@@ -1,0 +1,2169 @@
+{
+  "tiktokUsername": "",
+  "overlayPort": 8642,
+  "sound": {
+    "mode": "overlap"
+  },
+  "keyTrigger": {
+    "defaultDelayMs": 5000
+  },
+  "interactions": [
+    {
+      "name": "Heal",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "-",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045243149_749"
+    },
+    {
+      "name": "Nos Back",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "f8",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045267428_652"
+    },
+    {
+      "name": "Outfit",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "/",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045319164_567"
+    },
+    {
+      "name": "Nos",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "F10",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045338372_507"
+    },
+    {
+      "name": "Tanjakan",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "}",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045350980_377"
+    },
+    {
+      "name": "Car",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045358724_694"
+    },
+    {
+      "name": "Bakar CJ",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045381228_750"
+    },
+    {
+      "name": "Suruduk Tank",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045402333_774"
+    },
+    {
+      "name": "Beton",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045420253_846"
+    },
+    {
+      "name": "Keluar Mobil",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045434373_646"
+    },
+    {
+      "name": "Pohon",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045448125_812"
+    },
+    {
+      "name": "Tim Pukul",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045508897_895"
+    },
+    {
+      "name": "Suruduk Truck",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045522738_735"
+    },
+    {
+      "name": "Teleport",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045541419_226"
+    },
+    {
+      "name": "Mobil Terbang",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045564650_842"
+    },
+    {
+      "name": "Metong",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045582048_873"
+    },
+    {
+      "name": "CJ Meledak",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045596616_175"
+    },
+    {
+      "name": "Tim Tembak",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045613239_219"
+    },
+    {
+      "name": "Gagalkan Misi",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045632439_91"
+    },
+    {
+      "name": "Terjun Payung",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045664930_302"
+    },
+    {
+      "name": "Katon",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045689257_965"
+    },
+    {
+      "name": "Bintang 6",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045706753_597"
+    },
+    {
+      "name": "Change Car",
+      "actions": [
+        {
+          "type": "key",
+          "spec": "y",
+          "delayMs": 5000,
+          "holdMs": 0
+        }
+      ],
+      "simultaneous": false,
+      "id": "int_1789045743485_658"
+    }
+  ],
+  "activities": [
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 10716,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045243149_749"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046230627_374"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5778,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045267428_652"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046280243_873"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 7934,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045381228_750",
+        "int_1789045402333_774"
+      ],
+      "actionPickMode": "random",
+      "repeat": 1,
+      "id": "act_1789046326155_467"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5827,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045338372_507"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046344291_70"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5655,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045350980_377"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046381084_548"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5269,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045358724_694"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046421420_37"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 105781,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045381228_750"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046472452_551"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 8913,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045402333_774"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046560148_11"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 15049,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045420253_846"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046653876_771"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 10996,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045434373_646"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046733084_241"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5333,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045448125_812"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046780147_37"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 6064,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045508897_895"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046871595_334"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5487,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045402333_774"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046958452_202"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5780,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045541419_226"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789046999091_271"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5879,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045564650_842",
+        "int_1789045743485_658"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047031227_222"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5658,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045582048_873"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047114947_171"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 19443,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045596616_175"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047159451_531"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 15063,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045613239_219"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047231155_313"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5566,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045582048_873",
+        "int_1789045596616_175"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047323891_901"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 6427,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045664930_302"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047349491_186"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 10994,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045689257_965"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047414987_863"
+    },
+    {
+      "enabled": true,
+      "name": "",
+      "event": "gift",
+      "match": {
+        "giftId": 5585,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "interactionIds": [
+        "int_1789045706753_597"
+      ],
+      "actionPickMode": "all",
+      "repeat": 1,
+      "id": "act_1789047437235_518"
+    }
+  ],
+  "triggers": [
+    {
+      "enabled": false,
+      "name": "Car",
+      "event": "gift",
+      "match": {
+        "giftId": 5655,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "1",
+          "delayMs": 5000
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027393158_724"
+    },
+    {
+      "enabled": false,
+      "name": "Nos Back",
+      "event": "gift",
+      "match": {
+        "giftId": 5269,
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "A",
+          "delayMs": 5000
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027820434_660"
+    },
+    {
+      "enabled": false,
+      "name": "Heal",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 5000
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027844946_481"
+    },
+    {
+      "enabled": false,
+      "name": "Outfit",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027864362_639"
+    },
+    {
+      "enabled": false,
+      "name": "Nos",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027872322_690"
+    },
+    {
+      "enabled": false,
+      "name": "Tanjakan",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027881027_188"
+    },
+    {
+      "enabled": false,
+      "name": "Tim Pukul",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027896955_81"
+    },
+    {
+      "enabled": false,
+      "name": "Pohon",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "A",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027904531_184"
+    },
+    {
+      "enabled": false,
+      "name": "Keluar Mobil",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "A",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027914587_842"
+    },
+    {
+      "enabled": false,
+      "name": "Beton",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027924707_480"
+    },
+    {
+      "enabled": false,
+      "name": "Suruduk Tank",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027939587_114"
+    },
+    {
+      "enabled": false,
+      "name": "Bakar CJ",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "A",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027951339_999"
+    },
+    {
+      "enabled": false,
+      "name": "Suruduk Truck",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027964251_964"
+    },
+    {
+      "enabled": false,
+      "name": "Teleport",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027974451_530"
+    },
+    {
+      "enabled": false,
+      "name": "Metong",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027982243_123"
+    },
+    {
+      "enabled": false,
+      "name": "CJ Meledak",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789027992867_712"
+    },
+    {
+      "enabled": false,
+      "name": "Tim Tembak",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789028002859_735"
+    },
+    {
+      "enabled": false,
+      "name": "Gagalkan Misi",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789028017733_223"
+    },
+    {
+      "enabled": false,
+      "name": "Terjun Payung",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789028030310_286"
+    },
+    {
+      "enabled": false,
+      "name": "Katon",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789028038885_39"
+    },
+    {
+      "enabled": false,
+      "name": "Bintang 6",
+      "event": "gift",
+      "match": {
+        "minCombo": 1,
+        "repeat": 1
+      },
+      "actions": [
+        {
+          "type": "key",
+          "spec": "a",
+          "delayMs": 50
+        }
+      ],
+      "simultaneous": true,
+      "repeat": 1,
+      "id": "trig_1789028052021_36"
+    }
+  ],
+  "presets": [
+    {
+      "id": "preset_1789047466916_771",
+      "name": "GTA SA DEV",
+      "createdAt": "2026-09-10T13:37:46.916Z",
+      "interactions": [
+        {
+          "name": "Heal",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "1",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045243149_749"
+        },
+        {
+          "name": "Nos Back",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045267428_652"
+        },
+        {
+          "name": "Outfit",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045319164_567"
+        },
+        {
+          "name": "Nos",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "A",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045338372_507"
+        },
+        {
+          "name": "Tanjakan",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045350980_377"
+        },
+        {
+          "name": "Car",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045358724_694"
+        },
+        {
+          "name": "Bakar CJ",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045381228_750"
+        },
+        {
+          "name": "Suruduk Tank",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045402333_774"
+        },
+        {
+          "name": "Beton",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045420253_846"
+        },
+        {
+          "name": "Keluar Mobil",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045434373_646"
+        },
+        {
+          "name": "Pohon",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045448125_812"
+        },
+        {
+          "name": "Tim Pukul",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045508897_895"
+        },
+        {
+          "name": "Suruduk Truck",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045522738_735"
+        },
+        {
+          "name": "Teleport",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045541419_226"
+        },
+        {
+          "name": "Mobil Terbang",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045564650_842"
+        },
+        {
+          "name": "Metong",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045582048_873"
+        },
+        {
+          "name": "CJ Meledak",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045596616_175"
+        },
+        {
+          "name": "Tim Tembak",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045613239_219"
+        },
+        {
+          "name": "Gagalkan Misi",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045632439_91"
+        },
+        {
+          "name": "Terjun Payung",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045664930_302"
+        },
+        {
+          "name": "Katon",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045689257_965"
+        },
+        {
+          "name": "Bintang 6",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045706753_597"
+        },
+        {
+          "name": "Change Car",
+          "actions": [
+            {
+              "type": "key",
+              "spec": "y",
+              "delayMs": 5000,
+              "holdMs": 0
+            }
+          ],
+          "simultaneous": false,
+          "id": "int_1789045743485_658"
+        }
+      ],
+      "activities": [
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 10716,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045243149_749"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046230627_374"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5778,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045267428_652"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046280243_873"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 7934,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045381228_750",
+            "int_1789045402333_774"
+          ],
+          "actionPickMode": "random",
+          "repeat": 1,
+          "id": "act_1789046326155_467"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5827,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045338372_507"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046344291_70"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5655,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045350980_377"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046381084_548"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5269,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045358724_694"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046421420_37"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 105781,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045381228_750"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046472452_551"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 8913,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045402333_774"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046560148_11"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 15049,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045420253_846"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046653876_771"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 10996,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045434373_646"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046733084_241"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5333,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045448125_812"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046780147_37"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 6064,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045508897_895"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046871595_334"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5487,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045402333_774"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046958452_202"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5780,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045541419_226"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789046999091_271"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5879,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045564650_842",
+            "int_1789045743485_658"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047031227_222"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5658,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045582048_873"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047114947_171"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 19443,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045596616_175"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047159451_531"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 15063,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045613239_219"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047231155_313"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5566,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045582048_873",
+            "int_1789045596616_175"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047323891_901"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 6427,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045664930_302"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047349491_186"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 10994,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045689257_965"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047414987_863"
+        },
+        {
+          "enabled": true,
+          "name": "",
+          "event": "gift",
+          "match": {
+            "giftId": 5585,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "interactionIds": [
+            "int_1789045706753_597"
+          ],
+          "actionPickMode": "all",
+          "repeat": 1,
+          "id": "act_1789047437235_518"
+        }
+      ],
+      "triggers": [
+        {
+          "enabled": false,
+          "name": "Car",
+          "event": "gift",
+          "match": {
+            "giftId": 5655,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "1",
+              "delayMs": 5000
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027393158_724"
+        },
+        {
+          "enabled": false,
+          "name": "Nos Back",
+          "event": "gift",
+          "match": {
+            "giftId": 5269,
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "A",
+              "delayMs": 5000
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027820434_660"
+        },
+        {
+          "enabled": false,
+          "name": "Heal",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 5000
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027844946_481"
+        },
+        {
+          "enabled": false,
+          "name": "Outfit",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027864362_639"
+        },
+        {
+          "enabled": false,
+          "name": "Nos",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027872322_690"
+        },
+        {
+          "enabled": false,
+          "name": "Tanjakan",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027881027_188"
+        },
+        {
+          "enabled": false,
+          "name": "Tim Pukul",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027896955_81"
+        },
+        {
+          "enabled": false,
+          "name": "Pohon",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "A",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027904531_184"
+        },
+        {
+          "enabled": false,
+          "name": "Keluar Mobil",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "A",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027914587_842"
+        },
+        {
+          "enabled": false,
+          "name": "Beton",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027924707_480"
+        },
+        {
+          "enabled": false,
+          "name": "Suruduk Tank",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027939587_114"
+        },
+        {
+          "enabled": false,
+          "name": "Bakar CJ",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "A",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027951339_999"
+        },
+        {
+          "enabled": false,
+          "name": "Suruduk Truck",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027964251_964"
+        },
+        {
+          "enabled": false,
+          "name": "Teleport",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027974451_530"
+        },
+        {
+          "enabled": false,
+          "name": "Metong",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027982243_123"
+        },
+        {
+          "enabled": false,
+          "name": "CJ Meledak",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789027992867_712"
+        },
+        {
+          "enabled": false,
+          "name": "Tim Tembak",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789028002859_735"
+        },
+        {
+          "enabled": false,
+          "name": "Gagalkan Misi",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789028017733_223"
+        },
+        {
+          "enabled": false,
+          "name": "Terjun Payung",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789028030310_286"
+        },
+        {
+          "enabled": false,
+          "name": "Katon",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789028038885_39"
+        },
+        {
+          "enabled": false,
+          "name": "Bintang 6",
+          "event": "gift",
+          "match": {
+            "minCombo": 1,
+            "repeat": 1
+          },
+          "actions": [
+            {
+              "type": "key",
+              "spec": "a",
+              "delayMs": 50
+            }
+          ],
+          "simultaneous": true,
+          "repeat": 1,
+          "id": "trig_1789028052021_36"
+        }
+      ],
+      "sound": {
+        "mode": "overlap"
+      }
+    }
+  ],
+  "stats": {
+    "totalGifts": 0,
+    "totalComments": 0,
+    "totalLikes": 0,
+    "totalViewers": 0,
+    "gifters": {},
+    "giftStats": {},
+    "likers": {}
+  },
+  "eulerstream": {
+    "enabled": true,
+    "apiKey": "",
+    "autoFallback": true
+  },
+  "tts": {
+    "enabled": true,
+    "readChat": false,
+    "rate": 1,
+    "voice": null,
+    "blacklist": [
+      "anjing",
+      "bangsat",
+      "kontol",
+      "memek",
+      "goblok"
+    ]
+  }
+}

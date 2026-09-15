@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Music Overlay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ============================================================
+       NUREARN — YOUTUBE MUSIC OVERLAY
+       Premium Gold & Black Theme
+       ============================================================ */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --gold: #FFD700;
+      --gold-dark: #D4AF37;
+      --gold-gradient: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+      --gold-glow: rgba(255, 215, 0, 0.5);
+      --gold-soft: rgba(255, 215, 0, 0.12);
+      --bg-card: rgba(10, 10, 10, 0.85);
+      --bg-card-hover: rgba(20, 20, 20, 0.92);
+      --border: rgba(255, 215, 0, 0.2);
+      --border-soft: rgba(255, 255, 255, 0.06);
+      --text-main: #FFFFFF;
+      --text-secondary: #888888;
+      --text-muted: #555555;
+      --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text-main);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================================
+       MAIN OVERLAY CONTAINER
+       ============================================================ */
+    .yt-overlay {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      width: 450px;
+      max-width: 90vw;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+
+    .yt-overlay.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* ============================================================
+       SIZE MODES
+       ============================================================ */
+    .yt-overlay[data-size="mini"] {
+      width: 320px;
+      top: 24px;
+      left: 24px;
+      gap: 8px;
+    }
+
+    .yt-overlay[data-size="compact"] {
+      width: 380px;
+      top: 32px;
+      left: 32px;
+      gap: 10px;
+    }
+
+    .yt-overlay[data-size="expanded"] {
+      width: 520px;
+      top: 48px;
+      left: 48px;
+      gap: 14px;
+    }
+
+    /* ============================================================
+       HEADER
+       ============================================================ */
+    .yt-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 16px 8px 8px;
+      background: linear-gradient(90deg, rgba(10, 10, 10, 0.9) 0%, rgba(0, 0, 0, 0.7) 100%);
+      border: 1px solid var(--border);
+      border-radius: 12px 32px 32px 12px;
+      box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.15);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      width: fit-content;
+    }
+
+    .yt-icon-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--gold-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #000;
+      box-shadow: 0 0 15px var(--gold-glow);
+      flex-shrink: 0;
+    }
+
+    .yt-icon-box svg {
+      width: 20px;
+      height: 20px;
+      fill: #000;
+    }
+
+    .yt-header-text {
+      font-family: var(--font-heading);
+      font-size: 18px;
+      font-weight: 800;
+      font-style: italic;
+      display: flex;
+      gap: 6px;
+      letter-spacing: 0.8px;
+      white-space: nowrap;
+    }
+
+    .yt-text-gold {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 10px var(--gold-glow);
+    }
+
+    .yt-text-white {
+      color: var(--text-main);
+    }
+
+    .yt-header-dashes {
+      display: flex;
+      gap: 3px;
+      margin-left: 6px;
+    }
+
+    .yt-dash {
+      width: 5px;
+      height: 16px;
+      background: var(--gold);
+      transform: skewX(-20deg);
+      box-shadow: 0 0 8px var(--gold-glow);
+      border-radius: 1px;
+    }
+
+    .yt-dash:nth-child(2) {
+      background: var(--gold-dark);
+      box-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+    }
+
+    .yt-dash:nth-child(3) {
+      background: #8B6914;
+      box-shadow: 0 0 8px rgba(139, 105, 20, 0.5);
+    }
+
+    /* ============================================================
+       NOW PLAYING CARD
+       ============================================================ */
+    .yt-now-playing {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 215, 0, 0.05),
+        0 0 25px rgba(255, 215, 0, 0.1);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .yt-now-playing::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+          transparent 0%,
+          rgba(255, 215, 0, 0.06) 50%,
+          transparent 100%);
+      animation: shimmer 4s infinite linear;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 100%;
+      }
+    }
+
+    .yt-np-thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1.5px solid var(--border);
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+    }
+
+    .yt-np-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .yt-thumb-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(20, 15, 0, 0.8));
+    }
+
+    .yt-thumb-placeholder svg {
+      width: 28px;
+      height: 28px;
+      fill: var(--gold);
+      opacity: 0.6;
+    }
+
+    /* Equalizer indicator on thumbnail */
+    .yt-eq-indicator {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 14px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 3px 5px;
+      border-radius: 5px;
+      backdrop-filter: blur(4px);
+    }
+
+    .yt-eq-bar {
+      width: 3px;
+      background: var(--gold);
+      border-radius: 1px;
+      box-shadow: 0 0 6px var(--gold-glow);
+      animation: ytEq 0.6s ease-in-out infinite alternate;
+    }
+
+    .yt-eq-bar:nth-child(1) {
+      animation-delay: 0s;
+      height: 5px;
+    }
+
+    .yt-eq-bar:nth-child(2) {
+      animation-delay: 0.2s;
+      height: 10px;
+    }
+
+    .yt-eq-bar:nth-child(3) {
+      animation-delay: 0.1s;
+      height: 7px;
+    }
+
+    .yt-eq-bar:nth-child(4) {
+      animation-delay: 0.3s;
+      height: 11px;
+    }
+
+    @keyframes ytEq {
+      0% {
+        transform: scaleY(0.3);
+      }
+
+      100% {
+        transform: scaleY(1);
+      }
+    }
+
+    .yt-np-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .yt-np-title {
+      font-family: var(--font-heading);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.2px;
+    }
+
+    .yt-np-channel {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .yt-np-requester {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--gold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ============================================================
+       QUEUE LIST
+       ============================================================ */
+    .yt-queue-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .yt-queue-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: rgba(10, 10, 10, 0.75);
+      border: 1px solid var(--border-soft);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      animation: queueIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .yt-queue-item:nth-child(even) {
+      background: rgba(0, 0, 0, 0.7);
+      border-color: rgba(255, 215, 0, 0.1);
+    }
+
+    .yt-queue-item:hover {
+      border-color: var(--border);
+      background: var(--bg-card-hover);
+    }
+
+    @keyframes queueIn {
+      from {
+        opacity: 0;
+        transform: translateX(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .yt-queue-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid var(--border-soft);
+    }
+
+    .yt-queue-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .yt-queue-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .yt-queue-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .yt-queue-requester {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gold);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .yt-queue-index {
+      font-family: var(--font-heading);
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--gold);
+      background: var(--gold-soft);
+      border: 1px solid var(--border);
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      text-shadow: 0 0 8px var(--gold-glow);
+    }
+
+    /* ============================================================
+       EMPTY STATE
+       ============================================================ */
+    .yt-empty-state {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 16px;
+      background: rgba(10, 10, 10, 0.6);
+      border: 1px dashed var(--border-soft);
+      border-radius: 12px;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .yt-empty-state svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    /* ============================================================
+       SIZE MODES ADJUSTMENTS
+       ============================================================ */
+    .yt-overlay[data-size="mini"] .yt-header {
+      padding: 6px 12px 6px 6px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-icon-box {
+      width: 30px;
+      height: 30px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-icon-box svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-header-text {
+      font-size: 14px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-dash {
+      width: 4px;
+      height: 12px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-np-thumb {
+      width: 56px;
+      height: 56px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-np-title {
+      font-size: 13px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-np-channel {
+      font-size: 11px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-np-requester {
+      font-size: 10px;
+    }
+
+    .yt-overlay[data-size="mini"] .yt-now-playing {
+      padding: 10px;
+      gap: 10px;
+    }
+
+    .yt-overlay[data-size="expanded"] .yt-header-text {
+      font-size: 22px;
+    }
+
+    .yt-overlay[data-size="expanded"] .yt-np-title {
+      font-size: 17px;
+    }
+
+    .yt-overlay[data-size="expanded"] .yt-np-thumb {
+      width: 88px;
+      height: 88px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 600px) {
+      .yt-overlay {
+        width: 92vw;
+        top: 16px;
+        left: 16px;
+      }
+
+      .yt-header-text {
+        font-size: 15px;
+      }
+
+      .yt-np-thumb {
+        width: 60px;
+        height: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Main Widget -->
+  <div id="ytOverlay" class="yt-overlay" data-size="normal">
+    <!-- Header -->
+    <div class="yt-header">
+      <div class="yt-icon-box">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+        </svg>
+      </div>
+      <div class="yt-header-text">
+        <span class="yt-text-gold">MUSIC</span>
+        <span class="yt-text-white">REQUEST</span>
+      </div>
+      <div class="yt-header-dashes">
+        <div class="yt-dash"></div>
+        <div class="yt-dash"></div>
+        <div class="yt-dash"></div>
+      </div>
+    </div>
+
+    <!-- Now Playing -->
+    <div id="ytNowPlaying" class="yt-now-playing">
+      <div class="yt-np-thumb">
+        <img id="ytThumb" src="" alt="" onerror="this.style.display='none'" />
+        <div id="ytThumbPlaceholder" class="yt-thumb-placeholder">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+          </svg>
+        </div>
+        <div class="yt-eq-indicator">
+          <div class="yt-eq-bar"></div>
+          <div class="yt-eq-bar"></div>
+          <div class="yt-eq-bar"></div>
+          <div class="yt-eq-bar"></div>
+        </div>
+      </div>
+      <div class="yt-np-info">
+        <div id="ytTitle" class="yt-np-title">Menunggu Request...</div>
+        <div id="ytChannel" class="yt-np-channel">YouTube Music</div>
+        <div id="ytRequester" class="yt-np-requester">Req: -</div>
+      </div>
+    </div>
+
+    <!-- Queue List -->
+    <div id="ytQueueList" class="yt-queue-list"></div>
+  </div>
+
+  <script src="/overlay/youtube.js?v=2"></script>
+</body>
+
+</html>

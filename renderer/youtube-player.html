@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>YT Audio Player</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      /* Must be large enough for YouTube IFrame to accept (>=200x200) */
+      width: 320px;
+      height: 240px;
+      overflow: hidden;
+      background: #000;
+    }
+    #player {
+      width: 320px;
+      height: 240px;
+    }
+    #status {
+      position: fixed;
+      top: 4px;
+      left: 4px;
+      color: #0f0;
+      font: 10px monospace;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div id="player"></div>
+  <div id="status">Initializing...</div>
+
+  <script>
+    // Use Electron ipcRenderer directly (nodeIntegration: true window)
+    const { ipcRenderer } = require('electron');
+
+    const statusEl = document.getElementById('status');
+    function setStatus(msg) {
+      statusEl.textContent = msg;
+      console.log('[YT Hidden]', msg);
+    }
+
+    let ytPlayer = null;
+    let isReady = false;
+    let pendingVideoId = null;
+    let pendingVolume = 100;
+    let apiLoadTimeout = null;
+
+    // ── Load YouTube IFrame API ──────────────────────────────
+    setStatus('Loading IFrame API...');
+
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.onerror = () => {
+      setStatus('FAILED to load iframe_api!');
+      ipcRenderer.send('youtube-player:api-error', 'Failed to load IFrame API script');
+    };
+    document.head.appendChild(tag);
+
+    // Timeout if API never loads (no internet, blocked, etc.)
+    apiLoadTimeout = setTimeout(() => {
+      if (!isReady) {
+        setStatus('TIMEOUT: IFrame API never loaded');
+        ipcRenderer.send('youtube-player:api-error', 'IFrame API load timeout');
+      }
+    }, 15000);
+
+    // ── IFrame API Callback ──────────────────────────────────
+    window.onYouTubeIframeAPIReady = function () {
+      clearTimeout(apiLoadTimeout);
+      setStatus('IFrame API ready — creating player...');
+
+      ytPlayer = new YT.Player('player', {
+        height: '240',
+        width: '320',
+        videoId: '',
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          disablekb: 1,
+          enablejsapi: 1,
+          fs: 0,
+          iv_load_policy: 3,
+          modestbranding: 1,
+          playsinline: 1,
+          origin: window.location.origin || 'http://localhost'
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+          onError: onPlayerError
+        }
+      });
+    };
+
+    function onPlayerReady() {
+      isReady = true;
+      ytPlayer.setVolume(pendingVolume);
+      setStatus('Player READY ✓');
+      if (pendingVideoId) {
+        loadAndPlay(pendingVideoId);
+        pendingVideoId = null;
+      }
+      ipcRenderer.send('youtube-player:ready');
+    }
+
+    function onPlayerStateChange(event) {
+      const states = {
+        '-1': 'unstarted',
+        '0': 'ENDED',
+        '1': 'PLAYING',
+        '2': 'PAUSED',
+        '3': 'BUFFERING',
+        '5': 'cued'
+      };
+      setStatus('State: ' + (states[String(event.data)] || event.data));
+
+      if (event.data === YT.PlayerState.ENDED) {
+        ipcRenderer.send('youtube-player:ended');
+      } else if (event.data === YT.PlayerState.PLAYING) {
+        ipcRenderer.send('youtube-player:playing');
+      }
+    }
+
+    function onPlayerError(event) {
+      // YT error codes: 2=bad videoId, 5=HTML5 error, 100=not found, 101/150=embed blocked
+      const errMsg = {
+        2: 'Invalid videoId',
+        5: 'HTML5 player error',
+        100: 'Video not found',
+        101: 'Embedding disabled by owner',
+        150: 'Embedding disabled by owner'
+      }[event.data] || ('Error code ' + event.data);
+
+      setStatus('⚠ ' + errMsg + ' — skipping');
+      ipcRenderer.send('youtube-player:error', event.data);
+      // Auto-advance queue on error
+      ipcRenderer.send('youtube-player:ended');
+    }
+
+    function loadAndPlay(videoId) {
+      if (!ytPlayer || !isReady) {
+        pendingVideoId = videoId;
+        setStatus('Queued (player not ready): ' + videoId);
+        return;
+      }
+      try {
+        setStatus('Loading: ' + videoId);
+        ytPlayer.loadVideoById({ videoId: videoId, suggestedQuality: 'small' });
+      } catch (err) {
+        setStatus('loadVideoById ERROR: ' + err.message);
+        console.error('[YT Hidden] loadVideoById error:', err);
+      }
+    }
+
+    // ── IPC Command Handlers ─────────────────────────────────
+    ipcRenderer.on('youtube-player:play', (event, videoId) => {
+      setStatus('Recv play: ' + videoId);
+      loadAndPlay(videoId);
+    });
+
+    ipcRenderer.on('youtube-player:stop', () => {
+      setStatus('Recv stop');
+      if (ytPlayer && isReady) {
+        try { ytPlayer.stopVideo(); } catch (_) {}
+      }
+      pendingVideoId = null;
+    });
+
+    ipcRenderer.on('youtube-player:pause', () => {
+      if (ytPlayer && isReady) {
+        try { ytPlayer.pauseVideo(); } catch (_) {}
+      }
+    });
+
+    ipcRenderer.on('youtube-player:resume', () => {
+      if (ytPlayer && isReady) {
+        try { ytPlayer.playVideo(); } catch (_) {}
+      }
+    });
+
+    ipcRenderer.on('youtube-player:volume', (event, vol) => {
+      pendingVolume = Math.max(0, Math.min(100, vol));
+      if (ytPlayer && isReady) {
+        try { ytPlayer.setVolume(pendingVolume); } catch (_) {}
+      }
+    });
+
+    setStatus('Page loaded — waiting for IFrame API...');
+  </script>
+</body>
+</html>

@@ -1,0 +1,3404 @@
+[
+  {
+    "id": 10994,
+    "name": "Bouquet",
+    "diamond": 100,
+    "image": ""
+  },
+  {
+    "id": 15063,
+    "name": "Journey Pass",
+    "diamond": 10,
+    "image": ""
+  },
+  {
+    "id": 19443,
+    "name": "Bravo!",
+    "diamond": 15,
+    "image": ""
+  },
+  {
+    "id": 10996,
+    "name": "Power hug",
+    "diamond": 1,
+    "image": ""
+  },
+  {
+    "id": 15049,
+    "name": "Padang Rice",
+    "diamond": 5,
+    "image": ""
+  },
+  {
+    "id": 105781,
+    "name": "Spinning Soccer",
+    "diamond": 5,
+    "image": ""
+  },
+  {
+    "id": 10716,
+    "name": "Blow a kiss",
+    "diamond": 1,
+    "image": ""
+  },
+  {
+    "id": 5269,
+    "name": "TikTok",
+    "diamond": 1,
+    "image": "images/gifts/5269.png"
+  },
+  {
+    "id": 5333,
+    "name": "Coffee",
+    "diamond": 1,
+    "image": "images/gifts/5333.png"
+  },
+  {
+    "id": 5343,
+    "name": "Fried Rice",
+    "diamond": 1,
+    "image": "images/gifts/5343.png"
+  },
+  {
+    "id": 5462,
+    "name": "Tempe Tofu",
+    "diamond": 1,
+    "image": "images/gifts/5462.png"
+  },
+  {
+    "id": 5464,
+    "name": "Ice Tea",
+    "diamond": 1,
+    "image": "images/gifts/5464.png"
+  },
+  {
+    "id": 5588,
+    "name": "Nasi Lemak",
+    "diamond": 1,
+    "image": "images/gifts/5588.png"
+  },
+  {
+    "id": 5655,
+    "name": "Rose",
+    "diamond": 1,
+    "image": "images/gifts/5655.png"
+  },
+  {
+    "id": 5760,
+    "name": "Weights",
+    "diamond": 1,
+    "image": "images/gifts/5760.png"
+  },
+  {
+    "id": 5778,
+    "name": "Orange Juice",
+    "diamond": 1,
+    "image": "images/gifts/5778.png"
+  },
+  {
+    "id": 5827,
+    "name": "Ice Cream Cone",
+    "diamond": 1,
+    "image": "images/gifts/5827.png"
+  },
+  {
+    "id": 6042,
+    "name": "Mini Speaker",
+    "diamond": 1,
+    "image": "images/gifts/6042.png"
+  },
+  {
+    "id": 6064,
+    "name": "GG",
+    "diamond": 1,
+    "image": "images/gifts/6064.png"
+  },
+  {
+    "id": 6093,
+    "name": "Football",
+    "diamond": 1,
+    "image": "images/gifts/6093.png"
+  },
+  {
+    "id": 6169,
+    "name": "Tennis",
+    "diamond": 1,
+    "image": "images/gifts/6169.png"
+  },
+  {
+    "id": 6246,
+    "name": "Thumbs Up",
+    "diamond": 1,
+    "image": "images/gifts/6246.png"
+  },
+  {
+    "id": 6247,
+    "name": "Heart",
+    "diamond": 1,
+    "image": "images/gifts/6247.png"
+  },
+  {
+    "id": 6383,
+    "name": "Raya Rice",
+    "diamond": 1,
+    "image": "images/gifts/6383.png"
+  },
+  {
+    "id": 6466,
+    "name": "Star Heart",
+    "diamond": 1,
+    "image": "images/gifts/6466.png"
+  },
+  {
+    "id": 6598,
+    "name": "Genie Potion",
+    "diamond": 1,
+    "image": "images/gifts/6598.png"
+  },
+  {
+    "id": 6603,
+    "name": "Hi July",
+    "diamond": 1,
+    "image": "images/gifts/6603.png"
+  },
+  {
+    "id": 6635,
+    "name": "Thunder Hammer",
+    "diamond": 1,
+    "image": "images/gifts/6635.png"
+  },
+  {
+    "id": 6652,
+    "name": "Lightning Bolt",
+    "diamond": 1,
+    "image": "images/gifts/6652.png"
+  },
+  {
+    "id": 6700,
+    "name": "Calendar 8",
+    "diamond": 1,
+    "image": "images/gifts/6700.png"
+  },
+  {
+    "id": 6734,
+    "name": "Zodiac Potion",
+    "diamond": 1,
+    "image": "images/gifts/6734.png"
+  },
+  {
+    "id": 6784,
+    "name": "Cake Slice",
+    "diamond": 1,
+    "image": "images/gifts/6784.png"
+  },
+  {
+    "id": 6788,
+    "name": "Glow Stick",
+    "diamond": 1,
+    "image": "images/gifts/6788.png"
+  },
+  {
+    "id": 6837,
+    "name": "Perfume Bottle",
+    "diamond": 1,
+    "image": "images/gifts/6837.png"
+  },
+  {
+    "id": 6861,
+    "name": "Calendar 9",
+    "diamond": 1,
+    "image": "images/gifts/6861.png"
+  },
+  {
+    "id": 6890,
+    "name": "Love you",
+    "diamond": 1,
+    "image": "images/gifts/6890.png"
+  },
+  {
+    "id": 6926,
+    "name": "Basketball",
+    "diamond": 1,
+    "image": "images/gifts/6926.png"
+  },
+  {
+    "id": 7002,
+    "name": "Garden Gnome",
+    "diamond": 1,
+    "image": "images/gifts/7002.png"
+  },
+  {
+    "id": 7021,
+    "name": "Go Snacking",
+    "diamond": 1,
+    "image": "images/gifts/7021.png"
+  },
+  {
+    "id": 7024,
+    "name": "So Beautiful",
+    "diamond": 1,
+    "image": "images/gifts/7024.png"
+  },
+  {
+    "id": 7038,
+    "name": "Calendar 10",
+    "diamond": 1,
+    "image": "images/gifts/7038.png"
+  },
+  {
+    "id": 7070,
+    "name": "Match Star",
+    "diamond": 1,
+    "image": "images/gifts/7070.png"
+  },
+  {
+    "id": 7080,
+    "name": "Takut!!",
+    "diamond": 1,
+    "image": "images/gifts/7080.png"
+  },
+  {
+    "id": 7118,
+    "name": "Cute Cat",
+    "diamond": 1,
+    "image": "images/gifts/7118.png"
+  },
+  {
+    "id": 7160,
+    "name": "Wishing Bottle",
+    "diamond": 1,
+    "image": "images/gifts/7160.png"
+  },
+  {
+    "id": 7213,
+    "name": "Squirrel",
+    "diamond": 1,
+    "image": "images/gifts/7213.png"
+  },
+  {
+    "id": 7250,
+    "name": "Hot Water Bottle",
+    "diamond": 1,
+    "image": "images/gifts/7250.png"
+  },
+  {
+    "id": 7934,
+    "name": "Heart Me",
+    "diamond": 1,
+    "image": "images/gifts/7934.png"
+  },
+  {
+    "id": 9081,
+    "name": "New Universe",
+    "diamond": 1,
+    "image": "images/gifts/9081.png"
+  },
+  {
+    "id": 9087,
+    "name": "Flame heart",
+    "diamond": 1,
+    "image": "images/gifts/9087.png"
+  },
+  {
+    "id": 9097,
+    "name": "Birthday Cake",
+    "diamond": 1,
+    "image": "images/gifts/9097.png"
+  },
+  {
+    "id": 9818,
+    "name": "Tennis",
+    "diamond": 1,
+    "image": "images/gifts/9818.png"
+  },
+  {
+    "id": 10247,
+    "name": "Ramadan Kareem",
+    "diamond": 1,
+    "image": "images/gifts/10247.png"
+  },
+  {
+    "id": 12355,
+    "name": "Club Cheers",
+    "diamond": 1,
+    "image": "images/gifts/12355.png"
+  },
+  {
+    "id": 13282,
+    "name": "Slay",
+    "diamond": 1,
+    "image": "images/gifts/13282.png"
+  },
+  {
+    "id": 13298,
+    "name": "Wink Charm",
+    "diamond": 1,
+    "image": "images/gifts/13298.png"
+  },
+  {
+    "id": 13651,
+    "name": "Go Popular",
+    "diamond": 1,
+    "image": "images/gifts/13651.png"
+  },
+  {
+    "id": 14130,
+    "name": "Ramadan Welcome",
+    "diamond": 1,
+    "image": "images/gifts/14130.png"
+  },
+  {
+    "id": 14141,
+    "name": "Ramadan Kareem",
+    "diamond": 1,
+    "image": "images/gifts/14141.png"
+  },
+  {
+    "id": 14295,
+    "name": "Dates",
+    "diamond": 1,
+    "image": "images/gifts/14295.png"
+  },
+  {
+    "id": 9139,
+    "name": "Team Bracelet",
+    "diamond": 2,
+    "image": "images/gifts/9139.png"
+  },
+  {
+    "id": 37,
+    "name": "Panda",
+    "diamond": 5,
+    "image": "images/gifts/37.png"
+  },
+  {
+    "id": 5487,
+    "name": "Finger Heart",
+    "diamond": 5,
+    "image": "images/gifts/5487.png"
+  },
+  {
+    "id": 5650,
+    "name": "Mic",
+    "diamond": 5,
+    "image": "images/gifts/5650.png"
+  },
+  {
+    "id": 6704,
+    "name": "Chill",
+    "diamond": 5,
+    "image": "images/gifts/6704.png"
+  },
+  {
+    "id": 7079,
+    "name": "Candles",
+    "diamond": 5,
+    "image": "images/gifts/7079.png"
+  },
+  {
+    "id": 7136,
+    "name": "Golden Player",
+    "diamond": 5,
+    "image": "images/gifts/7136.png"
+  },
+  {
+    "id": 8352,
+    "name": "Cotton's Shell",
+    "diamond": 5,
+    "image": "images/gifts/8352.png"
+  },
+  {
+    "id": 8810,
+    "name": "Pinky promise",
+    "diamond": 5,
+    "image": "images/gifts/8810.png"
+  },
+  {
+    "id": 8815,
+    "name": "Pink shoes",
+    "diamond": 5,
+    "image": "images/gifts/8815.png"
+  },
+  {
+    "id": 8963,
+    "name": "Ice cream",
+    "diamond": 5,
+    "image": "images/gifts/8963.png"
+  },
+  {
+    "id": 9287,
+    "name": "Potato",
+    "diamond": 5,
+    "image": "images/gifts/9287.png"
+  },
+  {
+    "id": 10093,
+    "name": "Wide Eye Wurstie",
+    "diamond": 5,
+    "image": "images/gifts/10093.png"
+  },
+  {
+    "id": 10179,
+    "name": "Lily of the Valley",
+    "diamond": 5,
+    "image": "images/gifts/10179.png"
+  },
+  {
+    "id": 10268,
+    "name": "Easter egg",
+    "diamond": 5,
+    "image": "images/gifts/10268.png"
+  },
+  {
+    "id": 10604,
+    "name": "Tofu",
+    "diamond": 5,
+    "image": "images/gifts/10604.png"
+  },
+  {
+    "id": 12865,
+    "name": "Bread",
+    "diamond": 5,
+    "image": "images/gifts/12865.png"
+  },
+  {
+    "id": 6113,
+    "name": "Taco",
+    "diamond": 9,
+    "image": "images/gifts/6113.png"
+  },
+  {
+    "id": 8243,
+    "name": "Cheer You Up",
+    "diamond": 9,
+    "image": "images/gifts/8243.png"
+  },
+  {
+    "id": 9622,
+    "name": "Applause",
+    "diamond": 9,
+    "image": "images/gifts/9622.png"
+  },
+  {
+    "id": 12356,
+    "name": "Club Power",
+    "diamond": 9,
+    "image": "images/gifts/12356.png"
+  },
+  {
+    "id": 5657,
+    "name": "Lollipop",
+    "diamond": 10,
+    "image": "images/gifts/5657.png"
+  },
+  {
+    "id": 5779,
+    "name": "I love you",
+    "diamond": 10,
+    "image": "images/gifts/5779.png"
+  },
+  {
+    "id": 5853,
+    "name": "Gold Boxing Gloves",
+    "diamond": 10,
+    "image": "images/gifts/5853.png"
+  },
+  {
+    "id": 5933,
+    "name": "Coffee",
+    "diamond": 10,
+    "image": "images/gifts/5933.png"
+  },
+  {
+    "id": 7341,
+    "name": "Panther",
+    "diamond": 10,
+    "image": "images/gifts/7341.png"
+  },
+  {
+    "id": 7553,
+    "name": "Tiny Diny",
+    "diamond": 10,
+    "image": "images/gifts/7553.png"
+  },
+  {
+    "id": 8108,
+    "name": "Dog Bone",
+    "diamond": 10,
+    "image": "images/gifts/8108.png"
+  },
+  {
+    "id": 8206,
+    "name": "Bunny",
+    "diamond": 10,
+    "image": "images/gifts/8206.png"
+  },
+  {
+    "id": 8740,
+    "name": "Crocodile",
+    "diamond": 10,
+    "image": "images/gifts/8740.png"
+  },
+  {
+    "id": 8826,
+    "name": "Watermelon",
+    "diamond": 10,
+    "image": "images/gifts/8826.png"
+  },
+  {
+    "id": 8913,
+    "name": "Rosa",
+    "diamond": 10,
+    "image": "images/gifts/8913.png"
+  },
+  {
+    "id": 9458,
+    "name": "ASMR Time",
+    "diamond": 10,
+    "image": "images/gifts/9458.png"
+  },
+  {
+    "id": 9784,
+    "name": "Horseshoe",
+    "diamond": 10,
+    "image": "images/gifts/9784.png"
+  },
+  {
+    "id": 9947,
+    "name": "Friendship Necklace",
+    "diamond": 10,
+    "image": "images/gifts/9947.png"
+  },
+  {
+    "id": 10521,
+    "name": "Cherry Blossom Bunny",
+    "diamond": 10,
+    "image": "images/gifts/10521.png"
+  },
+  {
+    "id": 11108,
+    "name": "EWC",
+    "diamond": 10,
+    "image": "images/gifts/11108.png"
+  },
+  {
+    "id": 13300,
+    "name": "Heart Gaze",
+    "diamond": 10,
+    "image": "images/gifts/13300.png"
+  },
+  {
+    "id": 14560,
+    "name": "Easter Potato",
+    "diamond": 10,
+    "image": "images/gifts/14560.png"
+  },
+  {
+    "id": 5658,
+    "name": "Perfume",
+    "diamond": 20,
+    "image": "images/gifts/5658.png"
+  },
+  {
+    "id": 5919,
+    "name": "Love you",
+    "diamond": 20,
+    "image": "images/gifts/5919.png"
+  },
+  {
+    "id": 6248,
+    "name": "DJ Set",
+    "diamond": 20,
+    "image": "images/gifts/6248.png"
+  },
+  {
+    "id": 7542,
+    "name": "KO",
+    "diamond": 20,
+    "image": "images/gifts/7542.png"
+  },
+  {
+    "id": 7543,
+    "name": "M4 Beatrix",
+    "diamond": 20,
+    "image": "images/gifts/7543.png"
+  },
+  {
+    "id": 8552,
+    "name": "Baby fox",
+    "diamond": 20,
+    "image": "images/gifts/8552.png"
+  },
+  {
+    "id": 14115,
+    "name": "S Flowers",
+    "diamond": 20,
+    "image": "images/gifts/14115.png"
+  },
+  {
+    "id": 5780,
+    "name": "Bouquet Flower",
+    "diamond": 30,
+    "image": "images/gifts/5780.png"
+  },
+  {
+    "id": 5879,
+    "name": "Doughnut",
+    "diamond": 30,
+    "image": "images/gifts/5879.png"
+  },
+  {
+    "id": 6582,
+    "name": "Golden Gamepad",
+    "diamond": 30,
+    "image": "images/gifts/6582.png"
+  },
+  {
+    "id": 8217,
+    "name": "Capybara",
+    "diamond": 30,
+    "image": "images/gifts/8217.png"
+  },
+  {
+    "id": 5707,
+    "name": "Love you",
+    "diamond": 49,
+    "image": "images/gifts/5707.png"
+  },
+  {
+    "id": 8259,
+    "name": "Sign language love",
+    "diamond": 49,
+    "image": "images/gifts/8259.png"
+  },
+  {
+    "id": 6602,
+    "name": "July Summer",
+    "diamond": 88,
+    "image": "images/gifts/6602.png"
+  },
+  {
+    "id": 6701,
+    "name": "August Flamingo",
+    "diamond": 88,
+    "image": "images/gifts/6701.png"
+  },
+  {
+    "id": 6860,
+    "name": "September Leaf",
+    "diamond": 88,
+    "image": "images/gifts/6860.png"
+  },
+  {
+    "id": 7037,
+    "name": "October Pumpkin",
+    "diamond": 88,
+    "image": "images/gifts/7037.png"
+  },
+  {
+    "id": 8434,
+    "name": "Ruby red",
+    "diamond": 88,
+    "image": "images/gifts/8434.png"
+  },
+  {
+    "id": 10300,
+    "name": "Butterfly",
+    "diamond": 88,
+    "image": "images/gifts/10300.png"
+  },
+  {
+    "id": 9575,
+    "name": "Family",
+    "diamond": 90,
+    "image": "images/gifts/9575.png"
+  },
+  {
+    "id": 9582,
+    "name": "Sending strength",
+    "diamond": 90,
+    "image": "images/gifts/9582.png"
+  },
+  {
+    "id": 9933,
+    "name": "Fist bump",
+    "diamond": 90,
+    "image": "images/gifts/9933.png"
+  },
+  {
+    "id": 5659,
+    "name": "Paper Crane",
+    "diamond": 99,
+    "image": "images/gifts/5659.png"
+  },
+  {
+    "id": 5793,
+    "name": "Play Samba",
+    "diamond": 99,
+    "image": "images/gifts/5793.png"
+  },
+  {
+    "id": 5866,
+    "name": "Birthday Hat",
+    "diamond": 99,
+    "image": "images/gifts/5866.png"
+  },
+  {
+    "id": 6097,
+    "name": "Little Crown",
+    "diamond": 99,
+    "image": "images/gifts/6097.png"
+  },
+  {
+    "id": 6104,
+    "name": "Cap",
+    "diamond": 99,
+    "image": "images/gifts/6104.png"
+  },
+  {
+    "id": 6427,
+    "name": "Hat and Mustache",
+    "diamond": 99,
+    "image": "images/gifts/6427.png"
+  },
+  {
+    "id": 6432,
+    "name": "Star",
+    "diamond": 99,
+    "image": "images/gifts/6432.png"
+  },
+  {
+    "id": 6435,
+    "name": "Daffodils",
+    "diamond": 99,
+    "image": "images/gifts/6435.png"
+  },
+  {
+    "id": 6481,
+    "name": "Golden Crown",
+    "diamond": 99,
+    "image": "images/gifts/6481.png"
+  },
+  {
+    "id": 6525,
+    "name": "Honorable Person",
+    "diamond": 99,
+    "image": "images/gifts/6525.png"
+  },
+  {
+    "id": 6559,
+    "name": "Breakthrough Star",
+    "diamond": 99,
+    "image": "images/gifts/6559.png"
+  },
+  {
+    "id": 6663,
+    "name": "Royal Crown",
+    "diamond": 99,
+    "image": "images/gifts/6663.png"
+  },
+  {
+    "id": 6723,
+    "name": "Guitar",
+    "diamond": 99,
+    "image": "images/gifts/6723.png"
+  },
+  {
+    "id": 6793,
+    "name": "Ranking Lit",
+    "diamond": 99,
+    "image": "images/gifts/6793.png"
+  },
+  {
+    "id": 6849,
+    "name": "Clapping Hand",
+    "diamond": 99,
+    "image": "images/gifts/6849.png"
+  },
+  {
+    "id": 6851,
+    "name": "Yellow Flower",
+    "diamond": 99,
+    "image": "images/gifts/6851.png"
+  },
+  {
+    "id": 6852,
+    "name": "Magic Star",
+    "diamond": 99,
+    "image": "images/gifts/6852.png"
+  },
+  {
+    "id": 6853,
+    "name": "Tie Dye Hat",
+    "diamond": 99,
+    "image": "images/gifts/6853.png"
+  },
+  {
+    "id": 7883,
+    "name": "Guitar",
+    "diamond": 99,
+    "image": "images/gifts/7883.png"
+  },
+  {
+    "id": 8130,
+    "name": "Like-Pop",
+    "diamond": 99,
+    "image": "images/gifts/8130.png"
+  },
+  {
+    "id": 8156,
+    "name": "My favourite",
+    "diamond": 99,
+    "image": "images/gifts/8156.png"
+  },
+  {
+    "id": 9096,
+    "name": "Birthday Crown",
+    "diamond": 99,
+    "image": "images/gifts/9096.png"
+  },
+  {
+    "id": 9795,
+    "name": "Self care mask",
+    "diamond": 99,
+    "image": "images/gifts/9795.png"
+  },
+  {
+    "id": 11180,
+    "name": "Love Painting",
+    "diamond": 99,
+    "image": "images/gifts/11180.png"
+  },
+  {
+    "id": 12357,
+    "name": "Club Victory",
+    "diamond": 99,
+    "image": "images/gifts/12357.png"
+  },
+  {
+    "id": 12678,
+    "name": "Level-up Sparks",
+    "diamond": 99,
+    "image": "images/gifts/12678.png"
+  },
+  {
+    "id": 13087,
+    "name": "Bubble Gum",
+    "diamond": 99,
+    "image": "images/gifts/13087.png"
+  },
+  {
+    "id": 14109,
+    "name": "Mark of Love",
+    "diamond": 99,
+    "image": "images/gifts/14109.png"
+  },
+  {
+    "id": 14126,
+    "name": "Crescent Chain",
+    "diamond": 99,
+    "image": "images/gifts/14126.png"
+  },
+  {
+    "id": 14287,
+    "name": "Murtabak",
+    "diamond": 99,
+    "image": "images/gifts/14287.png"
+  },
+  {
+    "id": 5566,
+    "name": "Mishka Bear",
+    "diamond": 100,
+    "image": "images/gifts/5566.png"
+  },
+  {
+    "id": 5585,
+    "name": "Confetti",
+    "diamond": 100,
+    "image": "images/gifts/5585.png"
+  },
+  {
+    "id": 5660,
+    "name": "Hand Heart",
+    "diamond": 100,
+    "image": "images/gifts/5660.png"
+  },
+  {
+    "id": 6960,
+    "name": "Game Controller",
+    "diamond": 100,
+    "image": "images/gifts/6960.png"
+  },
+  {
+    "id": 6968,
+    "name": "Hand Heart",
+    "diamond": 100,
+    "image": "images/gifts/6968.png"
+  },
+  {
+    "id": 7029,
+    "name": "Match Wand",
+    "diamond": 100,
+    "image": "images/gifts/7029.png"
+  },
+  {
+    "id": 7121,
+    "name": "Marvelous Confetti",
+    "diamond": 100,
+    "image": "images/gifts/7121.png"
+  },
+  {
+    "id": 7163,
+    "name": "Mishka Bear",
+    "diamond": 100,
+    "image": "images/gifts/7163.png"
+  },
+  {
+    "id": 7264,
+    "name": "Mishka Bear",
+    "diamond": 100,
+    "image": "images/gifts/7264.png"
+  },
+  {
+    "id": 13301,
+    "name": "Singing Magic",
+    "diamond": 100,
+    "image": "images/gifts/13301.png"
+  },
+  {
+    "id": 14000,
+    "name": "Bowknot",
+    "diamond": 149,
+    "image": "images/gifts/14000.png"
+  },
+  {
+    "id": 5577,
+    "name": "Kiss",
+    "diamond": 150,
+    "image": "images/gifts/5577.png"
+  },
+  {
+    "id": 6618,
+    "name": "Socks and Sandals",
+    "diamond": 150,
+    "image": "images/gifts/6618.png"
+  },
+  {
+    "id": 10282,
+    "name": "Kiss",
+    "diamond": 150,
+    "image": "images/gifts/10282.png"
+  },
+  {
+    "id": 5729,
+    "name": "Butterfly",
+    "diamond": 169,
+    "image": "images/gifts/5729.png"
+  },
+  {
+    "id": 5915,
+    "name": "Music Note",
+    "diamond": 169,
+    "image": "images/gifts/5915.png"
+  },
+  {
+    "id": 5502,
+    "name": "Crown",
+    "diamond": 199,
+    "image": "images/gifts/5502.png"
+  },
+  {
+    "id": 5509,
+    "name": "Sunglasses",
+    "diamond": 199,
+    "image": "images/gifts/5509.png"
+  },
+  {
+    "id": 5586,
+    "name": "Hearts",
+    "diamond": 199,
+    "image": "images/gifts/5586.png"
+  },
+  {
+    "id": 5734,
+    "name": "Goggles",
+    "diamond": 199,
+    "image": "images/gifts/5734.png"
+  },
+  {
+    "id": 5880,
+    "name": "Lock and Key",
+    "diamond": 199,
+    "image": "images/gifts/5880.png"
+  },
+  {
+    "id": 6436,
+    "name": "Love Focus",
+    "diamond": 199,
+    "image": "images/gifts/6436.png"
+  },
+  {
+    "id": 6437,
+    "name": "Garland Headpiece",
+    "diamond": 199,
+    "image": "images/gifts/6437.png"
+  },
+  {
+    "id": 6671,
+    "name": "Love You",
+    "diamond": 199,
+    "image": "images/gifts/6671.png"
+  },
+  {
+    "id": 6694,
+    "name": "Pinch Cheek",
+    "diamond": 199,
+    "image": "images/gifts/6694.png"
+  },
+  {
+    "id": 6713,
+    "name": "Cheer For You",
+    "diamond": 199,
+    "image": "images/gifts/6713.png"
+  },
+  {
+    "id": 6776,
+    "name": "Birthday Glasses",
+    "diamond": 199,
+    "image": "images/gifts/6776.png"
+  },
+  {
+    "id": 6794,
+    "name": "Ranking Lit",
+    "diamond": 199,
+    "image": "images/gifts/6794.png"
+  },
+  {
+    "id": 6795,
+    "name": "Ranking Lit",
+    "diamond": 199,
+    "image": "images/gifts/6795.png"
+  },
+  {
+    "id": 6796,
+    "name": "Ranking Lit",
+    "diamond": 199,
+    "image": "images/gifts/6796.png"
+  },
+  {
+    "id": 6798,
+    "name": "Graduation Cap",
+    "diamond": 199,
+    "image": "images/gifts/6798.png"
+  },
+  {
+    "id": 7081,
+    "name": "Ghost",
+    "diamond": 199,
+    "image": "images/gifts/7081.png"
+  },
+  {
+    "id": 7549,
+    "name": "Gamer Cat",
+    "diamond": 199,
+    "image": "images/gifts/7549.png"
+  },
+  {
+    "id": 7839,
+    "name": "Shiba Inu",
+    "diamond": 199,
+    "image": "images/gifts/7839.png"
+  },
+  {
+    "id": 7927,
+    "name": "Puppy Love",
+    "diamond": 199,
+    "image": "images/gifts/7927.png"
+  },
+  {
+    "id": 8066,
+    "name": "Goggles",
+    "diamond": 199,
+    "image": "images/gifts/8066.png"
+  },
+  {
+    "id": 8597,
+    "name": "Suitcase",
+    "diamond": 199,
+    "image": "images/gifts/8597.png"
+  },
+  {
+    "id": 8600,
+    "name": "Sending positivity",
+    "diamond": 199,
+    "image": "images/gifts/8600.png"
+  },
+  {
+    "id": 9534,
+    "name": "Meerkat",
+    "diamond": 199,
+    "image": "images/gifts/9534.png"
+  },
+  {
+    "id": 9589,
+    "name": "Birthday Glasses",
+    "diamond": 199,
+    "image": "images/gifts/9589.png"
+  },
+  {
+    "id": 10560,
+    "name": "Stinging Bee",
+    "diamond": 199,
+    "image": "images/gifts/10560.png"
+  },
+  {
+    "id": 10573,
+    "name": "Massage for You",
+    "diamond": 199,
+    "image": "images/gifts/10573.png"
+  },
+  {
+    "id": 11177,
+    "name": "Coffee Magic",
+    "diamond": 199,
+    "image": "images/gifts/11177.png"
+  },
+  {
+    "id": 13075,
+    "name": "Cheering Crab",
+    "diamond": 199,
+    "image": "images/gifts/13075.png"
+  },
+  {
+    "id": 13981,
+    "name": "Love Charger",
+    "diamond": 199,
+    "image": "images/gifts/13981.png"
+  },
+  {
+    "id": 14294,
+    "name": "Sparklers",
+    "diamond": 199,
+    "image": "images/gifts/14294.png"
+  },
+  {
+    "id": 14474,
+    "name": "Ramadan Moon",
+    "diamond": 199,
+    "image": "images/gifts/14474.png"
+  },
+  {
+    "id": 5598,
+    "name": "Diamond Heart necklace",
+    "diamond": 200,
+    "image": "images/gifts/5598.png"
+  },
+  {
+    "id": 5599,
+    "name": "Gold necklace",
+    "diamond": 200,
+    "image": "images/gifts/5599.png"
+  },
+  {
+    "id": 6958,
+    "name": "On Fire",
+    "diamond": 200,
+    "image": "images/gifts/6958.png"
+  },
+  {
+    "id": 7068,
+    "name": "Match! Match!",
+    "diamond": 200,
+    "image": "images/gifts/7068.png"
+  },
+  {
+    "id": 10547,
+    "name": "Pinch Face",
+    "diamond": 249,
+    "image": "images/gifts/10547.png"
+  },
+  {
+    "id": 5882,
+    "name": "Rock 'n' Roll",
+    "diamond": 299,
+    "image": "images/gifts/5882.png"
+  },
+  {
+    "id": 5902,
+    "name": "Bridal Veil",
+    "diamond": 299,
+    "image": "images/gifts/5902.png"
+  },
+  {
+    "id": 6007,
+    "name": "Boxing Gloves",
+    "diamond": 299,
+    "image": "images/gifts/6007.png"
+  },
+  {
+    "id": 6265,
+    "name": "Duck",
+    "diamond": 299,
+    "image": "images/gifts/6265.png"
+  },
+  {
+    "id": 6267,
+    "name": "Corgi",
+    "diamond": 299,
+    "image": "images/gifts/6267.png"
+  },
+  {
+    "id": 6532,
+    "name": "Dancing Cactus",
+    "diamond": 299,
+    "image": "images/gifts/6532.png"
+  },
+  {
+    "id": 6752,
+    "name": "Friend",
+    "diamond": 299,
+    "image": "images/gifts/6752.png"
+  },
+  {
+    "id": 6757,
+    "name": "Dash",
+    "diamond": 299,
+    "image": "images/gifts/6757.png"
+  },
+  {
+    "id": 6868,
+    "name": "Hedgehog",
+    "diamond": 299,
+    "image": "images/gifts/6868.png"
+  },
+  {
+    "id": 7503,
+    "name": "We Love",
+    "diamond": 299,
+    "image": "images/gifts/7503.png"
+  },
+  {
+    "id": 8111,
+    "name": "Superpower",
+    "diamond": 299,
+    "image": "images/gifts/8111.png"
+  },
+  {
+    "id": 8141,
+    "name": "Ramadan Crescent",
+    "diamond": 299,
+    "image": "images/gifts/8141.png"
+  },
+  {
+    "id": 8260,
+    "name": "Elephant trunk",
+    "diamond": 299,
+    "image": "images/gifts/8260.png"
+  },
+  {
+    "id": 8873,
+    "name": "TikTok Crown",
+    "diamond": 299,
+    "image": "images/gifts/8873.png"
+  },
+  {
+    "id": 9465,
+    "name": "Fruit Friends",
+    "diamond": 299,
+    "image": "images/gifts/9465.png"
+  },
+  {
+    "id": 9535,
+    "name": "Play for you",
+    "diamond": 299,
+    "image": "images/gifts/9535.png"
+  },
+  {
+    "id": 10092,
+    "name": "FrankTastic",
+    "diamond": 299,
+    "image": "images/gifts/10092.png"
+  },
+  {
+    "id": 10574,
+    "name": "Dancing Flower",
+    "diamond": 299,
+    "image": "images/gifts/10574.png"
+  },
+  {
+    "id": 11179,
+    "name": "Naughty Chicken",
+    "diamond": 299,
+    "image": "images/gifts/11179.png"
+  },
+  {
+    "id": 11183,
+    "name": "Play for You",
+    "diamond": 299,
+    "image": "images/gifts/11183.png"
+  },
+  {
+    "id": 11808,
+    "name": "Rock Star",
+    "diamond": 299,
+    "image": "images/gifts/11808.png"
+  },
+  {
+    "id": 13073,
+    "name": "Butterfly for You",
+    "diamond": 299,
+    "image": "images/gifts/13073.png"
+  },
+  {
+    "id": 14142,
+    "name": "Ramadan Crescent",
+    "diamond": 299,
+    "image": "images/gifts/14142.png"
+  },
+  {
+    "id": 14418,
+    "name": "Ramadan Crescent",
+    "diamond": 299,
+    "image": "images/gifts/14418.png"
+  },
+  {
+    "id": 5569,
+    "name": "Diamond ring of love",
+    "diamond": 300,
+    "image": "images/gifts/5569.png"
+  },
+  {
+    "id": 5601,
+    "name": "Air Dancer",
+    "diamond": 300,
+    "image": "images/gifts/5601.png"
+  },
+  {
+    "id": 5661,
+    "name": "Air Dancer",
+    "diamond": 300,
+    "image": ""
+  },
+  {
+    "id": 5776,
+    "name": "Birthday Cake",
+    "diamond": 300,
+    "image": "images/gifts/5776.png"
+  },
+  {
+    "id": 5929,
+    "name": "Celebration Rice",
+    "diamond": 300,
+    "image": "images/gifts/5929.png"
+  },
+  {
+    "id": 10283,
+    "name": "Diamond Ring of love",
+    "diamond": 300,
+    "image": ""
+  },
+  {
+    "id": 10293,
+    "name": "Diamond Ring",
+    "diamond": 300,
+    "image": "images/gifts/10293.png"
+  },
+  {
+    "id": 13987,
+    "name": "Feather Mask",
+    "diamond": 300,
+    "image": "images/gifts/13987.png"
+  },
+  {
+    "id": 8392,
+    "name": "I love music",
+    "diamond": 398,
+    "image": "images/gifts/8392.png"
+  },
+  {
+    "id": 5899,
+    "name": "Swing",
+    "diamond": 399,
+    "image": "images/gifts/5899.png"
+  },
+  {
+    "id": 7895,
+    "name": "Gamer Cyber Mask",
+    "diamond": 399,
+    "image": "images/gifts/7895.png"
+  },
+  {
+    "id": 8014,
+    "name": "Forever Rose",
+    "diamond": 399,
+    "image": "images/gifts/8014.png"
+  },
+  {
+    "id": 8107,
+    "name": "Flower Flight",
+    "diamond": 399,
+    "image": "images/gifts/8107.png"
+  },
+  {
+    "id": 8349,
+    "name": "Cotton the Seal",
+    "diamond": 399,
+    "image": "images/gifts/8349.png"
+  },
+  {
+    "id": 8852,
+    "name": "Cotton the Seal",
+    "diamond": 399,
+    "image": "images/gifts/8852.png"
+  },
+  {
+    "id": 8914,
+    "name": "Forever Rosa",
+    "diamond": 399,
+    "image": ""
+  },
+  {
+    "id": 9624,
+    "name": "Mic Check",
+    "diamond": 399,
+    "image": "images/gifts/9624.png"
+  },
+  {
+    "id": 9825,
+    "name": "Magic Rhythm",
+    "diamond": 399,
+    "image": "images/gifts/9825.png"
+  },
+  {
+    "id": 10034,
+    "name": "Sending luck",
+    "diamond": 399,
+    "image": "images/gifts/10034.png"
+  },
+  {
+    "id": 10395,
+    "name": "Gaming Headset",
+    "diamond": 399,
+    "image": "images/gifts/10395.png"
+  },
+  {
+    "id": 11178,
+    "name": "Relaxed Goose",
+    "diamond": 399,
+    "image": "images/gifts/11178.png"
+  },
+  {
+    "id": 11181,
+    "name": "Tom's Hug",
+    "diamond": 399,
+    "image": "images/gifts/11181.png"
+  },
+  {
+    "id": 12210,
+    "name": "Rosie the Rose Bean",
+    "diamond": 399,
+    "image": "images/gifts/12210.png"
+  },
+  {
+    "id": 12211,
+    "name": "Jollie the Joy Bean",
+    "diamond": 399,
+    "image": "images/gifts/12211.png"
+  },
+  {
+    "id": 12212,
+    "name": "Rocky the Rock Bean",
+    "diamond": 399,
+    "image": "images/gifts/12212.png"
+  },
+  {
+    "id": 12213,
+    "name": "Sage the Smart Bean",
+    "diamond": 399,
+    "image": "images/gifts/12213.png"
+  },
+  {
+    "id": 14110,
+    "name": "You Are Loved",
+    "diamond": 399,
+    "image": "images/gifts/14110.png"
+  },
+  {
+    "id": 14131,
+    "name": "Ramadan Gift Box",
+    "diamond": 399,
+    "image": "images/gifts/14131.png"
+  },
+  {
+    "id": 14214,
+    "name": "Let butterfly dances",
+    "diamond": 399,
+    "image": "images/gifts/14214.png"
+  },
+  {
+    "id": 14507,
+    "name": "Ketupat Tree",
+    "diamond": 399,
+    "image": "images/gifts/14507.png"
+  },
+  {
+    "id": 5662,
+    "name": "Necklace",
+    "diamond": 400,
+    "image": "images/gifts/5662.png"
+  },
+  {
+    "id": 6205,
+    "name": "Love Chat",
+    "diamond": 400,
+    "image": "images/gifts/6205.png"
+  },
+  {
+    "id": 13988,
+    "name": "Crystal Dreams",
+    "diamond": 400,
+    "image": "images/gifts/13988.png"
+  },
+  {
+    "id": 13990,
+    "name": "Wishing Cake",
+    "diamond": 400,
+    "image": "images/gifts/13990.png"
+  },
+  {
+    "id": 13999,
+    "name": "Wishing Cake",
+    "diamond": 400,
+    "image": ""
+  },
+  {
+    "id": 11809,
+    "name": "Beating Heart",
+    "diamond": 449,
+    "image": "images/gifts/11809.png"
+  },
+  {
+    "id": 7119,
+    "name": "MPL Trophy",
+    "diamond": 450,
+    "image": "images/gifts/7119.png"
+  },
+  {
+    "id": 7544,
+    "name": "M4 Trophy",
+    "diamond": 450,
+    "image": "images/gifts/7544.png"
+  },
+  {
+    "id": 8793,
+    "name": "Across the board",
+    "diamond": 450,
+    "image": "images/gifts/8793.png"
+  },
+  {
+    "id": 13983,
+    "name": "Fortune Kitty",
+    "diamond": 450,
+    "image": "images/gifts/13983.png"
+  },
+  {
+    "id": 14002,
+    "name": "Fairy Mask",
+    "diamond": 450,
+    "image": "images/gifts/14002.png"
+  },
+  {
+    "id": 5731,
+    "name": "Coral",
+    "diamond": 499,
+    "image": "images/gifts/5731.png"
+  },
+  {
+    "id": 6415,
+    "name": "Music",
+    "diamond": 499,
+    "image": "images/gifts/6415.png"
+  },
+  {
+    "id": 8244,
+    "name": "Hands Up",
+    "diamond": 499,
+    "image": "images/gifts/8244.png"
+  },
+  {
+    "id": 8750,
+    "name": "Gold Microphone",
+    "diamond": 499,
+    "image": "images/gifts/8750.png"
+  },
+  {
+    "id": 5336,
+    "name": "Make it rain",
+    "diamond": 500,
+    "image": "images/gifts/5336.png"
+  },
+  {
+    "id": 5739,
+    "name": "Money Gun",
+    "diamond": 500,
+    "image": "images/gifts/5739.png"
+  },
+  {
+    "id": 7122,
+    "name": "Gem Gun",
+    "diamond": 500,
+    "image": "images/gifts/7122.png"
+  },
+  {
+    "id": 7168,
+    "name": "Money Gun",
+    "diamond": 500,
+    "image": "images/gifts/7168.png"
+  },
+  {
+    "id": 7282,
+    "name": "Spaghetti Kiss",
+    "diamond": 500,
+    "image": "images/gifts/7282.png"
+  },
+  {
+    "id": 7398,
+    "name": "Prince",
+    "diamond": 500,
+    "image": "images/gifts/7398.png"
+  },
+  {
+    "id": 7985,
+    "name": "Lion's Mane",
+    "diamond": 500,
+    "image": "images/gifts/7985.png"
+  },
+  {
+    "id": 8648,
+    "name": "Window basket",
+    "diamond": 500,
+    "image": "images/gifts/8648.png"
+  },
+  {
+    "id": 8892,
+    "name": "Dream Team",
+    "diamond": 500,
+    "image": "images/gifts/8892.png"
+  },
+  {
+    "id": 9623,
+    "name": "Mic Drop",
+    "diamond": 500,
+    "image": "images/gifts/9623.png"
+  },
+  {
+    "id": 9792,
+    "name": "Manifesting",
+    "diamond": 500,
+    "image": "images/gifts/9792.png"
+  },
+  {
+    "id": 9908,
+    "name": "Sweet Memories",
+    "diamond": 500,
+    "image": "images/gifts/9908.png"
+  },
+  {
+    "id": 9948,
+    "name": "You're Amazing",
+    "diamond": 500,
+    "image": "images/gifts/9948.png"
+  },
+  {
+    "id": 10667,
+    "name": "VR Goggles",
+    "diamond": 500,
+    "image": "images/gifts/10667.png"
+  },
+  {
+    "id": 11583,
+    "name": "DJ Glasses",
+    "diamond": 500,
+    "image": "images/gifts/11583.png"
+  },
+  {
+    "id": 12160,
+    "name": "Couch Potato",
+    "diamond": 500,
+    "image": "images/gifts/12160.png"
+  },
+  {
+    "id": 13072,
+    "name": "Dragon Crown",
+    "diamond": 500,
+    "image": "images/gifts/13072.png"
+  },
+  {
+    "id": 13172,
+    "name": "Star Map Polaris",
+    "diamond": 500,
+    "image": "images/gifts/13172.png"
+  },
+  {
+    "id": 13718,
+    "name": "Diamond Microphone",
+    "diamond": 500,
+    "image": "images/gifts/13718.png"
+  },
+  {
+    "id": 14114,
+    "name": "XXXL Flowers",
+    "diamond": 500,
+    "image": "images/gifts/14114.png"
+  },
+  {
+    "id": 14143,
+    "name": "Pelita",
+    "diamond": 500,
+    "image": "images/gifts/14143.png"
+  },
+  {
+    "id": 14476,
+    "name": "Make it Rain",
+    "diamond": 500,
+    "image": "images/gifts/14476.png"
+  },
+  {
+    "id": 6865,
+    "name": "Cooper Skates Home",
+    "diamond": 599,
+    "image": "images/gifts/6865.png"
+  },
+  {
+    "id": 6759,
+    "name": "Romantic Music Box",
+    "diamond": 600,
+    "image": "images/gifts/6759.png"
+  },
+  {
+    "id": 5897,
+    "name": "Swan",
+    "diamond": 699,
+    "image": "images/gifts/5897.png"
+  },
+  {
+    "id": 6554,
+    "name": "Dance Together",
+    "diamond": 699,
+    "image": "images/gifts/6554.png"
+  },
+  {
+    "id": 7093,
+    "name": "Piñata",
+    "diamond": 699,
+    "image": "images/gifts/7093.png"
+  },
+  {
+    "id": 7357,
+    "name": "TikTok Trophy",
+    "diamond": 699,
+    "image": "images/gifts/7357.png"
+  },
+  {
+    "id": 6274,
+    "name": "Basketball Trophy",
+    "diamond": 700,
+    "image": "images/gifts/6274.png"
+  },
+  {
+    "id": 14381,
+    "name": "Colorful Wings",
+    "diamond": 700,
+    "image": "images/gifts/14381.png"
+  },
+  {
+    "id": 5835,
+    "name": "Sunset in Bali",
+    "diamond": 799,
+    "image": "images/gifts/5835.png"
+  },
+  {
+    "id": 5664,
+    "name": "Pearl",
+    "diamond": 800,
+    "image": "images/gifts/5664.png"
+  },
+  {
+    "id": 6839,
+    "name": "Tango",
+    "diamond": 800,
+    "image": "images/gifts/6839.png"
+  },
+  {
+    "id": 9550,
+    "name": "Claw machine",
+    "diamond": 800,
+    "image": "images/gifts/9550.png"
+  },
+  {
+    "id": 10274,
+    "name": "Easter Tiny Diny",
+    "diamond": 800,
+    "image": "images/gifts/10274.png"
+  },
+  {
+    "id": 5978,
+    "name": "Train",
+    "diamond": 899,
+    "image": "images/gifts/5978.png"
+  },
+  {
+    "id": 6132,
+    "name": "Beach Date",
+    "diamond": 899,
+    "image": "images/gifts/6132.png"
+  },
+  {
+    "id": 14127,
+    "name": "Crescent Lanterns",
+    "diamond": 899,
+    "image": "images/gifts/14127.png"
+  },
+  {
+    "id": 14307,
+    "name": "Ramadan Blessings",
+    "diamond": 899,
+    "image": "images/gifts/14307.png"
+  },
+  {
+    "id": 13603,
+    "name": "Superstar",
+    "diamond": 900,
+    "image": "images/gifts/13603.png"
+  },
+  {
+    "id": 5976,
+    "name": "Hot Air Balloon",
+    "diamond": 999,
+    "image": "images/gifts/5976.png"
+  },
+  {
+    "id": 6233,
+    "name": "Travel with You",
+    "diamond": 999,
+    "image": "images/gifts/6233.png"
+  },
+  {
+    "id": 8769,
+    "name": "Raining gifts",
+    "diamond": 999,
+    "image": "images/gifts/8769.png"
+  },
+  {
+    "id": 9138,
+    "name": "Trending Figure",
+    "diamond": 999,
+    "image": "images/gifts/9138.png"
+  },
+  {
+    "id": 9717,
+    "name": "Lucky Airdrop Box",
+    "diamond": 999,
+    "image": "images/gifts/9717.png"
+  },
+  {
+    "id": 11806,
+    "name": "Enchanted Guitar",
+    "diamond": 999,
+    "image": "images/gifts/11806.png"
+  },
+  {
+    "id": 5461,
+    "name": "Batik Clothes",
+    "diamond": 1000,
+    "image": "images/gifts/5461.png"
+  },
+  {
+    "id": 5587,
+    "name": "Gold Mine",
+    "diamond": 1000,
+    "image": "images/gifts/5587.png"
+  },
+  {
+    "id": 5680,
+    "name": "Disco ball",
+    "diamond": 1000,
+    "image": "images/gifts/5680.png"
+  },
+  {
+    "id": 5886,
+    "name": "Galaxy",
+    "diamond": 1000,
+    "image": "images/gifts/5886.png"
+  },
+  {
+    "id": 6199,
+    "name": "Email Message",
+    "diamond": 1000,
+    "image": "images/gifts/6199.png"
+  },
+  {
+    "id": 6200,
+    "name": "Mirror Bloom",
+    "diamond": 1000,
+    "image": "images/gifts/6200.png"
+  },
+  {
+    "id": 6364,
+    "name": "Galaxy",
+    "diamond": 1000,
+    "image": "images/gifts/6364.png"
+  },
+  {
+    "id": 6781,
+    "name": "Watermelon Love",
+    "diamond": 1000,
+    "image": "images/gifts/6781.png"
+  },
+  {
+    "id": 6842,
+    "name": "Gerry the Giraffe",
+    "diamond": 1000,
+    "image": "images/gifts/6842.png"
+  },
+  {
+    "id": 7054,
+    "name": "Match Drum",
+    "diamond": 1000,
+    "image": "images/gifts/7054.png"
+  },
+  {
+    "id": 7123,
+    "name": "Shiny Air Balloon",
+    "diamond": 1000,
+    "image": "images/gifts/7123.png"
+  },
+  {
+    "id": 7871,
+    "name": "Drums",
+    "diamond": 1000,
+    "image": "images/gifts/7871.png"
+  },
+  {
+    "id": 7882,
+    "name": "Drums",
+    "diamond": 1000,
+    "image": "images/gifts/7882.png"
+  },
+  {
+    "id": 8972,
+    "name": "Glowing Jellyfish",
+    "diamond": 1000,
+    "image": "images/gifts/8972.png"
+  },
+  {
+    "id": 8978,
+    "name": "Glowing Jellyfish",
+    "diamond": 1000,
+    "image": "images/gifts/8978.png"
+  },
+  {
+    "id": 9408,
+    "name": "Blooming Ribbon",
+    "diamond": 1000,
+    "image": "images/gifts/9408.png"
+  },
+  {
+    "id": 9498,
+    "name": "Blooming Ribbons",
+    "diamond": 1000,
+    "image": ""
+  },
+  {
+    "id": 11046,
+    "name": "Galaxy",
+    "diamond": 1000,
+    "image": "images/gifts/11046.png"
+  },
+  {
+    "id": 13171,
+    "name": "Feather Flock",
+    "diamond": 1000,
+    "image": "images/gifts/13171.png"
+  },
+  {
+    "id": 13302,
+    "name": "Sparkle Dance",
+    "diamond": 1000,
+    "image": "images/gifts/13302.png"
+  },
+  {
+    "id": 14397,
+    "name": "Fairy Wings",
+    "diamond": 1000,
+    "image": "images/gifts/14397.png"
+  },
+  {
+    "id": 14399,
+    "name": "Flamingo Groove",
+    "diamond": 1000,
+    "image": "images/gifts/14399.png"
+  },
+  {
+    "id": 6090,
+    "name": "Fireworks",
+    "diamond": 1088,
+    "image": "images/gifts/6090.png"
+  },
+  {
+    "id": 7963,
+    "name": "Diamond Tree",
+    "diamond": 1088,
+    "image": "images/gifts/7963.png"
+  },
+  {
+    "id": 5781,
+    "name": "Diamond",
+    "diamond": 1099,
+    "image": "images/gifts/5781.png"
+  },
+  {
+    "id": 14057,
+    "name": "Golden Stars",
+    "diamond": 1099,
+    "image": "images/gifts/14057.png"
+  },
+  {
+    "id": 6031,
+    "name": "Gaming Chair",
+    "diamond": 1200,
+    "image": "images/gifts/6031.png"
+  },
+  {
+    "id": 7631,
+    "name": "Take a Drive",
+    "diamond": 1200,
+    "image": "images/gifts/7631.png"
+  },
+  {
+    "id": 8887,
+    "name": "Fountain",
+    "diamond": 1200,
+    "image": "images/gifts/8887.png"
+  },
+  {
+    "id": 8964,
+    "name": "Gaming Chair",
+    "diamond": 1200,
+    "image": "images/gifts/8964.png"
+  },
+  {
+    "id": 13263,
+    "name": "Umbrella of Love",
+    "diamond": 1200,
+    "image": "images/gifts/13263.png"
+  },
+  {
+    "id": 6286,
+    "name": "Wedding",
+    "diamond": 1400,
+    "image": "images/gifts/6286.png"
+  },
+  {
+    "id": 9588,
+    "name": "Moonlight flower",
+    "diamond": 1400,
+    "image": "images/gifts/9588.png"
+  },
+  {
+    "id": 14398,
+    "name": "Vibrant Stage",
+    "diamond": 1400,
+    "image": "images/gifts/14398.png"
+  },
+  {
+    "id": 5561,
+    "name": "Diamond Crown",
+    "diamond": 1499,
+    "image": "images/gifts/5561.png"
+  },
+  {
+    "id": 5651,
+    "name": "Garland",
+    "diamond": 1500,
+    "image": "images/gifts/5651.png"
+  },
+  {
+    "id": 5955,
+    "name": "Champion",
+    "diamond": 1500,
+    "image": "images/gifts/5955.png"
+  },
+  {
+    "id": 6488,
+    "name": "Breakthrough Celebration",
+    "diamond": 1500,
+    "image": "images/gifts/6488.png"
+  },
+  {
+    "id": 7367,
+    "name": "Diamond Ring",
+    "diamond": 1500,
+    "image": "images/gifts/7367.png"
+  },
+  {
+    "id": 7467,
+    "name": "Chasing the Dream",
+    "diamond": 1500,
+    "image": "images/gifts/7467.png"
+  },
+  {
+    "id": 9043,
+    "name": "Pim Bear",
+    "diamond": 1500,
+    "image": "images/gifts/9043.png"
+  },
+  {
+    "id": 9824,
+    "name": "Lover's Lock",
+    "diamond": 1500,
+    "image": "images/gifts/9824.png"
+  },
+  {
+    "id": 9909,
+    "name": "Greeting Card",
+    "diamond": 1500,
+    "image": "images/gifts/9909.png"
+  },
+  {
+    "id": 9912,
+    "name": "Dreamy Card",
+    "diamond": 1500,
+    "image": "images/gifts/9912.png"
+  },
+  {
+    "id": 10668,
+    "name": "Future Encounter",
+    "diamond": 1500,
+    "image": "images/gifts/10668.png"
+  },
+  {
+    "id": 10886,
+    "name": "Potato eating spaghetti",
+    "diamond": 1500,
+    "image": "images/gifts/10886.png"
+  },
+  {
+    "id": 11109,
+    "name": "EWC Trophy",
+    "diamond": 1500,
+    "image": "images/gifts/11109.png"
+  },
+  {
+    "id": 11584,
+    "name": "Under Control",
+    "diamond": 1500,
+    "image": "images/gifts/11584.png"
+  },
+  {
+    "id": 14306,
+    "name": "Raya Gift Card",
+    "diamond": 1500,
+    "image": "images/gifts/14306.png"
+  },
+  {
+    "id": 9457,
+    "name": "ASMR Starter Kit",
+    "diamond": 1599,
+    "image": "images/gifts/9457.png"
+  },
+  {
+    "id": 7879,
+    "name": "Center Stage",
+    "diamond": 1799,
+    "image": "images/gifts/7879.png"
+  },
+  {
+    "id": 8245,
+    "name": "Here We Go",
+    "diamond": 1799,
+    "image": "images/gifts/8245.png"
+  },
+  {
+    "id": 8277,
+    "name": "Love Drop",
+    "diamond": 1800,
+    "image": "images/gifts/8277.png"
+  },
+  {
+    "id": 9403,
+    "name": "Berlin Bear",
+    "diamond": 1800,
+    "image": "images/gifts/9403.png"
+  },
+  {
+    "id": 5763,
+    "name": "Speedboat",
+    "diamond": 1888,
+    "image": "images/gifts/5763.png"
+  },
+  {
+    "id": 5903,
+    "name": "Fall Candle",
+    "diamond": 1999,
+    "image": "images/gifts/5903.png"
+  },
+  {
+    "id": 6033,
+    "name": "Make-up Box",
+    "diamond": 1999,
+    "image": "images/gifts/6033.png"
+  },
+  {
+    "id": 6320,
+    "name": "Star Adventures",
+    "diamond": 1999,
+    "image": "images/gifts/6320.png"
+  },
+  {
+    "id": 6327,
+    "name": "Airship",
+    "diamond": 1999,
+    "image": "images/gifts/6327.png"
+  },
+  {
+    "id": 6348,
+    "name": "Rabbit",
+    "diamond": 1999,
+    "image": "images/gifts/6348.png"
+  },
+  {
+    "id": 6789,
+    "name": "Star of Red Carpet",
+    "diamond": 1999,
+    "image": "images/gifts/6789.png"
+  },
+  {
+    "id": 6797,
+    "name": "Super Cake",
+    "diamond": 1999,
+    "image": "images/gifts/6797.png"
+  },
+  {
+    "id": 6834,
+    "name": "Gift Box",
+    "diamond": 1999,
+    "image": "images/gifts/6834.png"
+  },
+  {
+    "id": 6862,
+    "name": "Cooper Flies Home",
+    "diamond": 1999,
+    "image": "images/gifts/6862.png"
+  },
+  {
+    "id": 7083,
+    "name": "Flying Witch",
+    "diamond": 1999,
+    "image": "images/gifts/7083.png"
+  },
+  {
+    "id": 7196,
+    "name": "Let Us Dance",
+    "diamond": 1999,
+    "image": "images/gifts/7196.png"
+  },
+  {
+    "id": 7529,
+    "name": "Mystery Firework",
+    "diamond": 1999,
+    "image": "images/gifts/7529.png"
+  },
+  {
+    "id": 14128,
+    "name": "Ramadan Blessing Box",
+    "diamond": 1999,
+    "image": "images/gifts/14128.png"
+  },
+  {
+    "id": 14144,
+    "name": "Ramadan Lantern",
+    "diamond": 1999,
+    "image": "images/gifts/14144.png"
+  },
+  {
+    "id": 14292,
+    "name": "Ramadan Gift Box",
+    "diamond": 1999,
+    "image": "images/gifts/14292.png"
+  },
+  {
+    "id": 14419,
+    "name": "Ramadan Lantern",
+    "diamond": 1999,
+    "image": "images/gifts/14419.png"
+  },
+  {
+    "id": 8812,
+    "name": "Panda skydiving",
+    "diamond": 2000,
+    "image": "images/gifts/8812.png"
+  },
+  {
+    "id": 6820,
+    "name": "Whale Diving",
+    "diamond": 2150,
+    "image": "images/gifts/6820.png"
+  },
+  {
+    "id": 8741,
+    "name": "Lamb",
+    "diamond": 2200,
+    "image": "images/gifts/8741.png"
+  },
+  {
+    "id": 8806,
+    "name": "Dancing Capybaras",
+    "diamond": 2200,
+    "image": "images/gifts/8806.png"
+  },
+  {
+    "id": 5964,
+    "name": "Music Box",
+    "diamond": 2399,
+    "image": "images/gifts/5964.png"
+  },
+  {
+    "id": 5345,
+    "name": "Elephant",
+    "diamond": 2500,
+    "image": "images/gifts/5345.png"
+  },
+  {
+    "id": 5459,
+    "name": "Orangutan",
+    "diamond": 2500,
+    "image": "images/gifts/5459.png"
+  },
+  {
+    "id": 11811,
+    "name": "Animal Band",
+    "diamond": 2500,
+    "image": "images/gifts/11811.png"
+  },
+  {
+    "id": 6263,
+    "name": "Magic Stage",
+    "diamond": 2599,
+    "image": "images/gifts/6263.png"
+  },
+  {
+    "id": 7881,
+    "name": "Magic Stage",
+    "diamond": 2599,
+    "image": "images/gifts/7881.png"
+  },
+  {
+    "id": 5236,
+    "name": "Cupid",
+    "diamond": 2888,
+    "image": "images/gifts/5236.png"
+  },
+  {
+    "id": 7880,
+    "name": "Concert",
+    "diamond": 2888,
+    "image": "images/gifts/7880.png"
+  },
+  {
+    "id": 5765,
+    "name": "Motorcycle",
+    "diamond": 2988,
+    "image": "images/gifts/5765.png"
+  },
+  {
+    "id": 14056,
+    "name": "Pink Dream",
+    "diamond": 2988,
+    "image": "images/gifts/14056.png"
+  },
+  {
+    "id": 5863,
+    "name": "Old Famous Car",
+    "diamond": 2999,
+    "image": "images/gifts/5863.png"
+  },
+  {
+    "id": 9468,
+    "name": "Rhythmic Bear",
+    "diamond": 2999,
+    "image": "images/gifts/9468.png"
+  },
+  {
+    "id": 10430,
+    "name": "Bull",
+    "diamond": 2999,
+    "image": "images/gifts/10430.png"
+  },
+  {
+    "id": 12679,
+    "name": "Level-up Spotlight",
+    "diamond": 2999,
+    "image": "images/gifts/12679.png"
+  },
+  {
+    "id": 5652,
+    "name": "Ferris Wheel",
+    "diamond": 3000,
+    "image": "images/gifts/5652.png"
+  },
+  {
+    "id": 6563,
+    "name": "Meteor Shower",
+    "diamond": 3000,
+    "image": "images/gifts/6563.png"
+  },
+  {
+    "id": 8086,
+    "name": "Car Drifting",
+    "diamond": 3000,
+    "image": "images/gifts/8086.png"
+  },
+  {
+    "id": 8188,
+    "name": "Dancing Bears",
+    "diamond": 3000,
+    "image": "images/gifts/8188.png"
+  },
+  {
+    "id": 9499,
+    "name": "Golden Party",
+    "diamond": 3000,
+    "image": "images/gifts/9499.png"
+  },
+  {
+    "id": 8252,
+    "name": "Happy Easter",
+    "diamond": 3500,
+    "image": "images/gifts/8252.png"
+  },
+  {
+    "id": 6244,
+    "name": "Sakura Train",
+    "diamond": 3999,
+    "image": "images/gifts/6244.png"
+  },
+  {
+    "id": 6345,
+    "name": "Cat",
+    "diamond": 3999,
+    "image": "images/gifts/6345.png"
+  },
+  {
+    "id": 6555,
+    "name": "Summer Band",
+    "diamond": 3999,
+    "image": "images/gifts/6555.png"
+  },
+  {
+    "id": 6835,
+    "name": "Gift Box",
+    "diamond": 3999,
+    "image": "images/gifts/6835.png"
+  },
+  {
+    "id": 6863,
+    "name": "Cooper Swims Home",
+    "diamond": 3999,
+    "image": "images/gifts/6863.png"
+  },
+  {
+    "id": 8152,
+    "name": "Spring train",
+    "diamond": 3999,
+    "image": "images/gifts/8152.png"
+  },
+  {
+    "id": 6148,
+    "name": "Flower Overflow",
+    "diamond": 4000,
+    "image": "images/gifts/6148.png"
+  },
+  {
+    "id": 6506,
+    "name": "Island of Love",
+    "diamond": 4000,
+    "image": "images/gifts/6506.png"
+  },
+  {
+    "id": 6869,
+    "name": "TikTok Volcano",
+    "diamond": 4000,
+    "image": "images/gifts/6869.png"
+  },
+  {
+    "id": 7789,
+    "name": "Mike",
+    "diamond": 4000,
+    "image": "images/gifts/7789.png"
+  },
+  {
+    "id": 10396,
+    "name": "Gaming Keyboard",
+    "diamond": 4000,
+    "image": "images/gifts/10396.png"
+  },
+  {
+    "id": 9384,
+    "name": "Breakthrough Superstar",
+    "diamond": 4088,
+    "image": "images/gifts/9384.png"
+  },
+  {
+    "id": 8564,
+    "name": "Tractor",
+    "diamond": 4099,
+    "image": "images/gifts/8564.png"
+  },
+  {
+    "id": 11810,
+    "name": "Your Concert",
+    "diamond": 4500,
+    "image": "images/gifts/11810.png"
+  },
+  {
+    "id": 5767,
+    "name": "Private Jet",
+    "diamond": 4888,
+    "image": "images/gifts/5767.png"
+  },
+  {
+    "id": 6646,
+    "name": "Leon the Kitten",
+    "diamond": 4888,
+    "image": "images/gifts/6646.png"
+  },
+  {
+    "id": 7124,
+    "name": "Signature Jet",
+    "diamond": 4888,
+    "image": "images/gifts/7124.png"
+  },
+  {
+    "id": 13604,
+    "name": "Fiery Dragon",
+    "diamond": 4888,
+    "image": "images/gifts/13604.png"
+  },
+  {
+    "id": 5938,
+    "name": "Pool Party",
+    "diamond": 4999,
+    "image": "images/gifts/5938.png"
+  },
+  {
+    "id": 8415,
+    "name": "Knockout",
+    "diamond": 4999,
+    "image": "images/gifts/8415.png"
+  },
+  {
+    "id": 13308,
+    "name": "Tom's Love",
+    "diamond": 4999,
+    "image": "images/gifts/13308.png"
+  },
+  {
+    "id": 5338,
+    "name": "Unicorn Fantasy",
+    "diamond": 5000,
+    "image": "images/gifts/5338.png"
+  },
+  {
+    "id": 6719,
+    "name": "Beach Hut",
+    "diamond": 5000,
+    "image": "images/gifts/6719.png"
+  },
+  {
+    "id": 6845,
+    "name": "Ellie the Elephant",
+    "diamond": 5000,
+    "image": "images/gifts/6845.png"
+  },
+  {
+    "id": 7237,
+    "name": "Unicorn Fantasy",
+    "diamond": 5000,
+    "image": "images/gifts/7237.png"
+  },
+  {
+    "id": 7468,
+    "name": "Dancing Adam",
+    "diamond": 5000,
+    "image": "images/gifts/7468.png"
+  },
+  {
+    "id": 7720,
+    "name": "Flying Jets",
+    "diamond": 5000,
+    "image": "images/gifts/7720.png"
+  },
+  {
+    "id": 8344,
+    "name": "Bird Whisperer",
+    "diamond": 5000,
+    "image": "images/gifts/8344.png"
+  },
+  {
+    "id": 8433,
+    "name": "Silver Sports Car",
+    "diamond": 5000,
+    "image": "images/gifts/8433.png"
+  },
+  {
+    "id": 8613,
+    "name": "Draco",
+    "diamond": 5000,
+    "image": "images/gifts/8613.png"
+  },
+  {
+    "id": 8988,
+    "name": "DJ Alien",
+    "diamond": 5000,
+    "image": "images/gifts/8988.png"
+  },
+  {
+    "id": 9500,
+    "name": "Flying Jets",
+    "diamond": 5000,
+    "image": "images/gifts/9500.png"
+  },
+  {
+    "id": 9949,
+    "name": "Motorcycle Together",
+    "diamond": 5000,
+    "image": "images/gifts/9949.png"
+  },
+  {
+    "id": 10175,
+    "name": "1st Anniversary",
+    "diamond": 5000,
+    "image": "images/gifts/10175.png"
+  },
+  {
+    "id": 11497,
+    "name": "Diamond Gun",
+    "diamond": 5000,
+    "image": "images/gifts/11497.png"
+  },
+  {
+    "id": 14147,
+    "name": "Ramadan Vibes",
+    "diamond": 5000,
+    "image": "images/gifts/14147.png"
+  },
+  {
+    "id": 8778,
+    "name": "Wolf",
+    "diamond": 5500,
+    "image": "images/gifts/8778.png"
+  },
+  {
+    "id": 6556,
+    "name": "Valley Festival",
+    "diamond": 5999,
+    "image": "images/gifts/6556.png"
+  },
+  {
+    "id": 6864,
+    "name": "Cooper's Home",
+    "diamond": 5999,
+    "image": "images/gifts/6864.png"
+  },
+  {
+    "id": 5627,
+    "name": "Romantic Carriage",
+    "diamond": 6000,
+    "image": "images/gifts/5627.png"
+  },
+  {
+    "id": 6760,
+    "name": "Romantic Hug",
+    "diamond": 6000,
+    "image": "images/gifts/6760.png"
+  },
+  {
+    "id": 7841,
+    "name": "With you",
+    "diamond": 6000,
+    "image": "images/gifts/7841.png"
+  },
+  {
+    "id": 8263,
+    "name": "Yellow Bus",
+    "diamond": 6000,
+    "image": "images/gifts/8263.png"
+  },
+  {
+    "id": 8604,
+    "name": "Starfish Bay",
+    "diamond": 6000,
+    "image": "images/gifts/8604.png"
+  },
+  {
+    "id": 10669,
+    "name": "Future City",
+    "diamond": 6000,
+    "image": "images/gifts/10669.png"
+  },
+  {
+    "id": 11585,
+    "name": "Work Hard Play Harder",
+    "diamond": 6000,
+    "image": "images/gifts/11585.png"
+  },
+  {
+    "id": 9467,
+    "name": "Lili the Leopard",
+    "diamond": 6599,
+    "image": "images/gifts/9467.png"
+  },
+  {
+    "id": 6542,
+    "name": "TikTok Red Carpet",
+    "diamond": 6600,
+    "image": "images/gifts/6542.png"
+  },
+  {
+    "id": 6787,
+    "name": "Birthday Party",
+    "diamond": 6999,
+    "image": "images/gifts/6787.png"
+  },
+  {
+    "id": 6790,
+    "name": "Celebration Time",
+    "diamond": 6999,
+    "image": "images/gifts/6790.png"
+  },
+  {
+    "id": 8247,
+    "name": "Happy Party",
+    "diamond": 6999,
+    "image": "images/gifts/8247.png"
+  },
+  {
+    "id": 9095,
+    "name": "Birthday Party",
+    "diamond": 6999,
+    "image": "images/gifts/9095.png"
+  },
+  {
+    "id": 14293,
+    "name": "Ramadan Night",
+    "diamond": 6999,
+    "image": "images/gifts/14293.png"
+  },
+  {
+    "id": 6089,
+    "name": "Sports Car",
+    "diamond": 7000,
+    "image": "images/gifts/6089.png"
+  },
+  {
+    "id": 6741,
+    "name": "Gorgeous Trophy",
+    "diamond": 7000,
+    "image": "images/gifts/6741.png"
+  },
+  {
+    "id": 10176,
+    "name": "2nd Anniversary",
+    "diamond": 7000,
+    "image": "images/gifts/10176.png"
+  },
+  {
+    "id": 10230,
+    "name": "Creator of the week",
+    "diamond": 7000,
+    "image": "images/gifts/10230.png"
+  },
+  {
+    "id": 11599,
+    "name": "Dubai",
+    "diamond": 7499,
+    "image": "images/gifts/11599.png"
+  },
+  {
+    "id": 6747,
+    "name": "Victory Shield",
+    "diamond": 7999,
+    "image": "images/gifts/6747.png"
+  },
+  {
+    "id": 7764,
+    "name": "Star Throne",
+    "diamond": 7999,
+    "image": "images/gifts/7764.png"
+  },
+  {
+    "id": 8104,
+    "name": "Monster Truck",
+    "diamond": 7999,
+    "image": "images/gifts/8104.png"
+  },
+  {
+    "id": 8420,
+    "name": "Star Throne",
+    "diamond": 7999,
+    "image": "images/gifts/8420.png"
+  },
+  {
+    "id": 7069,
+    "name": "Match Cup",
+    "diamond": 8000,
+    "image": "images/gifts/7069.png"
+  },
+  {
+    "id": 7078,
+    "name": "Match Cup",
+    "diamond": 8000,
+    "image": "images/gifts/7078.png"
+  },
+  {
+    "id": 9486,
+    "name": "Saxophone",
+    "diamond": 9000,
+    "image": "images/gifts/9486.png"
+  },
+  {
+    "id": 8916,
+    "name": "Leon and Lili",
+    "diamond": 9699,
+    "image": "images/gifts/8916.png"
+  },
+  {
+    "id": 9910,
+    "name": "Leon and Lili",
+    "diamond": 9699,
+    "image": "images/gifts/9910.png"
+  },
+  {
+    "id": 9913,
+    "name": "Desert Adventure",
+    "diamond": 9699,
+    "image": "images/gifts/9913.png"
+  },
+  {
+    "id": 6103,
+    "name": "Yacht",
+    "diamond": 9888,
+    "image": "images/gifts/6103.png"
+  },
+  {
+    "id": 6597,
+    "name": "Cancer",
+    "diamond": 9999,
+    "image": "images/gifts/6597.png"
+  },
+  {
+    "id": 6647,
+    "name": "Gemini",
+    "diamond": 9999,
+    "image": "images/gifts/6647.png"
+  },
+  {
+    "id": 6743,
+    "name": "Leo",
+    "diamond": 9999,
+    "image": "images/gifts/6743.png"
+  },
+  {
+    "id": 6818,
+    "name": "Virgo",
+    "diamond": 9999,
+    "image": "images/gifts/6818.png"
+  },
+  {
+    "id": 7030,
+    "name": "Libra",
+    "diamond": 9999,
+    "image": "images/gifts/7030.png"
+  },
+  {
+    "id": 7614,
+    "name": "Capricorn",
+    "diamond": 9999,
+    "image": "images/gifts/7614.png"
+  },
+  {
+    "id": 6149,
+    "name": "Interstellar",
+    "diamond": 10000,
+    "image": "images/gifts/6149.png"
+  },
+  {
+    "id": 6203,
+    "name": "Sunset Speedway",
+    "diamond": 10000,
+    "image": "images/gifts/6203.png"
+  },
+  {
+    "id": 8417,
+    "name": "Octopus",
+    "diamond": 10000,
+    "image": "images/gifts/8417.png"
+  },
+  {
+    "id": 8596,
+    "name": "Music festival",
+    "diamond": 10000,
+    "image": "images/gifts/8596.png"
+  },
+  {
+    "id": 13307,
+    "name": "Luxury Yacht",
+    "diamond": 10000,
+    "image": "images/gifts/13307.png"
+  },
+  {
+    "id": 6271,
+    "name": "Falcon",
+    "diamond": 10999,
+    "image": "images/gifts/6271.png"
+  },
+  {
+    "id": 6367,
+    "name": "Falcon",
+    "diamond": 10999,
+    "image": "images/gifts/6367.png"
+  },
+  {
+    "id": 7627,
+    "name": "Falcon",
+    "diamond": 10999,
+    "image": "images/gifts/7627.png"
+  },
+  {
+    "id": 6892,
+    "name": "Race Car",
+    "diamond": 12000,
+    "image": "images/gifts/6892.png"
+  },
+  {
+    "id": 7067,
+    "name": "Match Castle",
+    "diamond": 12000,
+    "image": "images/gifts/7067.png"
+  },
+  {
+    "id": 8419,
+    "name": "Red Lightning",
+    "diamond": 12000,
+    "image": "images/gifts/8419.png"
+  },
+  {
+    "id": 8599,
+    "name": "Convertible Car",
+    "diamond": 12000,
+    "image": "images/gifts/8599.png"
+  },
+  {
+    "id": 10177,
+    "name": "3rd Anniversary",
+    "diamond": 12000,
+    "image": "images/gifts/10177.png"
+  },
+  {
+    "id": 12680,
+    "name": "Level-up Spectacle",
+    "diamond": 12999,
+    "image": "images/gifts/12680.png"
+  },
+  {
+    "id": 6520,
+    "name": "Camping Night",
+    "diamond": 13999,
+    "image": "images/gifts/6520.png"
+  },
+  {
+    "id": 13790,
+    "name": "Invincible Hammer",
+    "diamond": 14999,
+    "image": "images/gifts/13790.png"
+  },
+  {
+    "id": 14310,
+    "name": "Tidecaller Trident",
+    "diamond": 14999,
+    "image": "images/gifts/14310.png"
+  },
+  {
+    "id": 5954,
+    "name": "Planet",
+    "diamond": 15000,
+    "image": "images/gifts/5954.png"
+  },
+  {
+    "id": 7598,
+    "name": "Pirate's Ship",
+    "diamond": 15000,
+    "image": "images/gifts/7598.png"
+  },
+  {
+    "id": 7911,
+    "name": "Mammoth",
+    "diamond": 15000,
+    "image": "images/gifts/7911.png"
+  },
+  {
+    "id": 7978,
+    "name": "Leopard",
+    "diamond": 15000,
+    "image": "images/gifts/7978.png"
+  },
+  {
+    "id": 8387,
+    "name": "peacock",
+    "diamond": 15000,
+    "image": "images/gifts/8387.png"
+  },
+  {
+    "id": 8435,
+    "name": "Pyramids",
+    "diamond": 15000,
+    "image": "images/gifts/8435.png"
+  },
+  {
+    "id": 8737,
+    "name": "Speedster",
+    "diamond": 15000,
+    "image": "images/gifts/8737.png"
+  },
+  {
+    "id": 8912,
+    "name": "Rosa Nebula",
+    "diamond": 15000,
+    "image": "images/gifts/8912.png"
+  },
+  {
+    "id": 9758,
+    "name": "Berlin",
+    "diamond": 15000,
+    "image": "images/gifts/9758.png"
+  },
+  {
+    "id": 9950,
+    "name": "Look! Meteor Shower",
+    "diamond": 15000,
+    "image": "images/gifts/9950.png"
+  },
+  {
+    "id": 10250,
+    "name": "Sweetopia",
+    "diamond": 15000,
+    "image": "images/gifts/10250.png"
+  },
+  {
+    "id": 10670,
+    "name": "Future Journey",
+    "diamond": 15000,
+    "image": "images/gifts/10670.png"
+  },
+  {
+    "id": 11586,
+    "name": "Party On&On",
+    "diamond": 15000,
+    "image": "images/gifts/11586.png"
+  },
+  {
+    "id": 6452,
+    "name": "Jakarta Roundabout",
+    "diamond": 16999,
+    "image": "images/gifts/6452.png"
+  },
+  {
+    "id": 9466,
+    "name": "Amusement Park",
+    "diamond": 17000,
+    "image": "images/gifts/9466.png"
+  },
+  {
+    "id": 8708,
+    "name": "Diamond flight",
+    "diamond": 18000,
+    "image": "images/gifts/8708.png"
+  },
+  {
+    "id": 8248,
+    "name": "Fly Love",
+    "diamond": 19999,
+    "image": "images/gifts/8248.png"
+  },
+  {
+    "id": 8691,
+    "name": "Party Boat",
+    "diamond": 19999,
+    "image": "images/gifts/8691.png"
+  },
+  {
+    "id": 14129,
+    "name": "Ramadan Celebration",
+    "diamond": 19999,
+    "image": "images/gifts/14129.png"
+  },
+  {
+    "id": 14132,
+    "name": "Ramadan Celebration",
+    "diamond": 19999,
+    "image": "images/gifts/14132.png"
+  },
+  {
+    "id": 5478,
+    "name": "Castle Fantasy",
+    "diamond": 20000,
+    "image": "images/gifts/5478.png"
+  },
+  {
+    "id": 5930,
+    "name": "Rocket",
+    "diamond": 20000,
+    "image": "images/gifts/5930.png"
+  },
+  {
+    "id": 6751,
+    "name": "TikTok Shuttle",
+    "diamond": 20000,
+    "image": "images/gifts/6751.png"
+  },
+  {
+    "id": 6833,
+    "name": "Castle Fantasy",
+    "diamond": 20000,
+    "image": "images/gifts/6833.png"
+  },
+  {
+    "id": 7125,
+    "name": "Premium Shuttle",
+    "diamond": 20000,
+    "image": "images/gifts/7125.png"
+  },
+  {
+    "id": 9501,
+    "name": "Yacht",
+    "diamond": 20000,
+    "image": "images/gifts/9501.png"
+  },
+  {
+    "id": 10345,
+    "name": "Enchanted Dolphin",
+    "diamond": 20000,
+    "image": "images/gifts/10345.png"
+  },
+  {
+    "id": 10398,
+    "name": "Spark",
+    "diamond": 20000,
+    "image": "images/gifts/10398.png"
+  },
+  {
+    "id": 9911,
+    "name": "Rose Carriage",
+    "diamond": 25000,
+    "image": "images/gifts/9911.png"
+  },
+  {
+    "id": 9914,
+    "name": "Starry Night Tourism",
+    "diamond": 25000,
+    "image": "images/gifts/9914.png"
+  },
+  {
+    "id": 7319,
+    "name": "Phoenix",
+    "diamond": 25999,
+    "image": "images/gifts/7319.png"
+  },
+  {
+    "id": 7400,
+    "name": "Adam's Dream",
+    "diamond": 25999,
+    "image": "images/gifts/7400.png"
+  },
+  {
+    "id": 7987,
+    "name": "Griffin",
+    "diamond": 25999,
+    "image": "images/gifts/7987.png"
+  },
+  {
+    "id": 9525,
+    "name": "Big Dino",
+    "diamond": 25999,
+    "image": "images/gifts/9525.png"
+  },
+  {
+    "id": 13791,
+    "name": "Chasing Glory",
+    "diamond": 25999,
+    "image": "images/gifts/13791.png"
+  },
+  {
+    "id": 14311,
+    "name": "Undersea Kingdom",
+    "diamond": 25999,
+    "image": "images/gifts/14311.png"
+  },
+  {
+    "id": 7610,
+    "name": "Dragon Flame",
+    "diamond": 26999,
+    "image": "images/gifts/7610.png"
+  },
+  {
+    "id": 6003,
+    "name": "Carriage",
+    "diamond": 28888,
+    "image": "images/gifts/6003.png"
+  },
+  {
+    "id": 6625,
+    "name": "Towards the future",
+    "diamond": 28888,
+    "image": "images/gifts/6625.png"
+  },
+  {
+    "id": 6369,
+    "name": "Lion",
+    "diamond": 29999,
+    "image": "images/gifts/6369.png"
+  },
+  {
+    "id": 7311,
+    "name": "Knee Sliding",
+    "diamond": 29999,
+    "image": "images/gifts/7311.png"
+  },
+  {
+    "id": 7505,
+    "name": "Winter Lion",
+    "diamond": 29999,
+    "image": "images/gifts/7505.png"
+  },
+  {
+    "id": 6583,
+    "name": "Grand Throne",
+    "diamond": 30000,
+    "image": "images/gifts/6583.png"
+  },
+  {
+    "id": 8391,
+    "name": "Sam the Whale",
+    "diamond": 30000,
+    "image": "images/gifts/8391.png"
+  },
+  {
+    "id": 8602,
+    "name": "Gorilla",
+    "diamond": 30000,
+    "image": "images/gifts/8602.png"
+  },
+  {
+    "id": 8814,
+    "name": "Superhero fight",
+    "diamond": 30000,
+    "image": "images/gifts/8814.png"
+  },
+  {
+    "id": 12260,
+    "name": "TikTok Houses Glory",
+    "diamond": 30000,
+    "image": "images/gifts/12260.png"
+  },
+  {
+    "id": 7823,
+    "name": "Leon and Lion",
+    "diamond": 34000,
+    "image": "images/gifts/7823.png"
+  },
+  {
+    "id": 8456,
+    "name": "Zeus",
+    "diamond": 34000,
+    "image": "images/gifts/8456.png"
+  },
+  {
+    "id": 8381,
+    "name": "Seal and Whale",
+    "diamond": 34500,
+    "image": "images/gifts/8381.png"
+  },
+  {
+    "id": 6038,
+    "name": "TikTok Universe",
+    "diamond": 34999,
+    "image": "images/gifts/6038.png"
+  },
+  {
+    "id": 6041,
+    "name": "TikTok Universe",
+    "diamond": 34999,
+    "image": "images/gifts/6041.png"
+  },
+  {
+    "id": 7312,
+    "name": "TikTok Universe+",
+    "diamond": 34999,
+    "image": "images/gifts/7312.png"
+  },
+  {
+    "id": 8582,
+    "name": "TikTok Stars",
+    "diamond": 39999,
+    "image": "images/gifts/8582.png"
+  },
+  {
+    "id": 8651,
+    "name": "Thunder Falcon",
+    "diamond": 39999,
+    "image": "images/gifts/8651.png"
+  },
+  {
+    "id": 7603,
+    "name": "Holiday Universe",
+    "diamond": 41999,
+    "image": "images/gifts/7603.png"
+  },
+  {
+    "id": 9092,
+    "name": "Fire Phoenix",
+    "diamond": 41999,
+    "image": "images/gifts/9092.png"
+  },
+  {
+    "id": 9427,
+    "name": "Pegasus",
+    "diamond": 42999,
+    "image": "images/gifts/9427.png"
+  },
+  {
+    "id": 13792,
+    "name": "Julius the Champion",
+    "diamond": 42999,
+    "image": "images/gifts/13792.png"
+  },
+  {
+    "id": 14312,
+    "name": "Lord Marcellus",
+    "diamond": 42999,
+    "image": "images/gifts/14312.png"
+  },
+  {
+    "id": 9072,
+    "name": "TikTok Universe",
+    "diamond": 44999,
+    "image": "images/gifts/9072.png"
+  },
+  {
+    "id": 9101,
+    "name": "TikTok Universe",
+    "diamond": 44999,
+    "image": "images/gifts/9101.png"
+  }
+]

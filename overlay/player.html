@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎵 YouTube Music Web Player — Nurearn Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0f17;
+      --card-bg: rgba(22, 27, 38, 0.85);
+      --border: rgba(255, 215, 0, 0.2);
+      --gold: #ffd700;
+      --gold-glow: rgba(255, 215, 0, 0.35);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+    .player-container {
+      width: 100%;
+      max-width: 860px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6), 0 0 24px var(--gold-glow);
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 16px;
+    }
+    .brand-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .badge-brave {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 90, 31, 0.15);
+      color: #ff5a1f;
+      border: 1px solid rgba(255, 90, 31, 0.4);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-badge {
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ef4444;
+      box-shadow: 0 0 8px #ef4444;
+    }
+    .status-dot.connected {
+      background: #22c55e;
+      box-shadow: 0 0 8px #22c55e;
+    }
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    #ytPlayer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .info-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .thumb-preview {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #1e293b;
+      flex-shrink: 0;
+    }
+    .song-details {
+      flex: 1;
+      overflow: hidden;
+    }
+    .song-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+    .song-meta {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .requester-badge {
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-action {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-action:hover {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .footer-note {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="player-container">
+    <div class="header-row">
+      <div class="brand-title">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        YouTube Music Web Player
+      </div>
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <span class="badge-brave" title="Brave Shields otomatis memblokir semua iklan YouTube">
+          🛡️ Brave Shields Ready
+        </span>
+        <div class="status-badge">
+          <span class="status-dot" id="wsDot"></span>
+          <span id="wsStatusText">Menghubungkan...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-wrapper">
+      <div id="ytPlayer"></div>
+    </div>
+
+    <div class="info-card">
+      <img id="thumbImg" class="thumb-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='%23334155'%3E%3Cpath d='M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z'/%3E%3C/svg%3E" alt="Thumbnail" />
+      <div class="song-details">
+        <div class="song-title" id="songTitle">Menunggu request lagu...</div>
+        <div class="song-meta">
+          <span id="songChannel">Nurearn Studio</span>
+          <span>•</span>
+          <span id="songRequester" class="requester-badge">TikTok LIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-action" id="btnToggleMute">
+          <span id="muteIcon">🔊</span>
+          <span id="muteText">Mute</span>
+        </button>
+        <button class="btn-action" id="btnSkipSong">
+          ⏭️ Skip
+        </button>
+      </div>
+      <div style="font-size: 12px; color: var(--muted);">
+        Volume: <input type="range" id="volRange" min="0" max="100" value="100" style="vertical-align: middle; width: 100px; cursor: pointer;">
+        <span id="volVal">100%</span>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      💡 <strong>Tips:</strong> Buka halaman ini di <strong>Brave Browser</strong> agar semua iklan YouTube otomatis terblokir secara permanen oleh Brave Shields. Tab ini akan otomatis memutar setiap lagu dari live chat TikTok (<code>!play</code>).
+    </div>
+  </div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    let player = null;
+    let isPlayerReady = false;
+    let ws = null;
+    let currentVideoId = null;
+    let pendingSong = null;
+    let progressTimer = null;
+    let isMuted = false;
+
+    // 1. Connect WebSocket IMMEDIATELY upon page load (0ms delay)
+    connectWebSocket();
+
+    // 2. YouTube IFrame API Ready
+    function onYouTubeIframeAPIReady() {
+      const initId = pendingSong ? pendingSong.videoId : '';
+      player = new YT.Player('ytPlayer', {
+        videoId: initId,
+        playerVars: {
+          autoplay: 1,
+          controls: 1,
+          rel: 0,
+          playsinline: 1,
+          modestbranding: 1
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange,
+          onError: onPlayerError
+        }
+      });
+    }
+
+    function onPlayerReady() {
+      console.log('[WebPlayer] YouTube player ready');
+      isPlayerReady = true;
+      if (pendingSong) {
+        try {
+          if (player && typeof player.loadVideoById === 'function') {
+            player.loadVideoById(pendingSong.videoId);
+            player.playVideo();
+          }
+        } catch (_) {}
+        pendingSong = null;
+      }
+      startProgressReporting();
+    }
+
+    function onPlayerStateChange(event) {
+      // YT.PlayerState.ENDED = 0
+      if (event.data === 0) {
+        console.log('[WebPlayer] Video ended -> notify server');
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'youtube:videoEnded' }));
+        }
+      }
+    }
+
+    function onPlayerError(event) {
+      console.warn('[WebPlayer] YouTube player error code:', event.data);
+      const isEmbedRestricted = event.data === 101 || event.data === 150;
+      const msg = isEmbedRestricted
+        ? '⚠️ Video tidak mengizinkan embed oleh pemiliknya, melewati ke lagu berikutnya...'
+        : '⚠️ Video tidak dapat diputar (Error ' + event.data + '), melewati...';
+      const titleEl = document.getElementById('songTitle');
+      if (titleEl) titleEl.textContent = msg;
+
+      setTimeout(() => {
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'youtube:skip' }));
+        }
+      }, 2500);
+    }
+
+    // 3. WebSocket Connection to local overlayServer
+    function connectWebSocket() {
+      const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const wsUrl = `${proto}//${window.location.host}`;
+      console.log('[WebPlayer] Connecting to WebSocket:', wsUrl);
+
+      ws = new WebSocket(wsUrl);
+
+      ws.onopen = () => {
+        console.log('[WebPlayer] WebSocket connected');
+        const dot = document.getElementById('wsDot');
+        const txt = document.getElementById('wsStatusText');
+        if (dot) dot.className = 'status-dot connected';
+        if (txt) txt.textContent = 'Terhubung ke Studio';
+        // Request current state immediately
+        ws.send(JSON.stringify({ type: 'youtube:request-state' }));
+        if (isPlayerReady) startProgressReporting();
+      };
+
+      ws.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          handleServerMessage(msg);
+        } catch (e) {
+          console.error('[WebPlayer] Parse error:', e);
+        }
+      };
+
+      ws.onclose = () => {
+        console.warn('[WebPlayer] WebSocket disconnected, reconnecting in 2s...');
+        const dot = document.getElementById('wsDot');
+        const txt = document.getElementById('wsStatusText');
+        if (dot) dot.className = 'status-dot';
+        if (txt) txt.textContent = 'Terputus (Reconnecting...)';
+        stopProgressReporting();
+        setTimeout(connectWebSocket, 2000);
+      };
+
+      ws.onerror = (err) => {
+        console.error('[WebPlayer] WebSocket error:', err);
+      };
+    }
+
+    function handleServerMessage(msg) {
+      if (!msg) return;
+      const type = msg.type;
+      const payload = msg.payload;
+
+      if (type === 'youtube:play' && payload) {
+        playSong(payload);
+      } else if (type === 'youtube:stop') {
+        stopSong();
+      } else if (type === 'youtube:command' && payload) {
+        handleCommand(payload.cmd, payload.arg);
+      }
+    }
+
+    function playSong(song) {
+      if (!song || !song.videoId) return;
+      currentVideoId = song.videoId;
+
+      document.getElementById('songTitle').textContent = song.title || 'Unknown Song';
+      document.getElementById('songChannel').textContent = song.channel || 'YouTube';
+      document.getElementById('songRequester').textContent = song.requester ? `@${song.requester}` : 'Host';
+      if (song.thumbnail) {
+        document.getElementById('thumbImg').src = song.thumbnail;
+      }
+
+      if (isPlayerReady && player && typeof player.loadVideoById === 'function') {
+        player.loadVideoById(song.videoId);
+        player.playVideo();
+      } else {
+        // Player belum siap (masih loading API) -> simpan ke pendingSong agar langsung putar begitu siap!
+        pendingSong = song;
+      }
+    }
+
+    function stopSong() {
+      currentVideoId = null;
+      pendingSong = null;
+      document.getElementById('songTitle').textContent = 'Menunggu request lagu...';
+      document.getElementById('songChannel').textContent = 'Nurearn Studio';
+      document.getElementById('songRequester').textContent = 'TikTok LIVE';
+      if (player && typeof player.stopVideo === 'function') {
+        player.stopVideo();
+      }
+    }
+
+    function handleCommand(cmd, arg) {
+      if (!player) return;
+      if (cmd === 'pause' && typeof player.pauseVideo === 'function') {
+        player.pauseVideo();
+      } else if (cmd === 'resume' && typeof player.playVideo === 'function') {
+        player.playVideo();
+      } else if (cmd === 'volume' && typeof player.setVolume === 'function') {
+        const vol = Number(arg);
+        player.setVolume(vol);
+        document.getElementById('volRange').value = vol;
+        document.getElementById('volVal').textContent = vol + '%';
+      } else if (cmd === 'seek' && typeof player.seekTo === 'function') {
+        player.seekTo(Number(arg), true);
+      }
+    }
+
+    function startProgressReporting() {
+      stopProgressReporting();
+      progressTimer = setInterval(() => {
+        if (!player || !currentVideoId || typeof player.getCurrentTime !== 'function') return;
+        try {
+          const current = Math.round(player.getCurrentTime() || 0);
+          const total = Math.round(player.getDuration() || 0);
+          if (ws && ws.readyState === WebSocket.OPEN && total > 0) {
+            ws.send(JSON.stringify({
+              type: 'youtube:progress',
+              payload: { current, total }
+            }));
+          }
+        } catch (_) {}
+      }, 1000);
+    }
+
+    function stopProgressReporting() {
+      if (progressTimer) clearInterval(progressTimer);
+      progressTimer = null;
+    }
+
+    // 3. Local UI controls
+    document.getElementById('btnToggleMute').onclick = () => {
+      if (!player) return;
+      isMuted = !isMuted;
+      if (isMuted) {
+        player.mute();
+        document.getElementById('muteIcon').textContent = '🔇';
+        document.getElementById('muteText').textContent = 'Unmute';
+      } else {
+        player.unMute();
+        document.getElementById('muteIcon').textContent = '🔊';
+        document.getElementById('muteText').textContent = 'Mute';
+      }
+    };
+
+    document.getElementById('btnSkipSong').onclick = () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'youtube:skip' }));
+      }
+    };
+
+    document.getElementById('volRange').oninput = (e) => {
+      const vol = Number(e.target.value);
+      document.getElementById('volVal').textContent = vol + '%';
+      if (player && typeof player.setVolume === 'function') {
+        player.setVolume(vol);
+      }
+    };
+
+    // Unblock browser autoplay restrictions on user interaction with the page
+    window.addEventListener('click', () => {
+      if (player && typeof player.unMute === 'function' && !isMuted) {
+        try { player.unMute(); } catch (_) {}
+      }
+    }, { once: true });
+  </script>
+</body>
+</html>

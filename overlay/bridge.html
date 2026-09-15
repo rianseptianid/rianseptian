@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok LIVE Studio Overlay Bridge</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent;
+    }
+    #overlayFrame {
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      background: transparent;
+      display: block;
+    }
+    #statusText {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.7);
+      color: #a855f7;
+      font-family: sans-serif;
+      font-size: 12px;
+      border-radius: 4px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="statusText">Menghubungkan ke Overlay Lokal...</div>
+  <iframe id="overlayFrame" allow="autoplay; camera; microphone" src="about:blank"></iframe>
+
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const target = params.get('url') || params.get('target') || params.get('to');
+      const mode = params.get('mode') || 'redirect'; // 'redirect' | 'iframe'
+
+      if (target) {
+        if (mode === 'redirect') {
+          // Buka langsung URL target secara instan
+          window.location.replace(target);
+        } else {
+          const frame = document.getElementById('overlayFrame');
+          if (frame) {
+            frame.src = target;
+          }
+        }
+      } else {
+        const path = window.location.pathname.replace(/^\/bridge(\.html)?/, '');
+        const fallbackTarget = window.location.origin + (path || '/overlay/');
+        window.location.replace(fallbackTarget);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nurearn — License Verification</title>
+    <link rel="stylesheet" href="license.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Poppins:wght@400;600;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Animated Background -->
+    <div class="background-animation">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
+        <div class="circle circle-3"></div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="glass-container">
+        <!-- Logo -->
+        <div class="logo-container">
+            <h1>nurearn</h1>
+            <p class="subtitle">Live Toolkit</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <h2>Activate your license</h2>
+            <p>Please enter your license key to continue using the toolkit.</p>
+
+            <!-- Input -->
+            <div class="input-group">
+                <input type="text" id="licenseKey" placeholder="XXXX-XXXX-XXXX-XXXX" autocomplete="off"
+                    spellcheck="false" maxlength="19">
+                <div class="status-icon" id="statusIcon"></div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message"></div>
+
+            <!-- Button -->
+            <button id="activateBtn" class="activate-btn">
+                <span class="btn-text">Activate</span>
+                <div class="spinner" id="btnSpinner"></div>
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-note">
+            © <span id="year">2025</span> nurearn. All rights reserved.
+        </div>
+    </div>
+
+    <script src="license.js"></script>
+</body>
+
+</html>

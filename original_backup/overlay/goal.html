@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goal Overlay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fredoka:wght@600;700&family=Inter:wght@600;700;800;900&family=Montserrat:wght@700;800;900&family=Oswald:wght@600;700&family=Passion+One:wght@700;900&family=Poppins:wght@600;700;800;900&family=Roboto:wght@700;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/overlay/goal.css?v=2" />
+</head>
+
+<body>
+  <!-- Goal Widget -->
+  <div id="goalWidgetContainer" class="goal-widget shape-rounded" data-size="normal">
+    <div class="goal-header">
+      <span id="goalTitle" class="goal-title">Goal Target</span>
+      <span id="goalCount" class="goal-count">0 / 100</span>
+    </div>
+    <div id="goalTrack" class="goal-track">
+      <div id="goalFill" class="goal-fill" style="width: 0%;">
+        <div class="water-wave-layer">
+          <div class="water-wave wave-back"></div>
+          <div class="water-wave wave-front"></div>
+        </div>
+        <div class="water-bubbles">
+          <div class="bubble b1"></div>
+          <div class="bubble b2"></div>
+          <div class="bubble b3"></div>
+          <div class="bubble b4"></div>
+          <div class="bubble b5"></div>
+        </div>
+        <span id="goalPercent" class="goal-percent-badge">0%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Celebration Layer (particles) -->
+  <div id="celebrationLayer" class="celebration-layer"></div>
+
+  <script src="/overlay/goal.js?v=2"></script>
+</body>
+
+</html>

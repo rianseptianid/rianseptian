@@ -1,0 +1,78 @@
+{
+  "tiktokUsername": "",
+  "overlayPort": 8642,
+  "sound": {
+    "mode": "overlap"
+  },
+  "keyTrigger": {
+    "defaultDelayMs": 50
+  },
+  "interactions": [],
+  "activities": [],
+  "triggers": [],
+  "presets": [],
+  "soundboard": [],
+  "customCss": {},
+  "topLikeSettings": {
+    "alignRight": false,
+    "showRank": true,
+    "showCrown": true,
+    "showTrophy": true,
+    "showHeart": true,
+    "heartAnim": true
+  },
+  "topGiftSettings": {
+    "alignRight": false,
+    "showRank": true,
+    "showCrown": true,
+    "showTrophy": true,
+    "showCoin": true
+  },
+  "battleArena": {
+    "title": "Battle Arena",
+    "teamA": {
+      "name": "Team A",
+      "color": "#FFD700",
+      "giftIds": [],
+      "giftKeyword": ""
+    },
+    "teamB": {
+      "name": "Team B",
+      "color": "#FF3B3B",
+      "giftIds": [],
+      "giftKeyword": ""
+    },
+    "generalGiftStrategy": "auto",
+    "pointMultiplier": 1,
+    "showFlameOnTop1": true,
+    "pcMode": false,
+    "backgroundStyle": "dark",
+    "barStyle": "gradient",
+    "maxLeaderboard": 10,
+    "likeToPoints": false,
+    "likeRatio": 100,
+    "soundEffects": true,
+    "scores": {
+      "teamA": 0,
+      "teamB": 0,
+      "membersA": {},
+      "membersB": {}
+    }
+  },
+  "stats": {
+    "totalGifts": 0,
+    "totalComments": 0,
+    "totalLikes": 0,
+    "totalViewers": 0,
+    "gifters": {},
+    "giftStats": {},
+    "likers": {}
+  }
+}alComments": 0,
+    "totalLikes": 0,
+    "totalViewers": 0,
+    "gifters": {},
+    "giftStats": {},
+    "likers": {}
+  }
+}
