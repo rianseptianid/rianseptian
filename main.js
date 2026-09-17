@@ -60,6 +60,8 @@ let licenseWindow = null;
 let logger, configManager, connector, triggerEngine, overlayServer, giftManager, goalManager, youtubeManager, ttsReader, tunnelManager;
 let statsThrottleTimer = null;
 let currentTikTokUsername = '';
+let currentBroadcasterNickname = '';
+let currentBroadcasterAvatar = null;
 let nurearnLiveHeartbeatTimer = null;
 
 // ── Guard: cegah connect() dobel sebelum disconnect selesai (Tugas 1) ──
@@ -671,6 +673,14 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, 'renderer', 'index.html'));
 
+  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    const fileSource = sourceId ? sourceId.split(/[\\/]/).pop() : 'inline';
+    console.log(`[Renderer] ${message} (${fileSource}:${line})`);
+    if (logger && typeof logger.info === 'function' && (message.includes('[Audio') || message.includes('[TriggerAudio]') || message.includes('error') || message.includes('Error'))) {
+      logger.info(`[Renderer] ${message} (${fileSource}:${line})`);
+    }
+  });
+
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
@@ -898,24 +908,70 @@ async function bootstrap() {
   const logsDir = path.join(userDataDir, 'logs');
   const configPath = path.join(userDataDir, 'config.json');
 
-  // Jika config.json belum ada di folder userData baru, periksa apakah ada instalasi v1.2.0 sebelumnya
+  // Jika config.json belum ada di folder userData baru, periksa apakah ada instalasi sebelumnya
   if (!fs.existsSync(configPath)) {
     try {
       const appData = app.getPath('appData');
       const legacyCandidates = [
-        path.join(appData, 'nurearn-studio', 'config.json'),
-        path.join(appData, 'xumuid-studio', 'config.json'),
-        path.join(appData, 'tiktok-live-toolkit', 'config.json')
+        path.join(appData, 'tiktok-live-toolkit', 'config.json'),
+        path.join(appData, 'xumuid-studio', 'config.json')
       ];
       for (const leg of legacyCandidates) {
         if (fs.existsSync(leg)) {
           fs.mkdirSync(userDataDir, { recursive: true });
           fs.copyFileSync(leg, configPath);
-          console.log(`[Config Migration] Berhasil memigrasikan data konfigurasi v1.2.0 dari: ${leg}`);
+          console.log(`[Config Migration] Berhasil memigrasikan data konfigurasi dari: ${leg}`);
           break;
         }
       }
     } catch (_) { }
+  } else {
+    // Jika configPath sudah ada tapi data interaksi & aktivitas kosong, pulihkan dari instalasi sebelumnya
+    try {
+      const currentCfg = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+      const hasNoInteractions = !Array.isArray(currentCfg.interactions) || currentCfg.interactions.length === 0;
+      const hasNoActivities = !Array.isArray(currentCfg.activities) || currentCfg.activities.length === 0;
+      if (hasNoInteractions && hasNoActivities) {
+        const appData = app.getPath('appData');
+        const legacyCandidates = [
+          path.join(appData, 'tiktok-live-toolkit', 'config.json'),
+          path.join(appData, 'xumuid-studio', 'config.json')
+        ];
+        for (const leg of legacyCandidates) {
+          if (fs.existsSync(leg)) {
+            const legCfg = JSON.parse(fs.readFileSync(leg, 'utf8'));
+            let updated = false;
+            if (Array.isArray(legCfg.interactions) && legCfg.interactions.length > 0) {
+              currentCfg.interactions = legCfg.interactions;
+              updated = true;
+            }
+            if (Array.isArray(legCfg.activities) && legCfg.activities.length > 0) {
+              currentCfg.activities = legCfg.activities;
+              updated = true;
+            }
+            if ((!Array.isArray(currentCfg.triggers) || currentCfg.triggers.length === 0) && Array.isArray(legCfg.triggers) && legCfg.triggers.length > 0) {
+              currentCfg.triggers = legCfg.triggers;
+              updated = true;
+            }
+            if ((!Array.isArray(currentCfg.presets) || currentCfg.presets.length === 0) && Array.isArray(legCfg.presets) && legCfg.presets.length > 0) {
+              currentCfg.presets = legCfg.presets;
+              updated = true;
+            }
+            if ((!currentCfg.tiktokUsername || currentCfg.tiktokUsername === 'xumuid') && legCfg.tiktokUsername && legCfg.tiktokUsername !== 'xumuid') {
+              currentCfg.tiktokUsername = legCfg.tiktokUsername;
+              updated = true;
+            }
+            if (updated) {
+              fs.writeFileSync(configPath, JSON.stringify(currentCfg, null, 2), 'utf8');
+              console.log(`[Config Migration] Berhasil memulihkan data interaksi & aktivitas dari: ${leg}`);
+              break;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('[Config Migration] Gagal memulihkan konfigurasi:', e);
+    }
   }
 
   logger = new Logger(logsDir);
@@ -937,7 +993,7 @@ async function bootstrap() {
     if (initStats.totalShares) goalManager.updateGoal('shares', { current: initStats.totalShares });
     if (initStats.totalSubscribers) goalManager.updateGoal('subscribers', { current: initStats.totalSubscribers });
     if (initStats.totalViewers) goalManager.updateGoal('viewers', { current: initStats.totalViewers });
-  } catch (_) {}
+  } catch (_) { }
 
   youtubeManager = new YoutubeManager(logger);
   overlayServer.setYoutubeManager(youtubeManager);
@@ -998,7 +1054,36 @@ async function bootstrap() {
   });
 
   triggerEngine.on('fired', data => send('trigger:fired', data));
-  triggerEngine.on('sound', ({ file, volume }) => send('sound:play', { file, volume }));
+  triggerEngine.on('sound', ({ file, volume }) => {
+    const normVolume = typeof volume === 'number' ? (volume > 1 ? Math.min(1, Math.max(0, volume / 100)) : Math.max(0, volume)) : 1;
+    if (logger) logger.info(`[Sound] Emitting sound playback: ${file} (volume: ${normVolume})`);
+    let dataUrl = null;
+    try {
+      if (file && !file.startsWith('http://') && !file.startsWith('https://')) {
+        let localPath = file.replace(/^file:\/\/\/?/i, '');
+        try { localPath = decodeURIComponent(localPath); } catch (_) {}
+        if (fs.existsSync(localPath)) {
+          const stats = fs.statSync(localPath);
+          if (stats.size < 25 * 1024 * 1024) { // file < 25MB dikonversi ke dataUrl agar anti-blokir
+            const ext = path.extname(localPath).toLowerCase().replace('.', '') || 'mp3';
+            const mime = ext === 'wav' ? 'audio/wav' : ext === 'ogg' ? 'audio/ogg' : 'audio/mpeg';
+            const buf = fs.readFileSync(localPath);
+            dataUrl = `data:${mime};base64,${buf.toString('base64')}`;
+          }
+        }
+      }
+    } catch (err) {
+      if (logger) logger.warn(`[Sound] Gagal encode dataUrl audio: ${err.message}`);
+    }
+
+    send('sound:play', { file, volume: normVolume, dataUrl });
+    if (overlayServer) {
+      overlayServer.broadcast('event:sound', { file, volume: normVolume });
+      if (currentTikTokUsername) {
+        overlayServer.broadcast('event:sound', { file, volume: normVolume }, currentTikTokUsername);
+      }
+    }
+  });
   triggerEngine.on('key', data => send('trigger:key', data));
   triggerEngine.on('media', ({ file, mediaType, durationMs }) => {
     const payload = {
@@ -1124,7 +1209,19 @@ ipcMain.handle('config:updateInteraction', (e, { id, data }) => configManager.up
 ipcMain.handle('config:removeInteraction', (e, id) => { configManager.removeInteraction(id); return true; });
 ipcMain.handle('config:resetInteractions', () => configManager.resetInteractions?.() || true);
 
-ipcMain.handle('config:addActivity', (e, activity) => configManager.addActivity(activity));
+ipcMain.handle('config:addActivity', (e, activity) => {
+  const cfg = configManager.get() || {};
+  const current = cfg.activities || [];
+  const isDup = current.some(a =>
+    a && a.name === activity.name && a.event === activity.event &&
+    JSON.stringify(a.interactionIds || []) === JSON.stringify(activity.interactionIds || [])
+  );
+  if (isDup) {
+    if (logger) logger.warn(`[Activity] Duplicate addActivity request ignored for "${activity.name}"`);
+    return current;
+  }
+  return configManager.addActivity(activity);
+});
 ipcMain.handle('config:updateActivity', (e, { id, data }) => configManager.updateActivity(id, data));
 ipcMain.handle('config:removeActivity', (e, id) => { configManager.removeActivity(id); return true; });
 ipcMain.handle('config:resetActivities', () => configManager.resetActivities?.() || true);
@@ -1187,7 +1284,7 @@ ipcMain.handle('tiktok:connect', async (e, username) => {
       connector.removeAllListeners('status');
     }
     if (connector && typeof connector.disconnect === 'function') {
-      try { await connector.disconnect(); } catch (_) {}
+      try { await connector.disconnect(); } catch (_) { }
     }
 
     // Re-attach listener setelah cleanup (sebelum connect() dipanggil)
@@ -1224,7 +1321,7 @@ ipcMain.handle('tiktok:connect', async (e, username) => {
           }
         }
       }
-      if (ttsReader) { try { ttsReader.handleEvent(evt); } catch (_) {} }
+      if (ttsReader) { try { ttsReader.handleEvent(evt); } catch (_) { } }
       send('tiktok:event', evt);
       updateStats(evt);
       scheduleStatsBroadcast();
@@ -1239,17 +1336,17 @@ ipcMain.handle('tiktok:connect', async (e, username) => {
     }
 
     // Extract broadcaster real avatar & info from connector roomInfo
-    let broadcasterAvatar = null;
-    let broadcasterNickname = currentTikTokUsername;
+    currentBroadcasterAvatar = null;
+    currentBroadcasterNickname = currentTikTokUsername;
     try {
       if (connector && connector.connector && connector.connector.roomInfo) {
         const owner = connector.connector.roomInfo.owner;
         if (owner) {
-          broadcasterNickname = owner.nickname || currentTikTokUsername;
-          broadcasterAvatar = owner.avatar_thumb?.url_list?.[0] || owner.avatar_large?.url_list?.[0] || owner.avatar_medium?.url_list?.[0] || null;
+          currentBroadcasterNickname = owner.nickname || currentTikTokUsername;
+          currentBroadcasterAvatar = owner.avatar_thumb?.url_list?.[0] || owner.avatar_large?.url_list?.[0] || owner.avatar_medium?.url_list?.[0] || null;
         }
       }
-    } catch (_) {}
+    } catch (_) { }
 
     if (nurearnLiveHeartbeatTimer) {
       clearInterval(nurearnLiveHeartbeatTimer);
@@ -1258,17 +1355,42 @@ ipcMain.handle('tiktok:connect', async (e, username) => {
 
     const pushNurearnHeartbeat = () => {
       if (!overlayServer || !currentTikTokUsername) return;
+      if (!currentBroadcasterAvatar && connector && connector.connector && connector.connector.roomInfo) {
+        const owner = connector.connector.roomInfo.owner;
+        if (owner) {
+          currentBroadcasterNickname = owner.nickname || currentTikTokUsername;
+          currentBroadcasterAvatar = owner.avatar_thumb?.url_list?.[0] || owner.avatar_large?.url_list?.[0] || owner.avatar_medium?.url_list?.[0] || null;
+        }
+      }
       const stats = configManager ? configManager.get()?.stats : null;
-      overlayServer.registerLiveStreamer({
+      const streamerData = {
         username: currentTikTokUsername,
-        nickname: broadcasterNickname,
-        avatar: broadcasterAvatar,
+        nickname: currentBroadcasterNickname || currentTikTokUsername,
+        avatar: currentBroadcasterAvatar,
         likes: stats?.totalLikeCount || stats?.likes || 0,
         viewers: stats?.viewerCount || 0,
         diamonds: stats?.totalGifts || stats?.diamonds || 0,
         version: APP_VERSION
-      });
+      };
+      overlayServer.registerLiveStreamer(streamerData);
       send('nurearn:liveUpdate', overlayServer.getLiveStreamers());
+
+      // Sync presence to user's domain (overlay.nurearn.site)
+      try {
+        const https = require('https');
+        const postData = JSON.stringify(streamerData);
+        const req = https.request('https://overlay.nurearn.site/api/nurearn/heartbeat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(postData)
+          },
+          timeout: 3500
+        }, () => {});
+        req.on('error', () => {});
+        req.write(postData);
+        req.end();
+      } catch (_) { }
     };
 
     pushNurearnHeartbeat();
@@ -1290,12 +1412,31 @@ ipcMain.handle('tiktok:disconnect', async () => {
   if (overlayServer && currentTikTokUsername) {
     overlayServer.removeLiveStreamer(currentTikTokUsername);
     send('nurearn:liveUpdate', overlayServer.getLiveStreamers());
+
+    // Notify user's domain
+    try {
+      const https = require('https');
+      const postData = JSON.stringify({ username: currentTikTokUsername });
+      const req = https.request('https://overlay.nurearn.site/api/nurearn/leave', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': Buffer.byteLength(postData)
+        },
+        timeout: 3000
+      }, () => {});
+      req.on('error', () => {});
+      req.write(postData);
+      req.end();
+    } catch (_) { }
   }
+  currentBroadcasterAvatar = null;
+  currentBroadcasterNickname = '';
 
   // ── Tugas 1: Bersihkan listener connector saat disconnect ──
   try {
     await connector.disconnect();
-  } catch (_) {}
+  } catch (_) { }
   currentTikTokUsername = '';
   if (overlayServer && typeof overlayServer.setCurrentUsername === 'function') {
     overlayServer.setCurrentUsername('');
@@ -1310,10 +1451,17 @@ ipcMain.handle('tiktok:disconnect', async () => {
 
 ipcMain.handle('tiktok:status', () => ({
   state: connector.state,
-  username: connector.username
+  username: connector.username || currentTikTokUsername,
+  nickname: currentBroadcasterNickname || connector.username || currentTikTokUsername,
+  avatar: currentBroadcasterAvatar
 }));
 
 ipcMain.handle('nurearn:getLive', () => {
+  const list = overlayServer ? overlayServer.getLiveStreamers() : [];
+  return { ok: true, success: true, data: list, streamers: list };
+});
+
+ipcMain.handle('nurearn:getLiveStreamers', () => {
   const list = overlayServer ? overlayServer.getLiveStreamers() : [];
   return { ok: true, success: true, data: list, streamers: list };
 });
@@ -1637,7 +1785,29 @@ ipcMain.handle('trigger:testActions', async (e, { actions, event, simultaneous, 
 
 ipcMain.handle('soundboard:get', () => configManager.getSoundboard() || []);
 ipcMain.handle('soundboard:add', (e, item) => {
-  const res = configManager.addSoundboardItem(item);
+  // Guard: tolak jika item kosong
+  if (!item || !item.name || !item.key) {
+    if (logger) logger.warn('[Soundboard] add ditolak: item tidak lengkap');
+    return configManager.getSoundboard() || [];
+  }
+
+  const current = configManager.getSoundboard() || [];
+
+  // Dedup guard: tolak jika sudah ada item dengan kombinasi name+key+file+mediaFile yang sama
+  const isDuplicate = current.some(existing =>
+    existing &&
+    existing.name === item.name &&
+    existing.key === item.key &&
+    (existing.file || '') === (item.file || '') &&
+    (existing.mediaFile || '') === (item.mediaFile || '')
+  );
+
+  if (isDuplicate) {
+    if (logger) logger.warn(`[Soundboard] Duplicate add ignored: "${item.name}" (${item.key})`);
+    return current; // kembalikan list saat ini tanpa menambah duplikat
+  }
+
+  configManager.addSoundboardItem(item);
   const all = configManager.getSoundboard() || [];
   registerSoundboardHotkeys(all, true);
   return all;
@@ -1835,7 +2005,7 @@ app.on('before-quit', () => {
   app.isQuitting = true;
   stopWatchPlayerPolling();
   if (tunnelManager && tunnelManager.active) {
-    try { tunnelManager.stop().catch(() => {}); } catch (_) {}
+    try { tunnelManager.stop().catch(() => { }); } catch (_) { }
   }
   if (ytWindow && !ytWindow.isDestroyed()) {
     ytWindow.destroy();

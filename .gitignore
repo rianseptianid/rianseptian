@@ -3,3 +3,7 @@ dist/
 logs/
 *.log
 .DS_Store
+.build-tmp/
+scratch/
+temp_cfg/
+test_config.json

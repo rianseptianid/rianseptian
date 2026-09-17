@@ -1,15 +1,10 @@
 /**
  * nurearnLive.js
- * Controller untuk Nurearn Live Streamers (Vue 3 Reactive Component)
- * Desain & layout persis seperti referensi screenshot (RVTik Online / Nurearn Live):
- * - Judul "Nurearn Live" + Subtitle "🤝 Nuances of Solidarity and Community."
- * - Badge "X Online" + Tombol "Refresh"
- * - Search bar "Cari username atau nama akun..."
- * - Grid 2 Kolom untuk Kartu Streamer
- * - Pembedaan warna tegas: ONLINE (Hijau neon) vs OFFLINE (Merah / Abu-abu muted)
- * - Avatar: Foto profil TikTok asli atau Inisial Huruf Bundar Gradien Toska (M, A, N, D, dll.)
- * - Keterangan durasi / jam mulai live
- * - Tombol [ ↗ Open Live ] untuk membuka live TikTok di browser
+ * Controller untuk Komunitas Streamer Nurearn Live (Vue 3 Reactive Component)
+ * - Hanya menampilkan streamer asli yang terhubung ke aplikasi Nurearn Studio.
+ * - Mengambil profil asli TikTok (avatar, nickname, username, viewers, likes, start time).
+ * - Sinkronisasi realtime melalui IPC, server overlay lokal, dan domain tunnel overlay.nurearn.site.
+ * - Tema visual diselaraskan 100% dengan Nurearn Studio (Dark Glassmorphism & Gold/Emerald).
  */
 
 (function () {
@@ -25,13 +20,13 @@
   }
 
   function getInitialChar(name, username) {
-    const str = (name || username || 'User').trim().replace(/^@/, '');
+    const str = (name || username || 'U').trim().replace(/^@/, '');
     return str.length > 0 ? str.charAt(0).toUpperCase() : 'U';
   }
 
-  // Format timestamp to HH.mm (e.g. 10.11)
+  // Format timestamp to HH.mm (e.g. 14.30)
   function formatTime(ts) {
-    if (!ts) return '10.00';
+    if (!ts) return '--:--';
     const d = new Date(ts);
     const h = String(d.getHours()).padStart(2, '0');
     const m = String(d.getMinutes()).padStart(2, '0');
@@ -40,7 +35,7 @@
 
   // Format live duration (e.g. 01:23:45)
   function formatDuration(startTime) {
-    if (!startTime) return '00:15:20';
+    if (!startTime) return '00:00:00';
     const elapsed = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
     const hours = String(Math.floor(elapsed / 3600)).padStart(2, '0');
     const mins = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
@@ -48,101 +43,8 @@
     return `${hours}:${mins}:${secs}`;
   }
 
-  // Initial community streamer data matching user community experience
-  const DEFAULT_STREAMERS = [
-    {
-      username: 'monmon.coc',
-      nickname: 'monmon.coc',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 40 * 60 * 1000,
-      likes: 12500,
-      viewers: 142
-    },
-    {
-      username: 'abet.popal',
-      nickname: 'abet.popal',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 3 * 3600 * 1000 - 41 * 60 * 1000,
-      likes: 8900,
-      viewers: 85
-    },
-    {
-      username: 'ngabaheuhayy',
-      nickname: 'ngabaheuhayy',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 1 * 3600 * 1000 - 50 * 60 * 1000,
-      likes: 5400,
-      viewers: 62
-    },
-    {
-      username: 'melly.colecti...',
-      nickname: 'melly.colecti...',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 1 * 3600 * 1000 - 10 * 60 * 1000,
-      likes: 21300,
-      viewers: 210
-    },
-    {
-      username: 'danielprosess',
-      nickname: 'danielprosess',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 45 * 60 * 1000,
-      likes: 3100,
-      viewers: 45
-    },
-    {
-      username: '115channel',
-      nickname: '115channel',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 2 * 3600 * 1000,
-      likes: 16700,
-      viewers: 198
-    },
-    {
-      username: 'arfinsuryan',
-      nickname: 'arfinsuryan',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 7 * 3600 * 1000 - 12 * 60 * 1000,
-      likes: 42000,
-      viewers: 420
-    },
-    {
-      username: 'lingkarbali',
-      nickname: 'lingkarbali',
-      avatar: null,
-      isOnline: true,
-      startTime: Date.now() - 1 * 3600 * 1000 - 36 * 60 * 1000,
-      likes: 7200,
-      viewers: 94
-    },
-    {
-      username: 'is_station_ra...',
-      nickname: 'is_station_ra...',
-      avatar: null,
-      isOnline: false,
-      startTime: null,
-      lastSeen: Date.now() - 2 * 3600 * 1000,
-      likes: 0,
-      viewers: 0
-    },
-    {
-      username: 'itsapin27',
-      nickname: 'itsapin27',
-      avatar: null,
-      isOnline: false,
-      startTime: null,
-      lastSeen: Date.now() - 3 * 3600 * 1000 - 12 * 60 * 1000,
-      likes: 0,
-      viewers: 0
-    }
-  ];
+  // Daftar streamer awal KOSONG — HANYA pengguna asli yang terhubung ke Nurearn Studio
+  const DEFAULT_STREAMERS = [];
 
   let vueLiveApp = null;
   const sharedState = {
@@ -162,8 +64,8 @@
         const isRefreshing = ref(false);
         const currentTime = ref(Date.now());
 
-        // Update timer every second for live duration counters
         let timerInterval = null;
+        let pollInterval = null;
 
         sharedState.streamers = streamers;
         sharedState.searchQuery = searchQuery;
@@ -187,7 +89,7 @@
             });
           }
 
-          // Sort: Online first, then Offline
+          // Sort: Online first, then Offline, ordered by start time
           return [...list].sort((a, b) => {
             const aOn = a.isOnline !== false ? 1 : 0;
             const bOn = b.isOnline !== false ? 1 : 0;
@@ -198,6 +100,16 @@
 
         const clearSearch = () => {
           searchQuery.value = '';
+        };
+
+        const focusConnectInput = () => {
+          const inp = document.getElementById('usernameInput');
+          if (inp) {
+            inp.focus();
+            inp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            inp.classList.add('link-copied-flash');
+            setTimeout(() => inp.classList.remove('link-copied-flash'), 1400);
+          }
         };
 
         const openLive = (username) => {
@@ -216,73 +128,45 @@
           s.avatar = null;
         };
 
-        // Fetch live streamers from server or main process
-        const fetchLiveStreamers = async () => {
-          try {
-            isRefreshing.value = true;
-
-            // 1. Electron Main IPC
-            const apiFn = window.api?.getNurearnLive || window.api?.getNurearnLiveStreamers;
-            if (apiFn) {
-              const res = await apiFn();
-              const list = Array.isArray(res) ? res : (res?.data || res?.streamers || []);
-              if (Array.isArray(list) && list.length > 0) {
-                mergeStreamers(list);
-              }
-            }
-
-            // 2. Fetch from local server endpoint if running
-            let port = 8642;
-            if (window.api && window.api.getConfig) {
-              const cfg = await window.api.getConfig().catch(() => null);
-              if (cfg?.overlayPort) port = cfg.overlayPort;
-            }
-
-            const res = await fetch(`http://127.0.0.1:${port}/api/nurearn/live`, { cache: 'no-store' }).catch(() => null);
-            if (res && res.ok) {
-              const json = await res.json().catch(() => null);
-              const list = Array.isArray(json) ? json : (json?.streamers || json?.data || []);
-              if (Array.isArray(list) && list.length > 0) {
-                mergeStreamers(list);
-              }
-            }
-
-            // 3. Sync with current connected user in this app instance
-            syncCurrentConnectedUser();
-          } catch (err) {
-            // Silently fallback
-          } finally {
-            setTimeout(() => {
-              isRefreshing.value = false;
-            }, 400);
-          }
-        };
-
+        // Merge incoming list of active streamers from server / IPC
         function mergeStreamers(incomingList) {
-          const map = new Map();
-          // Keep existing list
-          streamers.value.forEach(s => {
-            map.set(cleanUsername(s.username), { ...s });
-          });
+          if (!Array.isArray(incomingList)) return;
+          const activeMap = new Map();
 
-          // Overlay incoming list
+          // Retain state for incoming streamers
           incomingList.forEach(item => {
             const u = cleanUsername(item.username);
             if (!u) return;
-            const existing = map.get(u) || {};
-            map.set(u, {
+            const existing = streamers.value.find(s => cleanUsername(s.username) === u) || {};
+            activeMap.set(u, {
               ...existing,
               ...item,
               username: u,
               nickname: item.nickname || existing.nickname || u,
+              avatar: item.avatar || existing.avatar || null,
               isOnline: item.isOnline !== false,
-              startTime: item.startTime || existing.startTime || Date.now()
+              startTime: item.startTime || existing.startTime || Date.now(),
+              likes: Number(item.likes ?? existing.likes ?? 0),
+              viewers: Number(item.viewers ?? existing.viewers ?? 0),
+              diamonds: Number(item.diamonds ?? existing.diamonds ?? 0),
+              version: item.version || existing.version || null
             });
           });
 
-          streamers.value = Array.from(map.values());
+          // Also retain locally connected streamer if currently online
+          const usernameInput = document.getElementById('usernameInput');
+          const myUser = cleanUsername(usernameInput?.value || localStorage.getItem('saved_username') || '');
+          if (myUser && !activeMap.has(myUser)) {
+            const myExisting = streamers.value.find(s => cleanUsername(s.username) === myUser);
+            if (myExisting && myExisting.isOnline) {
+              activeMap.set(myUser, myExisting);
+            }
+          }
+
+          streamers.value = Array.from(activeMap.values());
         }
 
+        // Sync with currently connected TikTok account in this application instance
         async function syncCurrentConnectedUser() {
           if (!window.api || !window.api.getStatus) return;
           try {
@@ -291,28 +175,89 @@
             const myUser = cleanUsername(st?.username || usernameInput?.value || localStorage.getItem('saved_username') || '');
 
             if (myUser) {
+              const isConn = st?.state === 'CONNECTED';
               const idx = streamers.value.findIndex(s => cleanUsername(s.username) === myUser);
-              const isConn = st?.state === 'CONNECTED' || st?.state === 'CONNECTING';
+              const nickname = st?.nickname || myUser;
+              const avatar = st?.avatar || null;
 
-              if (idx >= 0) {
-                streamers.value[idx].isOnline = isConn;
-                if (isConn && !streamers.value[idx].startTime) {
-                  streamers.value[idx].startTime = Date.now();
+              if (isConn) {
+                if (idx >= 0) {
+                  streamers.value[idx].isOnline = true;
+                  if (nickname && nickname !== myUser) streamers.value[idx].nickname = nickname;
+                  if (avatar) streamers.value[idx].avatar = avatar;
+                  if (!streamers.value[idx].startTime) streamers.value[idx].startTime = Date.now();
+                } else {
+                  streamers.value.unshift({
+                    username: myUser,
+                    nickname: nickname,
+                    avatar: avatar,
+                    isOnline: true,
+                    startTime: Date.now(),
+                    likes: 0,
+                    viewers: 1
+                  });
                 }
-              } else {
-                streamers.value.unshift({
-                  username: myUser,
-                  nickname: myUser,
-                  avatar: null,
-                  isOnline: isConn,
-                  startTime: isConn ? Date.now() : null,
-                  likes: 0,
-                  viewers: isConn ? 1 : 0
-                });
+              } else if (idx >= 0) {
+                streamers.value[idx].isOnline = false;
+                streamers.value[idx].lastSeen = Date.now();
               }
             }
-          } catch (e) { }
+          } catch (_) { }
         }
+
+        // Fetch live streamers from local IPC, local server, and domain
+        const fetchLiveStreamers = async () => {
+          try {
+            isRefreshing.value = true;
+
+            // 1. Electron Main IPC
+            const apiFn = window.api?.getNurearnLive || window.api?.getNurearnLiveStreamers;
+            if (apiFn) {
+              const res = await apiFn().catch(() => null);
+              const list = Array.isArray(res) ? res : (res?.data || res?.streamers || []);
+              if (Array.isArray(list)) {
+                mergeStreamers(list);
+              }
+            }
+
+            // 2. Fetch from local server endpoint
+            let port = 8642;
+            if (window.api && window.api.getConfig) {
+              const cfg = await window.api.getConfig().catch(() => null);
+              if (cfg?.overlayPort) port = Number(cfg.overlayPort) || 8642;
+            }
+
+            try {
+              const localRes = await fetch(`http://127.0.0.1:${port}/api/nurearn/live`, { cache: 'no-store' });
+              if (localRes && localRes.ok) {
+                const json = await localRes.json().catch(() => null);
+                const list = Array.isArray(json) ? json : (json?.streamers || json?.data || []);
+                if (Array.isArray(list)) mergeStreamers(list);
+              }
+            } catch (_) { }
+
+            // 3. Fetch from remote domain (overlay.nurearn.site) if available
+            try {
+              const remoteRes = await fetch('https://overlay.nurearn.site/api/nurearn/live', {
+                cache: 'no-store',
+                signal: AbortSignal.timeout(2500)
+              });
+              if (remoteRes && remoteRes.ok) {
+                const json = await remoteRes.json().catch(() => null);
+                const list = Array.isArray(json) ? json : (json?.streamers || json?.data || []);
+                if (Array.isArray(list)) mergeStreamers(list);
+              }
+            } catch (_) { }
+
+            // 4. Sync current connected user
+            await syncCurrentConnectedUser();
+          } catch (_) {
+          } finally {
+            setTimeout(() => {
+              isRefreshing.value = false;
+            }, 300);
+          }
+        };
 
         onMounted(() => {
           fetchLiveStreamers();
@@ -321,8 +266,8 @@
             currentTime.value = Date.now();
           }, 1000);
 
-          // Poll every 10s
-          const pollInterval = setInterval(fetchLiveStreamers, 10000);
+          // Poll every 12 detik
+          pollInterval = setInterval(fetchLiveStreamers, 12000);
 
           // Listen for status changes (Connect / Disconnect)
           if (window.api && window.api.onStatus) {
@@ -332,28 +277,32 @@
               if (!u) return;
 
               const idx = streamers.value.findIndex(s => cleanUsername(s.username) === u);
-              const isLive = status.state === 'CONNECTED' || status.state === 'CONNECTING';
+              const isLive = status.state === 'CONNECTED';
+              const nickname = status.nickname || u;
+              const avatar = status.avatar || null;
 
               if (idx >= 0) {
                 streamers.value[idx].isOnline = isLive;
+                if (nickname) streamers.value[idx].nickname = nickname;
+                if (avatar) streamers.value[idx].avatar = avatar;
                 if (isLive && !streamers.value[idx].startTime) {
                   streamers.value[idx].startTime = Date.now();
                 }
-              } else {
+              } else if (isLive) {
                 streamers.value.unshift({
                   username: u,
-                  nickname: u,
-                  avatar: null,
-                  isOnline: isLive,
-                  startTime: isLive ? Date.now() : null,
+                  nickname: nickname,
+                  avatar: avatar,
+                  isOnline: true,
+                  startTime: Date.now(),
                   likes: 0,
-                  viewers: isLive ? 1 : 0
+                  viewers: 1
                 });
               }
             });
           }
 
-          // Realtime event updates for live streamer
+          // Realtime event updates for live streamers
           if (window.api && window.api.onNurearnLiveUpdate) {
             window.api.onNurearnLiveUpdate((data) => {
               const list = Array.isArray(data) ? data : (data?.streamers || data?.data);
@@ -374,6 +323,7 @@
           onlineCount,
           filteredStreamers,
           clearSearch,
+          focusConnectInput,
           openLive,
           handleAvatarError,
           formatTime,

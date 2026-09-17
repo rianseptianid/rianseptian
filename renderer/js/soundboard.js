@@ -14,7 +14,7 @@
         overlayPort = cfg.overlayPort;
         updateUniversalOverlayLink();
       }
-    }).catch(() => {});
+    }).catch(() => { });
   }
 
   if (window.api && window.api.getTunnelStatus) {
@@ -23,7 +23,7 @@
       else activeTunnelUrl = 'https://overlay.nurearn.site';
       updateUniversalOverlayLink();
       renderGrid();
-    }).catch(() => {});
+    }).catch(() => { });
   }
   if (window.api && window.api.onTunnelStatus) {
     window.api.onTunnelStatus(status => {
@@ -53,7 +53,7 @@
     return cleanUser ? `${host}/overlay/@${cleanUser}/soundboard` : `${host}/overlay/soundboard`;
   }
 
-  window.updateSoundboardOverlayLinks = function() {
+  window.updateSoundboardOverlayLinks = function () {
     updateUniversalOverlayLink();
     renderGrid();
   };
@@ -97,7 +97,7 @@
         if (!item.allowDuplicate) {
           const prev = activeAudios.get(item.id);
           if (prev) {
-            try { prev.pause(); prev.currentTime = 0; } catch (e) {}
+            try { prev.pause(); prev.currentTime = 0; } catch (e) { }
           }
           activeAudios.set(item.id, audio);
         }
@@ -114,7 +114,7 @@
           try {
             audio.src = '';
             audio.load();
-          } catch (_) {}
+          } catch (_) { }
         };
 
         updateCardPlayingState(item.id, true);
@@ -139,7 +139,7 @@
       try {
         audio.pause();
         audio.currentTime = 0;
-      } catch (e) {}
+      } catch (e) { }
     });
     activeAudios.clear();
     document.querySelectorAll('.soundboard-card').forEach(el => el.classList.remove('is-playing'));
@@ -168,9 +168,9 @@
       const q = soundboardSearchQuery.toLowerCase().trim();
       filtered = soundboardItems.filter(item => {
         return (item.name && item.name.toLowerCase().includes(q)) ||
-               (item.key && item.key.toLowerCase().includes(q)) ||
-               (item.file && item.file.toLowerCase().includes(q)) ||
-               (item.mediaFile && item.mediaFile.toLowerCase().includes(q));
+          (item.key && item.key.toLowerCase().includes(q)) ||
+          (item.file && item.file.toLowerCase().includes(q)) ||
+          (item.mediaFile && item.mediaFile.toLowerCase().includes(q));
       });
     }
 
@@ -464,7 +464,7 @@
               btnCopyModalUrl.textContent = orig;
               btnCopyModalUrl.style.color = '#fbbf24';
             }, 1500);
-          }).catch(() => {});
+          }).catch(() => { });
         }
       });
     }
@@ -542,11 +542,31 @@
       });
     }
 
-    // 8. Form Submit
+    // 8. Form Submit — FIX: Anti-Duplikasi (stopImmediatePropagation + isSubmitting + disable button)
     const form = document.getElementById('soundboardForm');
     if (form) {
-      form.addEventListener('submit', async (e) => {
+      // Guard flag global untuk form ini, mencegah double-submit dari listener lain
+      let isSubmitting = false;
+      let lastSubmitTs = 0;
+
+      const handleSubmit = async (e) => {
         e.preventDefault();
+        e.stopImmediatePropagation();   // Hentikan listener submit lain (legacy app.js)
+
+        const now = Date.now();
+        if (isSubmitting || (now - lastSubmitTs) < 1000) {
+          console.warn('[Soundboard] Submit diabaikan (dobel / terlalu cepat)');
+          return;
+        }
+        isSubmitting = true;
+        lastSubmitTs = now;
+
+        const submitBtn = document.getElementById('sb_submitBtn');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.dataset.origText = submitBtn.textContent;
+          submitBtn.textContent = 'Menyimpan...';
+        }
 
         const editId = document.getElementById('sb_editing_id')?.value;
         const name = document.getElementById('sb_name')?.value?.trim();
@@ -558,13 +578,23 @@
         const allowDuplicate = document.getElementById('sb_allow_duplicate')?.checked !== false;
         const volume = Number(document.getElementById('sb_volume')?.value || 100);
 
+        const resetSubmitBtn = () => {
+          isSubmitting = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = submitBtn.dataset.origText || 'Simpan ke Sound Board';
+          }
+        };
+
         if (!name || !key) {
           alert('Mohon isi Nama dan Hotkey!');
+          resetSubmitBtn();
           return;
         }
 
         if (!file && !mediaFile) {
           alert('Mohon tentukan minimal salah satu: File Suara atau Media Overlay!');
+          resetSubmitBtn();
           return;
         }
 
@@ -591,8 +621,13 @@
         } catch (err) {
           console.error('Error saving soundboard item:', err);
           alert('Gagal menyimpan tombol suara: ' + err.message);
+        } finally {
+          resetSubmitBtn();
         }
-      });
+      };
+
+      // Daftarkan dengan capture phase agar jalan lebih dulu dari listener lain
+      form.addEventListener('submit', handleSubmit, true);
     }
 
     // 9. Search Bar
@@ -625,7 +660,7 @@
             btnCopyAll.innerHTML = orig;
             btnCopyAll.style.color = '';
           }, 2000);
-        }).catch(() => {});
+        }).catch(() => { });
       });
     }
 
@@ -646,7 +681,7 @@
                 copyBtn.textContent = orig;
                 copyBtn.style.color = '';
               }, 1500);
-            }).catch(() => {});
+            }).catch(() => { });
           }
           return;
         }

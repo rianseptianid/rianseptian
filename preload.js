@@ -58,8 +58,12 @@ contextBridge.exposeInMainWorld('api', {
   testTriggerActions: (actions, event, simultaneous, repeat) =>
     ipcRenderer.invoke('trigger:testActions', { actions, event, simultaneous, repeat }),
   onTriggerFired: (cb) => ipcRenderer.on('trigger:fired', (_, d) => cb(d)),
-  onTriggerKey: (cb) => ipcRenderer.on('trigger:key', (_, d) => cb(d)),
-  onSoundPlay: (cb) => ipcRenderer.on('sound:play', (_, d) => cb(d)),
+  onSoundPlay: (cb) => ipcRenderer.on('sound:play', (_, d) => {
+    if (d && typeof d.volume === 'number' && d.volume > 1) {
+      d.volume = Math.max(0, Math.min(1, d.volume / 100));
+    }
+    cb(d);
+  }),
 
   // Dialogs & Folder Media
   pickSoundFile: () => ipcRenderer.invoke('dialog:pickSoundFile'),
@@ -136,6 +140,11 @@ contextBridge.exposeInMainWorld('api', {
   installIndonesianTts: () => ipcRenderer.invoke('system:installIndoTts'),
   onTtsSpeak: (cb) => ipcRenderer.on('tts:speak', (_, d) => cb(d)),
   onTtsClear: (cb) => ipcRenderer.on('tts:clear', () => cb()),
+
+  // Nurearn Live Community Streamers
+  getNurearnLive: () => ipcRenderer.invoke('nurearn:getLive'),
+  getNurearnLiveStreamers: () => ipcRenderer.invoke('nurearn:getLiveStreamers'),
+  onNurearnLiveUpdate: (cb) => ipcRenderer.on('nurearn:liveUpdate', (_, d) => cb(d)),
 
   // Auto-Update Notifier
   onUpdateAvailable: (cb) => ipcRenderer.on('update:available', (_, d) => cb(d)),

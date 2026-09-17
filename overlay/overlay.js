@@ -389,6 +389,19 @@ function handleIncomingMessage(parsed) {
       handleMedia(payload);
     }
   }
+  if (type === 'event:sound') {
+    if (payload && payload.file) {
+      const audioUrl = payload.file.startsWith('http://') || payload.file.startsWith('https://')
+        ? payload.file
+        : `${baseUrl}/api/media?path=${encodeURIComponent(payload.file)}`;
+      try {
+        const audio = new Audio(audioUrl);
+        const normVol = typeof payload.volume === 'number' ? Math.max(0, Math.min(1, payload.volume > 1 ? payload.volume / 100 : payload.volume)) : 1;
+        audio.volume = normVol;
+        audio.play().catch(e => console.warn('[Overlay Sound] Play error:', e));
+      } catch (err) {}
+    }
+  }
 }
 
 let isSocketIoConnected = false;

@@ -12,6 +12,7 @@
   'use strict';
 
   let cachedInteractions = [];
+  let _isSubmitting = false; // guard: cegah double-submit
 
   function $(id) {
     return document.getElementById(id);
@@ -114,8 +115,6 @@
 
       // Build Action Badges
       const actionBadges = [];
-      const isSimultaneous = item.simultaneous !== false;
-
       (item.actions || []).forEach(act => {
         if (act.type === 'key' && act.spec) {
           const delayTxt = act.delayMs ? ` (${act.delayMs}ms)` : '';
@@ -143,9 +142,10 @@
       });
 
       // Simultaneous Indicator Badge
+      const isSimultaneous = Boolean(item.simultaneous);
       const syncBadge = isSimultaneous
-        ? `<span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3);" title="Suara & Gambar berjalan serentak bersamaan saat Keystroke aktif">⚡ BERSAMAAN</span>`
-        : `<span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(148,163,184,0.15); color:#94a3b8; border:1px solid rgba(148,163,184,0.3);" title="Aksi dijalankan berurutan (menunggu jeda keystroke)">⏳ BERURUTAN</span>`;
+        ? `<span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(234,179,8,0.15); color:#eab308; border:1px solid rgba(234,179,8,0.3);" title="Suara & Media langsung dimainkan seketika tanpa menunggu delay Keystroke">⚡ TANPA DELAY</span>`
+        : `<span style="font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3);" title="Suara & Media dimainkan bersamaan saat tombol keyboard ditekan (mengikuti delay)">🎯 SYNC DELAY</span>`;
 
       card.innerHTML = `
         <div style="flex: 1; min-width: 0;">
@@ -225,9 +225,9 @@
       if (editIdEl) editIdEl.value = editItem.id || '';
       if (nameEl) nameEl.value = editItem.name || '';
 
-      // Simultaneous setting (default true jika belum diset)
+      // Simultaneous setting (default false / unchecked)
       if (simultaneousChk) {
-        simultaneousChk.checked = (editItem.simultaneous !== false);
+        simultaneousChk.checked = Boolean(editItem.simultaneous);
       }
 
       // Populate Keyboard
@@ -276,8 +276,8 @@
       if (editIdEl) editIdEl.value = '';
       if (nameEl) nameEl.value = '';
 
-      // Default: Simultaneous aktif agar suara dan gambar berjalan serentak saat keystroke aktif
-      if (simultaneousChk) simultaneousChk.checked = true;
+      // Default: Jangan diceklis (false) agar suara dan media bareng dengan keystroke setelah delay
+      if (simultaneousChk) simultaneousChk.checked = false;
 
       if (keyEnabled) keyEnabled.checked = false;
       if (keySpec) keySpec.value = '';
@@ -361,6 +361,12 @@
   async function handleInteractionSubmit(e) {
     if (e) e.preventDefault();
 
+    // Guard: jika sedang proses submit, abaikan panggilan duplikat
+    if (_isSubmitting) {
+      console.warn('[Interactions] Submit diabaikan: sedang proses.');
+      return;
+    }
+
     const name = $('int_name')?.value?.trim();
     if (!name) {
       alert('Mohon masukkan Nama Interaksi.');
@@ -375,13 +381,17 @@
     }
 
     const editId = $('int_editing_id')?.value?.trim();
-    const simultaneous = $('int_simultaneous') ? $('int_simultaneous').checked : true;
+    const simultaneous = $('int_simultaneous') ? $('int_simultaneous').checked : false;
 
     const interactionData = {
       name,
       simultaneous,
       actions
     };
+
+    _isSubmitting = true;
+    const submitBtn = $('int_submitBtn');
+    if (submitBtn) submitBtn.disabled = true;
 
     try {
       if (editId) {
@@ -406,6 +416,9 @@
     } catch (err) {
       console.error('[Interactions] Gagal menyimpan interaksi:', err);
       alert('Gagal menyimpan interaksi: ' + err.message);
+    } finally {
+      _isSubmitting = false;
+      if (submitBtn) submitBtn.disabled = false;
     }
   }
 
@@ -422,27 +435,30 @@
       return;
     }
 
-    const simultaneous = $('int_simultaneous') ? $('int_simultaneous').checked : true;
+    const simultaneous = $('int_simultaneous') ? $('int_simultaneous').checked : false;
     const name = $('int_name')?.value?.trim() || 'Uji Coba Interaksi';
 
     if (testResultEl) {
       testResultEl.style.color = '#fbbf24';
-      testResultEl.textContent = `Menjalankan ${actions.length} aksi (${simultaneous ? 'Bersamaan' : 'Berurutan'})...`;
+      testResultEl.textContent = `Menjalankan ${actions.length} aksi (${simultaneous ? 'Suara & Media seketika' : 'Suara & Media bareng delay keystroke'})...`;
     }
 
     try {
       if (window.api && window.api.testInteraction) {
-        await window.api.testInteraction({
+        const res = await window.api.testInteraction({
           id: 'test_preview_' + Date.now(),
           name,
           actions,
           simultaneous
         });
+        if (res && res.ok === false) {
+          throw new Error(res.error || 'Gagal menjalankan aksi interaksi');
+        }
       }
 
       if (testResultEl) {
         testResultEl.style.color = '#10b981';
-        testResultEl.textContent = `✅ Aksi berhasil dijalankan! ${simultaneous ? '(Suara, Gambar & Keystroke serentak)' : ''}`;
+        testResultEl.textContent = `✅ Aksi berhasil dijalankan! ${simultaneous ? '(Suara langsung tanpa delay)' : '(Suara & Keystroke bareng)'}`;
       }
       if (window.showGlassToast) {
         window.showGlassToast(`Uji coba aksi interaksi berhasil dijalankan!`);
@@ -483,9 +499,13 @@
       });
     }
 
-    // Form submit & test run
+    // Form submit & Simpan button click
     const form = $('interactionForm');
+    // Listen to form submit (untuk Enter key di input field)
     if (form) form.addEventListener('submit', handleInteractionSubmit);
+    // Listen to Simpan button click (type=button, bukan type=submit)
+    const btnSubmit = $('int_submitBtn');
+    if (btnSubmit) btnSubmit.addEventListener('click', handleInteractionSubmit);
 
     const btnTestRun = $('int_testRun');
     if (btnTestRun) btnTestRun.addEventListener('click', handleTestRunAction);
@@ -598,14 +618,18 @@
         const btnTest = e.target.closest('.btn-test-interaction');
         if (btnTest) {
           const id = btnTest.dataset.id;
-          const item = cachedInteractions.find(i => String(i.id) === String(id));
-          if (item && window.api && window.api.testInteraction) {
+          const item = cachedInteractions.find(i => String(i.id) === String(id)) || { id };
+          if (window.api && window.api.testInteraction) {
             try {
-              await window.api.testInteraction(item);
+              const res = await window.api.testInteraction(item);
+              if (res && res.ok === false) {
+                throw new Error(res.error || 'Gagal menjalankan aksi interaksi');
+              }
               if (window.showGlassToast) {
-                window.showGlassToast(`Uji coba aksi "${item.name}" berhasil dijalankan!`);
+                window.showGlassToast(`Uji coba aksi "${item.name || 'Interaksi'}" berhasil dijalankan!`);
               }
             } catch (err) {
+              console.error('[Interactions] Test aksi gagal:', err);
               alert('Test aksi gagal: ' + err.message);
             }
           }
@@ -648,6 +672,8 @@
     window.loadInteractions = loadInteractions;
     window.openInteractionModal = openInteractionModal;
     window.closeInteractionModal = closeInteractionModal;
+    // Expose re-init untuk anti-duplikat script (setelah cloneNode form)
+    window._reinitInteractionsController = initInteractions;
 
     // Load initial data
     loadInteractions();

@@ -53,12 +53,15 @@ class OverlayServer {
         const body = req.body || {};
         if (!body.username) return res.status(400).json({ ok: false, error: 'Username required' });
         const username = String(body.username).toLowerCase().trim().replace(/^@/, '');
+        const existing = this.liveStreamers.get(username);
         const streamer = {
           username,
           nickname: body.nickname || username,
           avatar: body.avatar || null,
           likes: Number(body.likes || 0),
           viewers: Number(body.viewers || 0),
+          diamonds: Number(body.diamonds || 0),
+          startTime: body.startTime || existing?.startTime || Date.now(),
           version: body.version || '1.3.14',
           lastSeen: Date.now()
         };
@@ -309,12 +312,20 @@ class OverlayServer {
         return res.status(400).send('Missing ?path=');
       }
       try {
-        const resolved = path.resolve(filePath);
+        let clean = filePath.trim();
+        clean = clean.replace(/^file:\/\/\/?/i, '');
+        try { clean = decodeURIComponent(clean); } catch (_) {}
+
+        let resolved = path.resolve(clean);
         if (!fs.existsSync(resolved)) {
-          this.logger.warn(`Overlay media file not found: "${resolved}"`);
-          return res.status(404).send('File not found');
+          if (fs.existsSync(clean)) {
+            resolved = clean;
+          } else {
+            this.logger.warn(`Overlay media file not found: "${resolved}" (raw: "${filePath}")`);
+            return res.status(404).send('File not found');
+          }
         }
-        res.sendFile(resolved, err => {
+        res.sendFile(resolved, { acceptRanges: true }, err => {
           if (err && !res.headersSent) {
             this.logger.warn(`Overlay media request failed for "${resolved}": ${err.message}`);
             res.status(500).send('Error sending file');
@@ -651,6 +662,7 @@ class OverlayServer {
     if (!data || !data.username) return;
     const username = String(data.username).toLowerCase().trim().replace(/^@/, '');
     if (!this.liveStreamers) this.liveStreamers = new Map();
+    const existing = this.liveStreamers.get(username);
     this.liveStreamers.set(username, {
       username,
       nickname: data.nickname || username,
@@ -658,6 +670,7 @@ class OverlayServer {
       likes: Number(data.likes || 0),
       viewers: Number(data.viewers || 0),
       diamonds: Number(data.diamonds || 0),
+      startTime: data.startTime || existing?.startTime || Date.now(),
       version: data.version || '1.3.14',
       lastSeen: Date.now()
     });
