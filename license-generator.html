@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>License Generator — Xumuid Admin</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0A0C10;
+            --card: #14181F;
+            --card-2: #1A1F28;
+            --border: #232934;
+            --text: #F1F5F9;
+            --text-dim: #8B94A3;
+            --text-mute: #64748B;
+            --accent: #7C5CFF;
+            --accent-hover: #9B85FF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --error: #EF4444;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(at 0% 0%, rgba(124, 92, 255, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(124, 92, 255, 0.05) 0px, transparent 50%);
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        /* ====== LOGIN SCREEN ====== */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: linear-gradient(145deg, rgba(20, 24, 31, 0.92), rgba(15, 18, 25, 0.92));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+            text-align: center;
+        }
+
+        .login-card h2 {
+            margin-bottom: 8px;
+            font-size: 22px;
+        }
+
+        .login-card p {
+            color: var(--text-dim);
+            font-size: 13px;
+            margin-bottom: 24px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px 16px;
+            background: #0A0C10;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border-color 0.18s;
+        }
+
+        .login-card input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent), #6366F1);
+            color: white;
+            border: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .login-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(124, 92, 255, 0.4);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* MAIN APP WRAPPER */
+        #appWrapper {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+        }
+
+        /* TOPBAR */
+        .topbar {
+            width: 100%;
+            max-width: 860px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: rgba(20, 24, 31, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 13px;
+        }
+
+        .topbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-dim);
+        }
+
+        .topbar .user-email {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            padding: 7px 14px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 860px;
+            background: linear-gradient(145deg, rgba(20, 24, 31, 0.92), rgba(15, 18, 25, 0.92));
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+            animation: cardIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .header-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7C5CFF 0%, #6366F1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(124, 92, 255, 0.35);
+            flex-shrink: 0;
+        }
+
+        .header-icon svg {
+            width: 22px;
+            height: 22px;
+            stroke: #fff;
+        }
+
+        .title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 12.5px;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border), transparent);
+            margin: 20px 0;
+        }
+
+        .info-box {
+            background: rgba(124, 92, 255, 0.06);
+            border: 1px solid rgba(124, 92, 255, 0.15);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 12px;
+            color: var(--text-dim);
+            line-height: 1.55;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .info-box svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--accent-hover);
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .btn-generate {
+            width: 100%;
+            padding: 14px 18px;
+            background: linear-gradient(135deg, var(--accent) 0%, #6366F1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.18s ease, box-shadow 0.25s ease, filter 0.2s ease;
+            box-shadow: 0 6px 18px rgba(124, 92, 255, 0.35);
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 26px rgba(124, 92, 255, 0.5);
+            filter: brightness(1.08);
+        }
+
+        .btn-generate:active:not(:disabled) {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-generate svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        #result {
+            margin-top: 20px;
+            min-height: 0;
+        }
+
+        .result-card {
+            background: rgba(16, 185, 129, 0.06);
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 12px;
+            padding: 16px;
+            animation: resultIn 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes resultIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-card.error {
+            background: rgba(239, 68, 68, 0.06);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .result-card.loading {
+            background: rgba(124, 92, 255, 0.06);
+            border-color: rgba(124, 92, 255, 0.25);
+        }
+
+        .result-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .result-card.error .result-label {
+            color: var(--error);
+        }
+
+        .result-card.loading .result-label {
+            color: var(--accent-hover);
+        }
+
+        .result-label svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .key-display {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .key-input {
+            flex: 1;
+            padding: 12px 14px;
+            background: #0A0C10;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: ui-monospace, 'Courier New', Consolas, monospace;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-align: center;
+            outline: none;
+        }
+
+        .key-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.2);
+        }
+
+        .btn-copy {
+            padding: 0 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+        }
+
+        .btn-copy:hover {
+            background: rgba(124, 92, 255, 0.15);
+            border-color: rgba(124, 92, 255, 0.5);
+        }
+
+        .btn-copy.copied {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.5);
+            color: var(--success);
+        }
+
+        .btn-copy svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .result-meta {
+            font-size: 11.5px;
+            color: var(--text-mute);
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .error-msg {
+            font-size: 13px;
+            color: #fca5a5;
+            line-height: 1.55;
+            word-break: break-word;
+        }
+
+        .error-hint {
+            font-size: 11.5px;
+            color: var(--text-mute);
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+            line-height: 1.6;
+        }
+
+        .error-hint code {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: ui-monospace, monospace;
+            font-size: 11px;
+            color: #fbbf24;
+        }
+
+        .status-bar {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11.5px;
+            color: var(--text-mute);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-mute);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .status-dot.online {
+            background: var(--success);
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+        }
+
+        .status-dot.offline {
+            background: var(--error);
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
+        }
+
+        .status-dot.checking {
+            background: var(--warning);
+            animation: pulseDot 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseDot {
+            from {
+                opacity: 0.5;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ====== LIST LICENSE ====== */
+        .list-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .list-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .list-title .badge {
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(124, 92, 255, 0.15);
+            color: var(--accent-hover);
+            padding: 3px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(124, 92, 255, 0.3);
+        }
+
+        .list-tools {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .search-box {
+            padding: 9px 14px;
+            background: #0A0C10;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13px;
+            outline: none;
+            width: 220px;
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.15);
+        }
+
+        .btn-refresh {
+            padding: 9px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.18s ease;
+        }
+
+        .btn-refresh:hover {
+            background: rgba(124, 92, 255, 0.15);
+            border-color: rgba(124, 92, 255, 0.5);
+        }
+
+        .btn-refresh svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .btn-refresh.spinning svg {
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .table-wrap {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid rgba(35, 41, 52, 0.6);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: rgba(124, 92, 255, 0.04);
+        }
+
+        .key-cell {
+            font-family: ui-monospace, Consolas, monospace;
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .key-cell .copy-mini {
+            margin-left: 8px;
+            opacity: 0.5;
+            cursor: pointer;
+            transition: opacity 0.15s;
+            background: none;
+            border: none;
+            color: var(--text);
+            padding: 0;
+        }
+
+        .key-cell .copy-mini:hover {
+            opacity: 1;
+            color: var(--accent-hover);
+        }
+
+        .key-cell .copy-mini svg {
+            width: 12px;
+            height: 12px;
+            vertical-align: middle;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        .status-pill.active {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-pill.expired {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--error);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-pill.banned,
+        .status-pill.revoked {
+            background: rgba(100, 116, 139, 0.15);
+            color: var(--text-mute);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+        }
+
+        .status-pill.unused {
+            background: rgba(245, 158, 11, 0.12);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .duration-cell {
+            font-size: 12.5px;
+            color: var(--text-dim);
+        }
+
+        .duration-cell .days {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .duration-cell .remaining {
+            display: block;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .duration-cell .remaining.ok {
+            color: var(--success);
+        }
+
+        .duration-cell .remaining.warn {
+            color: var(--warning);
+        }
+
+        .duration-cell .remaining.exp {
+            color: var(--error);
+        }
+
+        .machine-cell {
+            font-family: ui-monospace, Consolas, monospace;
+            font-size: 11px;
+            color: var(--text-mute);
+        }
+
+        .machine-cell.bound {
+            color: var(--text-dim);
+        }
+
+        .actions {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .icon-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-dim);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .icon-btn:hover {
+            background: rgba(124, 92, 255, 0.15);
+            border-color: rgba(124, 92, 255, 0.5);
+            color: var(--accent-hover);
+        }
+
+        .icon-btn.danger:hover {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+
+        .icon-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .empty-state {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-mute);
+            font-size: 13px;
+        }
+
+        .empty-state svg {
+            width: 40px;
+            height: 40px;
+            stroke: var(--text-mute);
+            opacity: 0.4;
+            margin-bottom: 12px;
+        }
+
+        /* ====== MODAL ====== */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal {
+            background: linear-gradient(145deg, #14181F, #101318);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.94);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal h3 {
+            font-size: 17px;
+            margin-bottom: 6px;
+        }
+
+        .modal p {
+            font-size: 12.5px;
+            color: var(--text-dim);
+            margin-bottom: 18px;
+            line-height: 1.55;
+        }
+
+        .modal .key-preview {
+            font-family: ui-monospace, monospace;
+            background: #0A0C10;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-align: center;
+            border: 1px solid var(--border);
+            margin-bottom: 16px;
+            color: var(--accent-hover);
+            font-weight: 600;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 11px 16px;
+            border-radius: 8px;
+            border: none;
+            font-family: inherit;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .btn-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 1px solid var(--border) !important;
+        }
+
+        .btn-cancel:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #6366F1);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(124, 92, 255, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(124, 92, 255, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #EF4444, #DC2626);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.5);
+        }
+
+        .field-row {
+            margin-bottom: 16px;
+        }
+
+        .field-row label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-dim);
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        .field-row select,
+        .field-row input {
+            width: 100%;
+            padding: 11px 13px;
+            background: #0A0C10;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 13.5px;
+            outline: none;
+        }
+
+        .field-row select:focus,
+        .field-row input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(124, 92, 255, 0.15);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1A1F28;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s;
+            opacity: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.ok {
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+
+        .toast.err {
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+
+        .toast svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        @media (max-width: 720px) {
+            .list-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+
+            table {
+                min-width: 720px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ========== LOGIN SCREEN ========== -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <h2>Admin Login</h2>
+            <p>Masukkan kredensial Firebase Auth Anda</p>
+            <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+            <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+            <button class="login-btn" id="loginBtn">Login Masuk</button>
+            <div id="loginError" style="color: var(--error); font-size: 13px; margin-top: 12px; display: none;"></div>
+        </div>
+    </div>
+
+    <div id="appWrapper">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div class="user-info">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+                Login sebagai <span class="user-email" id="userEmailDisplay">-</span>
+            </div>
+            <button class="btn-logout" id="logoutBtn">Logout</button>
+        </div>
+
+        <!-- ========== CARD GENERATOR ========== -->
+        <div class="card">
+            <div class="header">
+                <div class="header-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path
+                            d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
+                    </svg>
+                </div>
+                <div>
+                    <div class="title">Xumuid License Generator</div>
+                    <div class="subtitle">Buat kode lisensi baru untuk dijual / dibagikan</div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="info-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 16v-4M12 8h.01" />
+                </svg>
+                <span>Setiap klik akan membuat 1 kode lisensi acak format <strong>XXXX-XXXX-XXXX-XXXX</strong> dan
+                    langsung
+                    menyimpannya ke Firebase dengan status <strong>active</strong>. Waktu lisensi akan berjalan sejak
+                    pertama kali digunakan.</span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label
+                    style="display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-dim); font-weight: 600;">Durasi
+                    Lisensi</label>
+                <select id="durationSelect"
+                    style="width: 100%; padding: 12px 14px; background: #0A0C10; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; color: var(--text); font-family: inherit; font-size: 14px; outline: none;">
+                    <option value="0">Permanen (Unlimited)</option>
+                    <option value="1">1 Hari (Harian)</option>
+                    <option value="7">7 Hari (Mingguan)</option>
+                    <option value="30">30 Hari (Bulanan)</option>
+                    <option value="365">365 Hari (Tahunan)</option>
+                </select>
+            </div>
+
+            <button id="generateBtn" class="btn-generate">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                <span id="btnText">Generate License Key</span>
+            </button>
+
+            <div id="result"></div>
+
+            <div class="status-bar">
+                <span class="status-dot" id="statusDot"></span>
+                <span id="statusText">Memeriksa koneksi Firebase...</span>
+            </div>
+        </div>
+
+        <!-- ========== CARD LIST LICENSE ========== -->
+        <div class="card">
+            <div class="list-header">
+                <div class="list-title">
+                    Daftar License
+                    <span class="badge" id="countBadge">0</span>
+                </div>
+                <div class="list-tools">
+                    <input type="text" class="search-box" id="searchBox" placeholder="Cari key...">
+                    <button class="btn-refresh" id="refreshBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6M1 20v-6h6" />
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                        </svg>
+                        Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>License Key</th>
+                            <th>Status</th>
+                            <th>Durasi</th>
+                            <th>Machine</th>
+                            <th>Dibuat</th>
+                            <th style="text-align: right;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listBody">
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                                <div>Memuat data...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ========== MODAL EDIT ========== -->
+        <div id="modalRoot"></div>
+
+        <!-- ========== TOAST ========== -->
+        <div class="toast" id="toast"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import {
+            getDatabase, ref, set, get, remove, update, onValue, off
+        } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+        import {
+            getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+        } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAi8exYCTMOQiYFYF_G8kqFtOPsZC8I6hU",
+            authDomain: "xumuid-8cf81.firebaseapp.com",
+            projectId: "xumuid-8cf81",
+            storageBucket: "xumuid-8cf81.firebasestorage.app",
+            messagingSenderId: "298818940874",
+            appId: "1:298818940874:web:e4e4dc541884c6b1d22933",
+            databaseURL: "https://xumuid-8cf81-default-rtdb.asia-southeast1.firebasedatabase.app"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+        // ====== DOM ======
+        const loginScreen = document.getElementById('loginScreen');
+        const appWrapper = document.getElementById('appWrapper');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginEmail = document.getElementById('loginEmail');
+        const loginPass = document.getElementById('loginPass');
+        const loginError = document.getElementById('loginError');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userEmailDisplay = document.getElementById('userEmailDisplay');
+
+        const btn = document.getElementById('generateBtn');
+        const btnText = document.getElementById('btnText');
+        const resultEl = document.getElementById('result');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const durationSelect = document.getElementById('durationSelect');
+        const listBody = document.getElementById('listBody');
+        const countBadge = document.getElementById('countBadge');
+        const searchBox = document.getElementById('searchBox');
+        const refreshBtn = document.getElementById('refreshBtn');
+        const modalRoot = document.getElementById('modalRoot');
+        const toastEl = document.getElementById('toast');
+
+        let licensesCache = {};
+        let searchQuery = '';
+        let licensesUnsub = null; // fungsi untuk detach listener
+        let connectedUnsub = null; // fungsi untuk detach listener koneksi
+
+        // ====== AUTH ERROR MESSAGES ======
+        function mapAuthError(code) {
+            const map = {
+                'auth/invalid-email': 'Format email tidak valid.',
+                'auth/user-disabled': 'Akun ini dinonaktifkan.',
+                'auth/user-not-found': 'Email tidak terdaftar.',
+                'auth/wrong-password': 'Password salah.',
+                'auth/invalid-credential': 'Email atau password salah.',
+                'auth/too-many-requests': 'Terlalu banyak percobaan. Coba lagi nanti.',
+                'auth/network-request-failed': 'Koneksi internet bermasalah.',
+                'auth/missing-password': 'Password wajib diisi.'
+            };
+            const key = String(code || '').split('(')[0].trim();
+            return map[key] || 'Login gagal. Periksa email & password.';
+        }
+
+        // ====== AUTH LISTENER ======
+        onAuthStateChanged(auth, (user) => {
+            // Cleanup listener sebelumnya
+            if (licensesUnsub) {
+                licensesUnsub();
+                licensesUnsub = null;
+            }
+            if (connectedUnsub) {
+                connectedUnsub();
+                connectedUnsub = null;
+            }
+
+            if (user) {
+                loginScreen.style.display = 'none';
+                appWrapper.style.display = 'flex';
+                userEmailDisplay.textContent = user.email || '(no email)';
+                initApp();
+            } else {
+                loginScreen.style.display = 'flex';
+                appWrapper.style.display = 'none';
+                userEmailDisplay.textContent = '-';
+                licensesCache = {};
+            }
+        });
+
+        // ====== LOGIN ======
+        loginBtn.addEventListener('click', async () => {
+            const email = loginEmail.value.trim();
+            const pass = loginPass.value;
+            loginError.style.display = 'none';
+
+            if (!email || !pass) {
+                loginError.textContent = 'Email dan password wajib diisi.';
+                loginError.style.display = 'block';
+                return;
+            }
+
+            loginBtn.textContent = 'Memuat...';
+            loginBtn.disabled = true;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                loginPass.value = '';
+            } catch (err) {
+                loginError.textContent = mapAuthError(err.code || err.message);
+                loginError.style.display = 'block';
+            } finally {
+                loginBtn.textContent = 'Login Masuk';
+                loginBtn.disabled = false;
+            }
+        });
+
+        // Enter key di password
+        loginPass.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+
+        // ====== LOGOUT ======
+        logoutBtn.addEventListener('click', async () => {
+            if (!confirm('Yakin mau logout?')) return;
+            try {
+                await signOut(auth);
+            } catch (err) {
+                showToast('Gagal logout: ' + err.message, 'err');
+            }
+        });
+
+        // ====== INIT APP SETELAH LOGIN ======
+        function initApp() {
+            // Cek koneksi realtime via onValue (bukan get(), karena .info/connected tidak boleh di-get())
+            const connectedRef = ref(db, '.info/connected');
+            const connHandler = onValue(connectedRef, (snap) => {
+                if (snap.val() === true) {
+                    statusDot.className = 'status-dot online';
+                    statusText.textContent = 'Terhubung ke Firebase Realtime Database';
+                } else {
+                    statusDot.className = 'status-dot offline';
+                    statusText.textContent = 'Menghubungkan ke database...';
+                }
+            }, (err) => {
+                statusDot.className = 'status-dot offline';
+                statusText.textContent = 'Error: ' + err.message;
+            });
+            connectedUnsub = () => off(connectedRef, 'value', connHandler);
+
+            // Realtime listener (hanya SATU, disimpan agar bisa di-detach)
+            const licensesRef = ref(db, 'licenses');
+            const handler = onValue(
+                licensesRef,
+                (snap) => {
+                    licensesCache = snap.val() || {};
+                    renderList();
+                },
+                (err) => {
+                    console.error(err);
+                    listBody.innerHTML = `
+                        <tr><td colspan="6" class="empty-state">
+                            <div style="color:#fca5a5">Gagal memuat list: ${escapeHtml(err.message)}</div>
+                        </td></tr>
+                    `;
+                }
+            );
+            // Simpan fungsi detach
+            licensesUnsub = () => off(licensesRef, 'value', handler);
+        }
+
+        // ====== HELPERS ======
+        function generateRandomKey() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let key = '';
+            for (let i = 0; i < 16; i++) {
+                if (i > 0 && i % 4 === 0) key += '-';
+                key += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return key;
+        }
+
+        function escapeHtml(str) {
+            if (str === undefined || str === null) return '';
+            return String(str).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function formatDate(ts) {
+            if (!ts) return '-';
+            return new Date(ts).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' });
+        }
+
+        function formatDuration(days) {
+            if (days === 0 || days === null || days === undefined) return 'Permanen';
+            return days + ' Hari';
+        }
+
+        // Hitung expires_at dari activated_at + duration_days
+        // Konsisten dengan backend Electron: activated_at + (duration_days * 86400000)
+        function getExpiresAt(data) {
+            const days = data.duration_days || 0;
+            if (days === 0) return null; // permanen
+            // Prioritas: expires_at (jika ada), fallback ke activated_at + duration
+            if (data.expires_at) return data.expires_at;
+            if (data.activated_at) return data.activated_at + (days * 24 * 60 * 60 * 1000);
+            return null;
+        }
+
+        function computeStatus(data) {
+            if (data.status !== 'active') return data.status;
+            const days = data.duration_days || 0;
+            if (days === 0) {
+                // Permanen: active kalau sudah terikat, unused kalau belum
+                return data.active_machine_id ? 'active' : 'unused';
+            }
+            // Durasi terbatas
+            if (!data.activated_at && !data.expires_at) return 'unused';
+            const exp = getExpiresAt(data);
+            if (exp && Date.now() > exp) return 'expired';
+            return 'active';
+        }
+
+        function computeRemaining(data) {
+            const days = data.duration_days || 0;
+            if (days === 0) return null;
+            if (!data.activated_at && !data.expires_at) {
+                return { text: 'Belum diaktifkan', cls: 'warn' };
+            }
+            const exp = getExpiresAt(data);
+            if (!exp) return { text: 'Belum diaktifkan', cls: 'warn' };
+            const msLeft = exp - Date.now();
+            if (msLeft <= 0) return { text: 'Expired', cls: 'exp' };
+            const dayLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000));
+            return {
+                text: `${dayLeft} hari tersisa`,
+                cls: dayLeft <= 3 ? 'warn' : 'ok'
+            };
+        }
+
+        function showToast(msg, type = 'ok') {
+            toastEl.className = 'toast ' + type;
+            toastEl.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                    ${type === 'ok'
+                    ? '<polyline points="20 6 9 17 4 12"/>'
+                    : '<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'}
+                </svg>
+                <span>${escapeHtml(msg)}</span>
+            `;
+            toastEl.classList.add('show');
+            clearTimeout(toastEl._t);
+            toastEl._t = setTimeout(() => toastEl.classList.remove('show'), 2600);
+        }
+
+        // ====== RENDER LIST ======
+        function renderList() {
+            const entries = Object.entries(licensesCache)
+                .filter(([k]) => !searchQuery || k.toUpperCase().includes(searchQuery.toUpperCase()))
+                .sort((a, b) => (b[1].created_at || 0) - (a[1].created_at || 0));
+
+            countBadge.textContent = Object.keys(licensesCache).length;
+
+            if (entries.length === 0) {
+                listBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <div>${searchQuery ? 'Tidak ada license yang cocok' : 'Belum ada license. Generate dulu di atas.'}</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            listBody.innerHTML = entries.map(([key, data]) => {
+                const status = computeStatus(data);
+                const remaining = computeRemaining(data);
+                const machineShort = data.active_machine_id
+                    ? data.active_machine_id.slice(0, 12) + '...'
+                    : 'Belum terikat';
+
+                return `
+                    <tr>
+                        <td class="key-cell">
+                            ${escapeHtml(key)}
+                            <button class="copy-mini" data-copy="${escapeHtml(key)}" title="Salin key">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <span class="status-pill ${status}">${status}</span>
+                        </td>
+                        <td class="duration-cell">
+                            <span class="days">${formatDuration(data.duration_days)}</span>
+                            ${remaining
+                        ? `<span class="remaining ${remaining.cls}">${remaining.text}</span>`
+                        : '<span class="remaining ok">∞</span>'}
+                        </td>
+                        <td class="machine-cell ${data.active_machine_id ? 'bound' : ''}" title="${escapeHtml(data.active_machine_id || '')}">
+                            ${escapeHtml(machineShort)}
+                        </td>
+                        <td class="duration-cell">${formatDate(data.created_at)}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="icon-btn" data-edit="${escapeHtml(key)}" title="Edit durasi">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                    </svg>
+                                </button>
+                                <button class="icon-btn danger" data-delete="${escapeHtml(key)}" title="Hapus">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="3 6 5 6 21 6"/>
+                                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                        <path d="M10 11v6M14 11v6"/>
+                                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            listBody.querySelectorAll('[data-copy]').forEach(b => {
+                b.onclick = () => {
+                    navigator.clipboard.writeText(b.dataset.copy)
+                        .then(() => showToast('Key disalin!', 'ok'))
+                        .catch(() => showToast('Gagal menyalin', 'err'));
+                };
+            });
+            listBody.querySelectorAll('[data-edit]').forEach(b => {
+                b.onclick = () => openEditModal(b.dataset.edit);
+            });
+            listBody.querySelectorAll('[data-delete]').forEach(b => {
+                b.onclick = () => openDeleteModal(b.dataset.delete);
+            });
+        }
+
+        // Search filter
+        searchBox.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            renderList();
+        });
+
+        // Refresh manual
+        refreshBtn.onclick = async () => {
+            refreshBtn.classList.add('spinning');
+            try {
+                const snap = await get(ref(db, 'licenses'));
+                licensesCache = snap.val() || {};
+                renderList();
+                showToast('Data di-refresh', 'ok');
+            } catch (err) {
+                showToast('Gagal refresh: ' + err.message, 'err');
+            } finally {
+                setTimeout(() => refreshBtn.classList.remove('spinning'), 500);
+            }
+        };
+
+        // ====== GENERATE ======
+        btn.addEventListener('click', async () => {
+            const newKey = generateRandomKey();
+            const durationDays = parseInt(durationSelect.value, 10);
+
+            btn.disabled = true;
+            btnText.textContent = 'Menyimpan...';
+            resultEl.innerHTML = `
+                <div class="result-card loading">
+                    <div class="result-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                        </svg>
+                        Menyimpan ke Firebase...
+                    </div>
+                </div>
+            `;
+
+            try {
+                await set(ref(db, `licenses/${newKey}`), {
+                    status: 'active',
+                    created_at: Date.now(),
+                    duration_days: durationDays,
+                    active_machine_id: null,
+                    activated_at: null,
+                    expires_at: null
+                });
+
+                const durationText = durationDays === 0 ? 'Permanen' : `${durationDays} Hari`;
+
+                resultEl.innerHTML = `
+                    <div class="result-card">
+                        <div class="result-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            License berhasil dibuat
+                        </div>
+                        <div class="key-display">
+                            <input type="text" class="key-input" id="keyOutput" value="${escapeHtml(newKey)}" readonly />
+                            <button class="btn-copy" id="copyBtn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2"/>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                </svg>
+                                <span id="copyText">Salin</span>
+                            </button>
+                        </div>
+                        <div class="result-meta">
+                            <span>Dibuat: ${new Date().toLocaleString('id-ID')}</span>
+                            <span>Status: active</span>
+                            <span>Durasi: ${durationText}</span>
+                        </div>
+                    </div>
+                `;
+
+                const copyBtn = document.getElementById('copyBtn');
+                const keyOutput = document.getElementById('keyOutput');
+                const copyText = document.getElementById('copyText');
+
+                copyBtn.addEventListener('click', () => {
+                    keyOutput.select();
+                    keyOutput.setSelectionRange(0, 99999);
+                    const val = keyOutput.value;
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(val).then(() => showCopied()).catch(() => {
+                            document.execCommand('copy'); showCopied();
+                        });
+                    } else {
+                        document.execCommand('copy'); showCopied();
+                    }
+                });
+
+                function showCopied() {
+                    copyBtn.classList.add('copied');
+                    copyText.textContent = 'Tersalin!';
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyText.textContent = 'Salin';
+                    }, 1500);
+                }
+
+                keyOutput.focus();
+                keyOutput.select();
+                showToast('License berhasil dibuat', 'ok');
+
+            } catch (err) {
+                let hint = '';
+                if (err.message.includes('permission_denied') || err.message.includes('Permission denied')) {
+                    hint = 'Realtime Database Rules menolak akses. Cek Firebase Console → Realtime Database → Rules.';
+                } else if (err.message.includes('databaseURL') || err.message.includes('No database')) {
+                    hint = 'Nilai <code>databaseURL</code> kemungkinan salah.';
+                } else if (err.message.includes('network') || err.message.includes('Failed to fetch')) {
+                    hint = 'Koneksi ke Firebase gagal. Cek internet.';
+                } else {
+                    hint = 'Pastikan Realtime Database aktif dan <code>databaseURL</code> benar.';
+                }
+
+                resultEl.innerHTML = `
+                    <div class="result-card error">
+                        <div class="result-label">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            Gagal Generate Key
+                        </div>
+                        <div class="error-msg">${escapeHtml(err.message)}</div>
+                        <div class="error-hint">${hint}</div>
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Generate License Key';
+            }
+        });
+
+        // ====== MODAL: EDIT ======
+        function openEditModal(key) {
+            const data = licensesCache[key];
+            if (!data) return;
+
+            const durOptions = [
+                { v: 0, l: 'Permanen (Unlimited)' },
+                { v: 1, l: '1 Hari (Harian)' },
+                { v: 7, l: '7 Hari (Mingguan)' },
+                { v: 30, l: '30 Hari (Bulanan)' },
+                { v: 365, l: '365 Hari (Tahunan)' }
+            ];
+
+            const statusOptions = [
+                { v: 'active', l: 'Active' },
+                { v: 'banned', l: 'Banned' },
+                { v: 'revoked', l: 'Revoked' }
+            ];
+
+            const durSelect = durOptions.map(o =>
+                `<option value="${o.v}" ${o.v === (data.duration_days || 0) ? 'selected' : ''}>${o.l}</option>`
+            ).join('');
+            const statSelect = statusOptions.map(o =>
+                `<option value="${o.v}" ${o.v === data.status ? 'selected' : ''}>${o.l}</option>`
+            ).join('');
+
+            const hasMachine = !!data.active_machine_id;
+
+            modalRoot.innerHTML = `
+                <div class="modal-backdrop" id="backdrop">
+                    <div class="modal">
+                        <h3>Edit License</h3>
+                        <p>Ubah durasi dan status. Reset aktivasi juga bisa dilakukan.</p>
+
+                        <div class="key-preview">${escapeHtml(key)}</div>
+
+                        <div class="field-row">
+                            <label>Durasi</label>
+                            <select id="editDuration">${durSelect}</select>
+                        </div>
+
+                        <div class="field-row">
+                            <label>Status</label>
+                            <select id="editStatus">${statSelect}</select>
+                        </div>
+
+                        <div class="field-row">
+                            <label style="display:flex; align-items:center; gap:8px; cursor:${hasMachine ? 'pointer' : 'not-allowed'};">
+                                <input type="checkbox" id="editResetMachine" ${hasMachine ? '' : 'disabled'}>
+                                Reset aktivasi (unbind HWID & reset durasi)
+                            </label>
+                            <div style="font-size:11px; color: var(--text-mute); margin-top:6px; line-height:1.5;">
+                                ${hasMachine
+                    ? 'Mencentang ini akan menghapus machine ID, <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">activated_at</code>, dan <code style="background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:3px;">expires_at</code>. Durasi mulai dari nol lagi saat diaktivasi ulang.'
+                    : 'Belum ada machine yang terikat.'}
+                            </div>
+                        </div>
+
+                        <div class="modal-actions">
+                            <button class="btn-cancel" id="cancelBtn">Batal</button>
+                            <button class="btn-primary" id="saveBtn">Simpan</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const close = () => modalRoot.innerHTML = '';
+            document.getElementById('cancelBtn').onclick = close;
+            document.getElementById('backdrop').onclick = (e) => { if (e.target.id === 'backdrop') close(); };
+
+            document.getElementById('saveBtn').onclick = async () => {
+                const newDur = parseInt(document.getElementById('editDuration').value, 10);
+                const newStatus = document.getElementById('editStatus').value;
+                const resetMachine = document.getElementById('editResetMachine').checked;
+
+                const updates = {
+                    duration_days: newDur,
+                    status: newStatus
+                };
+
+                if (resetMachine) {
+                    updates.active_machine_id = null;
+                    updates.activated_at = null;
+                    updates.expires_at = null;
+                } else if (newDur === 0) {
+                    updates.expires_at = null;
+                } else if (data.activated_at) {
+                    updates.expires_at = data.activated_at + (newDur * 24 * 60 * 60 * 1000);
+                }
+
+                try {
+                    await update(ref(db, `licenses/${key}`), updates);
+                    showToast('License diupdate', 'ok');
+                    close();
+                } catch (err) {
+                    showToast('Gagal update: ' + err.message, 'err');
+                }
+            };
+        }
+
+        // ====== MODAL: DELETE ======
+        function openDeleteModal(key) {
+            modalRoot.innerHTML = `
+                <div class="modal-backdrop" id="backdrop">
+                    <div class="modal">
+                        <h3 style="color:#fca5a5">Hapus License?</h3>
+                        <p>License ini akan dihapus permanen dari database. Tindakan ini tidak dapat dibatalkan.</p>
+
+                        <div class="key-preview">${escapeHtml(key)}</div>
+
+                        <div class="modal-actions">
+                            <button class="btn-cancel" id="cancelBtn">Batal</button>
+                            <button class="btn-danger" id="delBtn">Ya, Hapus</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const close = () => modalRoot.innerHTML = '';
+            document.getElementById('cancelBtn').onclick = close;
+            document.getElementById('backdrop').onclick = (e) => { if (e.target.id === 'backdrop') close(); };
+
+            document.getElementById('delBtn').onclick = async () => {
+                try {
+                    await remove(ref(db, `licenses/${key}`));
+                    showToast('License dihapus', 'ok');
+                    close();
+                } catch (err) {
+                    showToast('Gagal hapus: ' + err.message, 'err');
+                }
+            };
+        }
+    </script>
+</body>
+
+</html>

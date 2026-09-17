@@ -1,0 +1,14 @@
+{
+  "interactions": [
+    {
+      "id": "int-1",
+      "name": "Test"
+    }
+  ],
+  "activities": [
+    {
+      "id": "act-1",
+      "name": "Test Act"
+    }
+  ]
+}
