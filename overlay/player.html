@@ -61,20 +61,7 @@
       align-items: center;
       gap: 10px;
     }
-    .badge-brave {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255, 90, 31, 0.15);
-      color: #ff5a1f;
-      border: 1px solid rgba(255, 90, 31, 0.4);
-      padding: 4px 10px;
-      border-radius: 9999px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
+
     .status-badge {
       font-size: 12px;
       font-weight: 600;
@@ -93,23 +80,70 @@
       background: #22c55e;
       box-shadow: 0 0 8px #22c55e;
     }
-    .video-wrapper {
+
+    /* Audio visualizer area */
+    .audio-wrapper {
       position: relative;
       width: 100%;
-      padding-top: 56.25%; /* 16:9 Aspect Ratio */
-      background: #000;
+      padding: 32px 24px;
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(10, 10, 30, 0.8) 100%);
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 140px;
     }
-    #ytPlayer {
-      position: absolute;
-      top: 0;
-      left: 0;
+    .audio-icon {
+      font-size: 48px;
+      margin-bottom: 8px;
+      transition: transform 0.3s ease;
+    }
+    .audio-icon.playing {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+    .audio-status {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .audio-status.active { color: #22c55e; }
+    .audio-status.error { color: #ef4444; }
+    .audio-status.loading { color: #f59e0b; }
+
+    /* Progress bar */
+    .progress-container {
       width: 100%;
-      height: 100%;
-      border: none;
+      margin-top: 16px;
     }
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 3px;
+      transition: width 0.3s linear;
+      width: 0%;
+    }
+    .progress-time {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
     .info-card {
       display: flex;
       align-items: center;
@@ -193,12 +227,9 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
         </svg>
-        YouTube Music Web Player
+        yt-dlp Music Player
       </div>
       <div style="display: flex; align-items: center; gap: 12px;">
-        <span class="badge-brave" title="Brave Shields otomatis memblokir semua iklan YouTube">
-          🛡️ Brave Shields Ready
-        </span>
         <div class="status-badge">
           <span class="status-dot" id="wsDot"></span>
           <span id="wsStatusText">Menghubungkan...</span>
@@ -206,9 +237,22 @@
       </div>
     </div>
 
-    <div class="video-wrapper">
-      <div id="ytPlayer"></div>
+    <div class="audio-wrapper">
+      <div class="audio-icon" id="audioIcon">🎵</div>
+      <div class="audio-status" id="audioStatus">Menunggu request lagu...</div>
+      <div class="progress-container" id="progressContainer" style="display: none;">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-time">
+          <span id="timeCurrent">0:00</span>
+          <span id="timeDuration">0:00</span>
+        </div>
+      </div>
     </div>
+
+    <!-- Hidden audio element for direct stream playback -->
+    <audio id="audioPlayer" preload="auto"></audio>
 
     <div class="info-card">
       <img id="thumbImg" class="thumb-preview" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='%23334155'%3E%3Cpath d='M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z'/%3E%3C/svg%3E" alt="Thumbnail" />
@@ -239,101 +283,113 @@
     </div>
 
     <div class="footer-note">
-      💡 <strong>Tips:</strong> Buka halaman ini di <strong>Brave Browser</strong> agar semua iklan YouTube otomatis terblokir secara permanen oleh Brave Shields. Tab ini akan otomatis memutar setiap lagu dari live chat TikTok (<code>!play</code>).
+      💡 <strong>yt-dlp Direct Stream:</strong> Audio diputar langsung dari engine yt-dlp — tanpa iklan, tanpa batasan embed. Tab ini otomatis memutar setiap lagu dari live chat TikTok (<code>!play</code>).
     </div>
   </div>
 
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    let player = null;
-    let isPlayerReady = false;
+    const audio = document.getElementById('audioPlayer');
+    const audioIcon = document.getElementById('audioIcon');
+    const audioStatusEl = document.getElementById('audioStatus');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const timeCurrent = document.getElementById('timeCurrent');
+    const timeDuration = document.getElementById('timeDuration');
+
     let ws = null;
     let currentVideoId = null;
-    let pendingSong = null;
-    let progressTimer = null;
     let isMuted = false;
+    let currentSongData = null;
+    let progressTimer = null;
 
-    // 1. Connect WebSocket IMMEDIATELY upon page load (0ms delay)
+    // Format seconds to m:ss
+    function fmtTime(sec) {
+      if (!sec || isNaN(sec)) return '0:00';
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    // Audio event listeners
+    audio.addEventListener('play', () => {
+      audioIcon.textContent = '🎶';
+      audioIcon.classList.add('playing');
+      audioStatusEl.textContent = '▶ Sedang memutar...';
+      audioStatusEl.className = 'audio-status active';
+      progressContainer.style.display = 'block';
+    });
+
+    audio.addEventListener('pause', () => {
+      if (!audio.ended) {
+        audioIcon.classList.remove('playing');
+        audioStatusEl.textContent = '⏸ Dijeda';
+        audioStatusEl.className = 'audio-status loading';
+      }
+    });
+
+    audio.addEventListener('ended', () => {
+      audioIcon.textContent = '✅';
+      audioIcon.classList.remove('playing');
+      audioStatusEl.textContent = '✓ Lagu selesai — menunggu lagu berikutnya...';
+      audioStatusEl.className = 'audio-status';
+      // Notify server that song ended
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'youtube:videoEnded' }));
+      }
+    });
+
+    audio.addEventListener('error', (e) => {
+      const errMsg = audio.error ? audio.error.message : 'Unknown error';
+      audioIcon.textContent = '⚠️';
+      audioIcon.classList.remove('playing');
+      audioStatusEl.textContent = '✗ Error: ' + errMsg;
+      audioStatusEl.className = 'audio-status error';
+      console.error('[Player] Audio error:', errMsg);
+      // Notify server to skip on error
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({ type: 'youtube:videoEnded' }));
+      }
+    });
+
+    audio.addEventListener('waiting', () => {
+      audioStatusEl.textContent = '⏳ Buffering...';
+      audioStatusEl.className = 'audio-status loading';
+    });
+
+    audio.addEventListener('canplay', () => {
+      if (!audio.paused) {
+        audioStatusEl.textContent = '▶ Sedang memutar...';
+        audioStatusEl.className = 'audio-status active';
+      }
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration && !isNaN(audio.duration)) {
+        const pct = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = pct + '%';
+        timeCurrent.textContent = fmtTime(audio.currentTime);
+        timeDuration.textContent = fmtTime(audio.duration);
+      }
+    });
+
+    // 1. Connect WebSocket
     connectWebSocket();
 
-    // 2. YouTube IFrame API Ready
-    function onYouTubeIframeAPIReady() {
-      const initId = pendingSong ? pendingSong.videoId : '';
-      player = new YT.Player('ytPlayer', {
-        videoId: initId,
-        playerVars: {
-          autoplay: 1,
-          controls: 1,
-          rel: 0,
-          playsinline: 1,
-          modestbranding: 1
-        },
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange,
-          onError: onPlayerError
-        }
-      });
-    }
-
-    function onPlayerReady() {
-      console.log('[WebPlayer] YouTube player ready');
-      isPlayerReady = true;
-      if (pendingSong) {
-        try {
-          if (player && typeof player.loadVideoById === 'function') {
-            player.loadVideoById(pendingSong.videoId);
-            player.playVideo();
-          }
-        } catch (_) {}
-        pendingSong = null;
-      }
-      startProgressReporting();
-    }
-
-    function onPlayerStateChange(event) {
-      // YT.PlayerState.ENDED = 0
-      if (event.data === 0) {
-        console.log('[WebPlayer] Video ended -> notify server');
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'youtube:videoEnded' }));
-        }
-      }
-    }
-
-    function onPlayerError(event) {
-      console.warn('[WebPlayer] YouTube player error code:', event.data);
-      const isEmbedRestricted = event.data === 101 || event.data === 150;
-      const msg = isEmbedRestricted
-        ? '⚠️ Video tidak mengizinkan embed oleh pemiliknya, melewati ke lagu berikutnya...'
-        : '⚠️ Video tidak dapat diputar (Error ' + event.data + '), melewati...';
-      const titleEl = document.getElementById('songTitle');
-      if (titleEl) titleEl.textContent = msg;
-
-      setTimeout(() => {
-        if (ws && ws.readyState === WebSocket.OPEN) {
-          ws.send(JSON.stringify({ type: 'youtube:skip' }));
-        }
-      }, 2500);
-    }
-
-    // 3. WebSocket Connection to local overlayServer
     function connectWebSocket() {
       const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsUrl = `${proto}//${window.location.host}`;
-      console.log('[WebPlayer] Connecting to WebSocket:', wsUrl);
+      console.log('[Player] Connecting to WebSocket:', wsUrl);
 
       ws = new WebSocket(wsUrl);
 
       ws.onopen = () => {
-        console.log('[WebPlayer] WebSocket connected');
+        console.log('[Player] WebSocket connected');
         const dot = document.getElementById('wsDot');
         const txt = document.getElementById('wsStatusText');
         if (dot) dot.className = 'status-dot connected';
         if (txt) txt.textContent = 'Terhubung ke Studio';
-        // Request current state immediately
         ws.send(JSON.stringify({ type: 'youtube:request-state' }));
-        if (isPlayerReady) startProgressReporting();
+        startProgressReporting();
       };
 
       ws.onmessage = (event) => {
@@ -341,12 +397,12 @@
           const msg = JSON.parse(event.data);
           handleServerMessage(msg);
         } catch (e) {
-          console.error('[WebPlayer] Parse error:', e);
+          console.error('[Player] Parse error:', e);
         }
       };
 
       ws.onclose = () => {
-        console.warn('[WebPlayer] WebSocket disconnected, reconnecting in 2s...');
+        console.warn('[Player] WebSocket disconnected, reconnecting in 2s...');
         const dot = document.getElementById('wsDot');
         const txt = document.getElementById('wsStatusText');
         if (dot) dot.className = 'status-dot';
@@ -356,7 +412,7 @@
       };
 
       ws.onerror = (err) => {
-        console.error('[WebPlayer] WebSocket error:', err);
+        console.error('[Player] WebSocket error:', err);
       };
     }
 
@@ -377,65 +433,108 @@
     function playSong(song) {
       if (!song || !song.videoId) return;
       currentVideoId = song.videoId;
+      currentSongData = song;
 
       document.getElementById('songTitle').textContent = song.title || 'Unknown Song';
-      document.getElementById('songChannel').textContent = song.channel || 'YouTube';
+      document.getElementById('songChannel').textContent = song.channel || 'yt-dlp Music';
       document.getElementById('songRequester').textContent = song.requester ? `@${song.requester}` : 'Host';
       if (song.thumbnail) {
         document.getElementById('thumbImg').src = song.thumbnail;
       }
 
-      if (isPlayerReady && player && typeof player.loadVideoById === 'function') {
-        player.loadVideoById(song.videoId);
-        player.playVideo();
+      // Use direct stream URL if available
+      if (song.streamUrl) {
+        audioIcon.textContent = '⏳';
+        audioStatusEl.textContent = '⏳ Loading stream...';
+        audioStatusEl.className = 'audio-status loading';
+
+        audio.src = song.streamUrl;
+        audio.load();
+        audio.play().then(() => {
+          audioIcon.textContent = '🎶';
+          audioIcon.classList.add('playing');
+          audioStatusEl.textContent = '▶ Sedang memutar...';
+          audioStatusEl.className = 'audio-status active';
+          progressContainer.style.display = 'block';
+        }).catch(err => {
+          console.error('[Player] Play error:', err);
+          audioIcon.textContent = '⚠️';
+          audioStatusEl.textContent = '✗ Gagal memutar: ' + err.message;
+          audioStatusEl.className = 'audio-status error';
+        });
       } else {
-        // Player belum siap (masih loading API) -> simpan ke pendingSong agar langsung putar begitu siap!
-        pendingSong = song;
+        // Fallback: try to construct stream URL from Invidious
+        const base = (song.invidiousUrl || 'https://yewtu.be').replace(/\/+$/, '');
+        const streamUrl = `${base}/latest_version?id=${song.videoId}&itag=140`;
+
+        audioIcon.textContent = '⏳';
+        audioStatusEl.textContent = '⏳ Loading stream...';
+        audioStatusEl.className = 'audio-status loading';
+
+        audio.src = streamUrl;
+        audio.load();
+        audio.play().then(() => {
+          audioIcon.textContent = '🎶';
+          audioIcon.classList.add('playing');
+          audioStatusEl.textContent = '▶ Sedang memutar...';
+          audioStatusEl.className = 'audio-status active';
+          progressContainer.style.display = 'block';
+        }).catch(err => {
+          console.error('[Player] Play error:', err);
+          audioStatusEl.textContent = '✗ Gagal memutar';
+          audioStatusEl.className = 'audio-status error';
+        });
       }
     }
 
     function stopSong() {
       currentVideoId = null;
-      pendingSong = null;
+      currentSongData = null;
+      audio.pause();
+      audio.src = '';
       document.getElementById('songTitle').textContent = 'Menunggu request lagu...';
       document.getElementById('songChannel').textContent = 'Nurearn Studio';
       document.getElementById('songRequester').textContent = 'TikTok LIVE';
-      if (player && typeof player.stopVideo === 'function') {
-        player.stopVideo();
-      }
+      audioIcon.textContent = '🎵';
+      audioIcon.classList.remove('playing');
+      audioStatusEl.textContent = 'Menunggu request lagu...';
+      audioStatusEl.className = 'audio-status';
+      progressContainer.style.display = 'none';
+      progressFill.style.width = '0%';
     }
 
     function handleCommand(cmd, arg) {
-      if (!player) return;
-      if (cmd === 'pause' && typeof player.pauseVideo === 'function') {
-        player.pauseVideo();
-      } else if (cmd === 'resume' && typeof player.playVideo === 'function') {
-        player.playVideo();
-      } else if (cmd === 'volume' && typeof player.setVolume === 'function') {
-        const vol = Number(arg);
-        player.setVolume(vol);
-        document.getElementById('volRange').value = vol;
-        document.getElementById('volVal').textContent = vol + '%';
-      } else if (cmd === 'seek' && typeof player.seekTo === 'function') {
-        player.seekTo(Number(arg), true);
+      if (cmd === 'pause') {
+        audio.pause();
+      } else if (cmd === 'resume') {
+        audio.play().catch(() => {});
+      } else if (cmd === 'volume') {
+        const vol = Math.max(0, Math.min(1, Number(arg) / 100));
+        audio.volume = vol;
+        const range = document.getElementById('volRange');
+        const val = document.getElementById('volVal');
+        if (range) range.value = String(Math.round(vol * 100));
+        if (val) val.textContent = Math.round(vol * 100) + '%';
+      } else if (cmd === 'seek') {
+        const sec = Number(arg);
+        if (!Number.isNaN(sec) && audio.duration) audio.currentTime = sec;
       }
     }
 
     function startProgressReporting() {
       stopProgressReporting();
       progressTimer = setInterval(() => {
-        if (!player || !currentVideoId || typeof player.getCurrentTime !== 'function') return;
-        try {
-          const current = Math.round(player.getCurrentTime() || 0);
-          const total = Math.round(player.getDuration() || 0);
-          if (ws && ws.readyState === WebSocket.OPEN && total > 0) {
-            ws.send(JSON.stringify({
-              type: 'youtube:progress',
-              payload: { current, total }
-            }));
-          }
-        } catch (_) {}
-      }, 1000);
+        if (!currentVideoId) return;
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'youtube:progress',
+            payload: {
+              current: Math.round(audio.currentTime || 0),
+              total: Math.round(audio.duration || 0)
+            }
+          }));
+        }
+      }, 2000);
     }
 
     function stopProgressReporting() {
@@ -443,19 +542,12 @@
       progressTimer = null;
     }
 
-    // 3. Local UI controls
+    // UI controls
     document.getElementById('btnToggleMute').onclick = () => {
-      if (!player) return;
       isMuted = !isMuted;
-      if (isMuted) {
-        player.mute();
-        document.getElementById('muteIcon').textContent = '🔇';
-        document.getElementById('muteText').textContent = 'Unmute';
-      } else {
-        player.unMute();
-        document.getElementById('muteIcon').textContent = '🔊';
-        document.getElementById('muteText').textContent = 'Mute';
-      }
+      audio.muted = isMuted;
+      document.getElementById('muteIcon').textContent = isMuted ? '🔇' : '🔊';
+      document.getElementById('muteText').textContent = isMuted ? 'Unmute' : 'Mute';
     };
 
     document.getElementById('btnSkipSong').onclick = () => {
@@ -467,17 +559,8 @@
     document.getElementById('volRange').oninput = (e) => {
       const vol = Number(e.target.value);
       document.getElementById('volVal').textContent = vol + '%';
-      if (player && typeof player.setVolume === 'function') {
-        player.setVolume(vol);
-      }
+      audio.volume = vol / 100;
     };
-
-    // Unblock browser autoplay restrictions on user interaction with the page
-    window.addEventListener('click', () => {
-      if (player && typeof player.unMute === 'function' && !isMuted) {
-        try { player.unMute(); } catch (_) {}
-      }
-    }, { once: true });
   </script>
 </body>
 </html>

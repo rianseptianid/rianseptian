@@ -13,6 +13,11 @@
     chkReadChat: document.getElementById('tts_read_chat'),
     chkReadGift: document.getElementById('tts_read_gift'),
     chkIgnoreCommands: document.getElementById('tts_ignore_commands'),
+    chkReadLike: document.getElementById('tts_read_like'),
+    chkReadShare: document.getElementById('tts_read_share'),
+    chkReadFollow: document.getElementById('tts_read_follow'),
+    chkReadJoin: document.getElementById('tts_read_join'),
+    selEngine: document.getElementById('tts_engine'),
     selVoice: document.getElementById('tts_voice'),
     rangeSpeed: document.getElementById('tts_rate'),
     valSpeed: document.getElementById('tts_rate_val'),
@@ -47,20 +52,26 @@
     const currentVal = els.selVoice.value;
     els.selVoice.innerHTML = '';
 
+    const googleGroup = document.createElement('optgroup');
+    googleGroup.label = '🟢 Google TTS (Gratis)';
     const idGroup = document.createElement('optgroup');
-    idGroup.label = '🇮🇩 Bahasa Indonesia';
+    idGroup.label = '🇮🇩 Bahasa Indonesia (Edge Neural)';
     const duniaGroup = document.createElement('optgroup');
-    duniaGroup.label = '🌍 Bahasa Dunia';
+    duniaGroup.label = '🌍 Bahasa Dunia (Edge Neural)';
 
     if (Array.isArray(neuralCatalog) && neuralCatalog.length > 0) {
       neuralCatalog.forEach(v => {
         const opt = document.createElement('option');
         opt.value = v.id;
         opt.textContent = v.name;
-        if (v.category === 'id-pria' || v.category === 'id-cewek') idGroup.appendChild(opt);
+        if (v.category === 'google' || v.engine === 'google') googleGroup.appendChild(opt);
+        else if (v.category === 'id-pria' || v.category === 'id-cewek') idGroup.appendChild(opt);
         else duniaGroup.appendChild(opt);
       });
     } else {
+      const optGoogle = document.createElement('option');
+      optGoogle.value = 'g-id'; optGoogle.textContent = '🇮🇩 Google Indonesia (Gratis)';
+      googleGroup.appendChild(optGoogle);
       const optPria = document.createElement('option');
       optPria.value = 'id-pria'; optPria.textContent = '🇮🇩 Indonesia — Pria (Ardi)';
       idGroup.appendChild(optPria);
@@ -69,12 +80,13 @@
       idGroup.appendChild(optCewek);
     }
 
+    if (googleGroup.children.length) els.selVoice.appendChild(googleGroup);
     if (idGroup.children.length) els.selVoice.appendChild(idGroup);
     if (duniaGroup.children.length) els.selVoice.appendChild(duniaGroup);
 
     if (currentVal) els.selVoice.value = currentVal;
     else if (currentSettings?.voice) els.selVoice.value = currentSettings.voice;
-    else els.selVoice.value = 'id-pria';
+    else els.selVoice.value = 'g-id';
   }
 
   /* ── Settings ──────────────────────────────────────────── */
@@ -97,9 +109,14 @@
     if (els.chkReadChat) els.chkReadChat.checked = cfg.readChat !== false;
     if (els.chkReadGift) els.chkReadGift.checked = Boolean(cfg.readGift);
     if (els.chkIgnoreCommands) els.chkIgnoreCommands.checked = cfg.ignoreCommands !== false;
+    if (els.chkReadLike) els.chkReadLike.checked = Boolean(cfg.readLike);
+    if (els.chkReadShare) els.chkReadShare.checked = Boolean(cfg.readShare);
+    if (els.chkReadFollow) els.chkReadFollow.checked = Boolean(cfg.readFollow);
+    if (els.chkReadJoin) els.chkReadJoin.checked = Boolean(cfg.readJoin);
 
+    if (els.selEngine) els.selEngine.value = cfg.engine || 'google';
     if (els.selVoice && cfg.voice) els.selVoice.value = cfg.voice;
-    else if (els.selVoice && !els.selVoice.value) els.selVoice.value = 'id-pria';
+    else if (els.selVoice && !els.selVoice.value) els.selVoice.value = 'g-id';
 
     if (els.rangeSpeed) {
       els.rangeSpeed.value = cfg.rate ?? 1.0;
@@ -151,7 +168,12 @@
       readChat: Boolean(els.chkReadChat?.checked),
       readGift: Boolean(els.chkReadGift?.checked),
       ignoreCommands: Boolean(els.chkIgnoreCommands?.checked),
-      voice: els.selVoice?.value || 'id-pria',
+      readLike: Boolean(els.chkReadLike?.checked),
+      readShare: Boolean(els.chkReadShare?.checked),
+      readFollow: Boolean(els.chkReadFollow?.checked),
+      readJoin: Boolean(els.chkReadJoin?.checked),
+      engine: els.selEngine?.value || 'google',
+      voice: els.selVoice?.value || 'g-id',
       rate: parseFloat(els.rangeSpeed?.value || 1.0),
       pitch: parseFloat(els.rangePitch?.value || 1.0),
       volume: parseInt(els.rangeVolume?.value || 100, 10),
@@ -196,7 +218,8 @@
     stopActivePlayback();
 
     const s = item.settings || {};
-    const voiceChoice = s.voice || els.selVoice?.value || 'id-pria';
+    const voiceChoice = s.voice || els.selVoice?.value || 'g-id';
+    const engineChoice = s.engine || els.selEngine?.value || 'google';
 
     function done() {
       activeTtsAudio = null;
@@ -208,6 +231,7 @@
         const audio = new Audio(dataUrl);
         activeTtsAudio = audio;
         audio.volume = s.volume !== undefined ? Math.max(0, Math.min(1, s.volume)) : 1.0;
+        if (s.rate) audio.playbackRate = Math.max(0.5, Math.min(2, Number(s.rate) || 1));
 
         let finished = false;
         const onDone = () => { if (finished) return; finished = true; done(); };
@@ -223,6 +247,7 @@
       window.api.getTtsAudio({
         text: item.text,
         voice: voiceChoice,
+        engine: engineChoice,
         rate: s.rate ?? 1.0,
         pitch: s.pitch ?? 1.0
       }).then(res => {
@@ -246,6 +271,12 @@
   /* ── Toggle + Buttons ──────────────────────────────────── */
   if (els.toggleEnabled) els.toggleEnabled.addEventListener('change', () => {
     updateStatusBadge(els.toggleEnabled.checked);
+    saveSettings(true);
+  });
+  if (els.selEngine) els.selEngine.addEventListener('change', () => {
+    if (els.selEngine.value === 'google' && els.selVoice && !String(els.selVoice.value).startsWith('g-')) {
+      els.selVoice.value = 'g-id';
+    }
     saveSettings(true);
   });
 
@@ -280,7 +311,7 @@
   /* ── Test Voice ────────────────────────────────────────── */
   if (els.btnTestVoice) {
     els.btnTestVoice.addEventListener('click', async () => {
-      const selectedVoice = els.selVoice?.value || 'id-pria';
+      const selectedVoice = els.selVoice?.value || 'g-id';
       const catalogItem = neuralCatalog.find(c => c.id === selectedVoice);
       let sampleText = catalogItem?.sample || 'Halo! Ini adalah tes suara pembaca komentar TikTok LIVE.';
 
@@ -300,6 +331,7 @@
         text: sampleText,
         settings: {
           voice: selectedVoice,
+          engine: els.selEngine?.value || 'google',
           rate: parseFloat(els.rangeSpeed?.value || 1.0),
           pitch: parseFloat(els.rangePitch?.value || 1.0),
           volume: parseInt(els.rangeVolume?.value || 100, 10) / 100

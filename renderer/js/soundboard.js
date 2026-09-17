@@ -5,6 +5,7 @@
   let isRecordingKey = false;
   let activeAudios = new Map(); // id -> HTMLAudioElement
   let overlayPort = 8642;
+  let activeTunnelUrl = 'https://overlay.nurearn.site';
 
   // Fetch actual port
   if (window.api && window.api.getConfig) {
@@ -16,9 +17,46 @@
     }).catch(() => {});
   }
 
-  function getOverlayBaseUrl() {
-    return `http://localhost:${overlayPort}/overlay/soundboard`;
+  if (window.api && window.api.getTunnelStatus) {
+    window.api.getTunnelStatus().then(status => {
+      if (status && status.active && status.url) activeTunnelUrl = String(status.url).replace(/\/+$/, '');
+      else activeTunnelUrl = 'https://overlay.nurearn.site';
+      updateUniversalOverlayLink();
+      renderGrid();
+    }).catch(() => {});
   }
+  if (window.api && window.api.onTunnelStatus) {
+    window.api.onTunnelStatus(status => {
+      if (status && status.active && status.url) activeTunnelUrl = String(status.url).replace(/\/+$/, '');
+      else activeTunnelUrl = 'https://overlay.nurearn.site';
+      updateUniversalOverlayLink();
+      renderGrid();
+    });
+  }
+
+  const usernameInput = document.getElementById('usernameInput');
+  if (usernameInput) {
+    usernameInput.addEventListener('input', () => {
+      updateUniversalOverlayLink();
+      renderGrid();
+    });
+    usernameInput.addEventListener('change', () => {
+      updateUniversalOverlayLink();
+      renderGrid();
+    });
+  }
+
+  function getOverlayBaseUrl() {
+    const rawUser = usernameInput ? usernameInput.value : '';
+    const cleanUser = rawUser ? String(rawUser).toLowerCase().trim().replace(/^@/, '') : '';
+    const host = activeTunnelUrl || 'https://overlay.nurearn.site';
+    return cleanUser ? `${host}/overlay/@${cleanUser}/soundboard` : `${host}/overlay/soundboard`;
+  }
+
+  window.updateSoundboardOverlayLinks = function() {
+    updateUniversalOverlayLink();
+    renderGrid();
+  };
 
   function updateUniversalOverlayLink() {
     const input = document.getElementById('overlayUrl_soundboard');
@@ -73,12 +111,21 @@
             activeAudios.delete(item.id);
           }
           updateCardPlayingState(item.id, false);
+          try {
+            audio.src = '';
+            audio.load();
+          } catch (_) {}
         };
 
         updateCardPlayingState(item.id, true);
       } catch (err) {
         console.error('Error playing soundboard audio:', err);
       }
+    } else {
+      // Overlay-only item
+      updateCardPlayingState(item.id, true);
+      const durationMs = (item.mediaDuration ? Number(item.mediaDuration) : 5) * 1000;
+      setTimeout(() => updateCardPlayingState(item.id, false), durationMs);
     }
 
     // 2. Trigger Overlay Media (Video / Image)
@@ -148,7 +195,7 @@
 
     grid.innerHTML = filtered.map(item => {
       const perItemOverlayUrl = `${getOverlayBaseUrl()}?id=${item.id}`;
-      const fileName = item.file ? item.file.split(/[\\/]/).pop() : 'Tanpa file';
+      const fileName = item.file ? item.file.split(/[\\/]/).pop() : 'Tanpa audio (Hanya overlay)';
       const mediaName = item.mediaFile ? item.mediaFile.split(/[\\/]/).pop() : '';
       const isVideo = item.mediaType === 'video' || (item.mediaType !== 'image' && /\.(mp4|webm|mkv|mov)$/i.test(item.mediaFile || ''));
       const hasMedia = Boolean(item.mediaFile);
@@ -161,41 +208,54 @@
               <h4 style="margin: 0; font-size: 14px; font-weight: 600; color: var(--text-primary); word-break: break-word; flex: 1;">
                 ${escapeHtml(item.name || 'Suara')}
               </h4>
-              <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); font-family: monospace; font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 600; white-space: nowrap;">
-                ⌨ ${escapeHtml(item.key || '-')}
+              <span class="badge" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); font-family: monospace; font-size: 11px; padding: 2px 7px; border-radius: 6px; font-weight: 600; white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"/></svg>
+                ${escapeHtml(item.key || '-')}
               </span>
             </div>
 
             <!-- Audio File Info -->
-            <div style="font-size: 11px; color: var(--muted, #9ca3af); margin-bottom: 6px; display: flex; align-items: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(item.file || '')}">
-              <span>🎵</span>
+            <div style="font-size: 11px; color: var(--muted, #9ca3af); margin-bottom: 6px; display: flex; align-items: center; gap: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${escapeHtml(item.file || '')}">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
               <span style="overflow: hidden; text-overflow: ellipsis;">${escapeHtml(fileName)}</span>
             </div>
 
-            <!-- Media Overlay Badge / Info -->
+            <!-- Media Overlay Badge / Info & Link Box -->
             ${hasMedia ? `
-              <div style="font-size: 11px; color: #f59e0b; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 6px; padding: 3px 6px; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;" title="${escapeHtml(item.mediaFile || '')}">
-                <span>${isVideo ? '🎬 Video' : '🖼️ Gambar'}</span>
+              <div style="font-size: 11px; color: #f59e0b; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 6px; padding: 3px 6px; margin-bottom: 8px; display: flex; align-items: center; gap: 5px;" title="${escapeHtml(item.mediaFile || '')}">
+                ${isVideo ? `
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="5" rx="2"/><polyline points="8 5 8 20"/><polyline points="16 5 16 20"/></svg>
+                  <span>Video Overlay</span>
+                ` : `
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                  <span>Gambar Overlay</span>
+                `}
                 <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;">${escapeHtml(mediaName)}</span>
                 <span style="font-size: 9.5px; opacity: 0.8;">(${item.mediaDuration || 5}s)</span>
               </div>
-            ` : ''}
 
-            <!-- Dedicated Overlay Link Box for this Card -->
-            <div style="margin-top: 6px; margin-bottom: 12px; padding: 6px 8px; background: rgba(0,0,0,0.25); border: 1px dashed rgba(255,255,255,0.12); border-radius: 6px;">
-              <div style="font-size: 10px; color: var(--muted, #9ca3af); display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                <span>🔗 Link Overlay Khusus Tombol Ini:</span>
+              <!-- Dedicated Overlay Link Box for this Card -->
+              <div style="margin-top: 6px; margin-bottom: 12px; padding: 8px; background: rgba(245, 158, 11, 0.08); border: 1px dashed rgba(245, 158, 11, 0.35); border-radius: 6px;">
+                <div style="font-size: 10.5px; color: #fbbf24; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-weight: 600;">
+                  <span style="display: inline-flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    Link Overlay Khusus Tombol Ini:
+                  </span>
+                </div>
+                <div style="display: flex; gap: 4px; align-items: center;">
+                  <input type="text" readonly value="${perItemOverlayUrl}" class="sb-item-overlay-url" style="flex: 1; font-size: 10px; padding: 4px 6px; background: rgba(0,0,0,0.4); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 4px; color: #fef08a; font-family: monospace;" />
+                  <button type="button" class="btn btn-ghost btn-sm btn-copy-sb-url" data-url="${perItemOverlayUrl}" style="padding: 3px 8px; font-size: 10px; height: 24px; color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3);" title="Salin link overlay OBS untuk tombol ini saja">
+                    Copy Link
+                  </button>
+                  <button type="button" class="btn btn-ghost btn-sm btn-open-sb-url" data-url="${perItemOverlayUrl}" style="padding: 3px 8px; font-size: 10px; height: 24px;" title="Buka di browser">
+                    Buka
+                  </button>
+                </div>
+                <div style="font-size: 9.5px; color: var(--muted, #9ca3af); margin-top: 4px; line-height: 1.3;">
+                  Pasang link ini di TikTok LIVE Studio / OBS agar animasi video/gambar tombol ini muncul di posisi layar yang Anda inginkan.
+                </div>
               </div>
-              <div style="display: flex; gap: 4px; align-items: center;">
-                <input type="text" readonly value="${perItemOverlayUrl}" class="sb-item-overlay-url" style="flex: 1; font-size: 10px; padding: 3px 6px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 4px; color: #94a3b8;" />
-                <button type="button" class="btn btn-ghost btn-sm btn-copy-sb-url" data-url="${perItemOverlayUrl}" style="padding: 3px 7px; font-size: 10px; height: 24px;" title="Salin link overlay OBS untuk tombol ini saja">
-                  Salin
-                </button>
-                <button type="button" class="btn btn-ghost btn-sm btn-open-sb-url" data-url="${perItemOverlayUrl}" style="padding: 3px 7px; font-size: 10px; height: 24px;" title="Buka di browser">
-                  Buka
-                </button>
-              </div>
-            </div>
+            ` : ''}
           </div>
 
           <!-- Bottom Action Buttons -->
@@ -206,11 +266,11 @@
               </svg>
               Putar
             </button>
-            <button type="button" class="btn btn-ghost btn-sm btn-edit-sb" data-id="${item.id}" style="padding: 4px 8px; height: 30px;" title="Edit Suara & Overlay">
-              ✏️
+            <button type="button" class="btn btn-ghost btn-sm btn-edit-sb" data-id="${item.id}" style="padding: 4px 8px; height: 30px; display: inline-flex; align-items: center; justify-content: center;" title="Edit Suara & Overlay">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
             </button>
-            <button type="button" class="btn btn-ghost btn-sm btn-delete-sb" data-id="${item.id}" style="padding: 4px 8px; height: 30px; color: #ef4444;" title="Hapus Tombol">
-              🗑️
+            <button type="button" class="btn btn-ghost btn-sm btn-delete-sb" data-id="${item.id}" style="padding: 4px 8px; height: 30px; color: #ef4444; display: inline-flex; align-items: center; justify-content: center;" title="Hapus Tombol">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
             </button>
           </div>
         </div>
@@ -271,7 +331,24 @@
       if (volVal) volVal.textContent = '100%';
     }
 
+    updateModalOverlayUrlPreview();
     modal.style.display = 'flex';
+  }
+
+  function updateModalOverlayUrlPreview() {
+    const box = document.getElementById('sb_media_overlay_link_box');
+    const input = document.getElementById('sb_preview_overlay_url');
+    const mediaFileInput = document.getElementById('sb_media_file');
+    const editId = document.getElementById('sb_editing_id')?.value;
+    if (!box || !input) return;
+
+    if (mediaFileInput && mediaFileInput.value.trim()) {
+      const id = editId || 'otomatis_dibuat';
+      input.value = `${getOverlayBaseUrl()}?id=${encodeURIComponent(id)}`;
+      box.style.display = 'block';
+    } else {
+      box.style.display = 'none';
+    }
   }
 
   function closeModal() {
@@ -305,8 +382,8 @@
     // 4. File Pickers with Asset Folders Modal Integration
     const btnPickFile = document.getElementById('btn_pick_sb_file');
     if (btnPickFile) {
-      btnPickFile.addEventListener('click', async () => {
-        if (window.assetFolders && window.assetFolders.getAudioFolder()) {
+      btnPickFile.addEventListener('click', () => {
+        if (window.assetFolders && typeof window.assetFolders.openAudioPicker === 'function') {
           window.assetFolders.openAudioPicker((filePath) => {
             if (filePath) {
               const input = document.getElementById('sb_file');
@@ -314,18 +391,27 @@
             }
           });
         } else if (window.api && window.api.pickSoundFile) {
-          const filePath = await window.api.pickSoundFile();
-          if (filePath) {
-            const input = document.getElementById('sb_file');
-            if (input) input.value = filePath;
-          }
+          window.api.pickSoundFile().then(filePath => {
+            if (filePath) {
+              const input = document.getElementById('sb_file');
+              if (input) input.value = filePath;
+            }
+          });
         }
+      });
+    }
+
+    const btnClearFile = document.getElementById('btn_clear_sb_file');
+    if (btnClearFile) {
+      btnClearFile.addEventListener('click', () => {
+        const input = document.getElementById('sb_file');
+        if (input) input.value = '';
       });
     }
 
     const btnPickMedia = document.getElementById('btn_pick_sb_media_file');
     if (btnPickMedia) {
-      btnPickMedia.addEventListener('click', async () => {
+      btnPickMedia.addEventListener('click', () => {
         const handleMediaSelection = (filePath) => {
           if (!filePath) return;
           const input = document.getElementById('sb_media_file');
@@ -339,13 +425,13 @@
               selType.value = 'image';
             }
           }
+          updateModalOverlayUrlPreview();
         };
 
-        if (window.assetFolders && window.assetFolders.getMediaFolder()) {
+        if (window.assetFolders && typeof window.assetFolders.openMediaPicker === 'function') {
           window.assetFolders.openMediaPicker(handleMediaSelection);
         } else if (window.api && window.api.pickMediaFile) {
-          const filePath = await window.api.pickMediaFile();
-          handleMediaSelection(filePath);
+          window.api.pickMediaFile().then(handleMediaSelection);
         }
       });
     }
@@ -355,6 +441,31 @@
       btnClearMedia.addEventListener('click', () => {
         const input = document.getElementById('sb_media_file');
         if (input) input.value = '';
+        updateModalOverlayUrlPreview();
+      });
+    }
+
+    const sbMediaFileInput = document.getElementById('sb_media_file');
+    if (sbMediaFileInput) {
+      sbMediaFileInput.addEventListener('input', updateModalOverlayUrlPreview);
+      sbMediaFileInput.addEventListener('change', updateModalOverlayUrlPreview);
+    }
+
+    const btnCopyModalUrl = document.getElementById('btn_copy_modal_sb_url');
+    if (btnCopyModalUrl) {
+      btnCopyModalUrl.addEventListener('click', () => {
+        const input = document.getElementById('sb_preview_overlay_url');
+        if (input && input.value) {
+          navigator.clipboard.writeText(input.value).then(() => {
+            const orig = btnCopyModalUrl.textContent;
+            btnCopyModalUrl.textContent = 'Tersalin!';
+            btnCopyModalUrl.style.color = '#22c55e';
+            setTimeout(() => {
+              btnCopyModalUrl.textContent = orig;
+              btnCopyModalUrl.style.color = '#fbbf24';
+            }, 1500);
+          }).catch(() => {});
+        }
       });
     }
 
@@ -447,8 +558,13 @@
         const allowDuplicate = document.getElementById('sb_allow_duplicate')?.checked !== false;
         const volume = Number(document.getElementById('sb_volume')?.value || 100);
 
-        if (!name || !key || !file) {
-          alert('Mohon lengkapi Nama, Hotkey, dan File Suara!');
+        if (!name || !key) {
+          alert('Mohon isi Nama dan Hotkey!');
+          return;
+        }
+
+        if (!file && !mediaFile) {
+          alert('Mohon tentukan minimal salah satu: File Suara atau Media Overlay!');
           return;
         }
 
@@ -502,11 +618,11 @@
       btnCopyAll.addEventListener('click', () => {
         const url = getOverlayBaseUrl();
         navigator.clipboard.writeText(url).then(() => {
-          const orig = btnCopyAll.textContent;
-          btnCopyAll.textContent = '✅ Link Overlay Universal Tersalin!';
+          const orig = btnCopyAll.innerHTML;
+          btnCopyAll.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right:5px;"><polyline points="20 6 9 17 4 12"></polyline></svg><span>Link Overlay Tersalin!</span>`;
           btnCopyAll.style.color = '#22c55e';
           setTimeout(() => {
-            btnCopyAll.textContent = orig;
+            btnCopyAll.innerHTML = orig;
             btnCopyAll.style.color = '';
           }, 2000);
         }).catch(() => {});

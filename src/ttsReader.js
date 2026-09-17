@@ -23,8 +23,13 @@ class TtsReader extends EventEmitter {
       enabled: tts.enabled ?? false,
       readChat: tts.readChat ?? true,
       readGift: tts.readGift ?? false,
+      readLike: tts.readLike ?? false,
+      readShare: tts.readShare ?? false,
+      readFollow: tts.readFollow ?? false,
+      readJoin: tts.readJoin ?? false,
       role: tts.role || 'all', // 'all' | 'follower' | 'subscriber' | 'moderator'
-      voice: tts.voice || 'id-pria',
+      voice: tts.voice || 'g-id',
+      engine: tts.engine || 'google',
       rate: Number(tts.rate ?? 1.0),
       pitch: Number(tts.pitch ?? 1.0),
       volume: Number(tts.volume ?? 100),
@@ -143,6 +148,23 @@ class TtsReader extends EventEmitter {
           this.enqueue(text, { category: 'gift', user: evt.payload.nickname });
         }
       }
+    } else {
+      const settings = this.getSettings();
+      if (!settings.enabled) return;
+      const nickname = evt.payload.nickname || evt.payload.uniqueId || 'Anonim';
+      
+      if (evt.type === 'like' && settings.readLike) {
+        // Prevent spam by only reading likes occasionally or grouping them
+        if (evt.payload.totalLikeCount % 50 === 0 || evt.payload.likeCount > 10) {
+          this.enqueue(`${nickname} menyukai live ini`, { category: 'like', user: nickname });
+        }
+      } else if (evt.type === 'share' && settings.readShare) {
+        this.enqueue(`Terima kasih ${nickname} sudah membagikan live ini`, { category: 'share', user: nickname });
+      } else if (evt.type === 'follow' && settings.readFollow) {
+        this.enqueue(`Terima kasih ${nickname} sudah follow`, { category: 'follow', user: nickname });
+      } else if (evt.type === 'member' && settings.readJoin) {
+        this.enqueue(`Selamat datang ${nickname}`, { category: 'join', user: nickname });
+      }
     }
   }
 
@@ -162,6 +184,7 @@ class TtsReader extends EventEmitter {
       meta,
       settings: {
         voice: settings.voice,
+        engine: settings.engine || 'google',
         rate: settings.rate,
         pitch: settings.pitch,
         volume: settings.volume / 100

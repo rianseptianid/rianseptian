@@ -931,3 +931,43 @@ body {
   bottom: 24px;
   right: 24px;
 }
+
+/* ============================================================
+   TAP-TAP FLOATING HEARTS ANIMATION
+   ============================================================ */
+.taptap-floating-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 999;
+}
+
+.taptap-floating-heart {
+  position: absolute;
+  bottom: 30px;
+  font-size: 28px;
+  user-select: none;
+  pointer-events: none;
+  opacity: 1;
+  filter: drop-shadow(0 2px 8px rgba(244, 63, 94, 0.5));
+  animation: tapTapFloatUp linear forwards;
+}
+
+@keyframes tapTapFloatUp {
+  0% {
+    transform: translateY(0) scale(0.6) rotate(0deg);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translateY(-240px) scale(1.15) rotate(15deg);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-500px) scale(0.9) rotate(-15deg);
+    opacity: 0;
+  }
+}

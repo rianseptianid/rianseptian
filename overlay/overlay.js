@@ -6,11 +6,41 @@
 console.log('[DIAG] overlay.js loaded. URL:', window.location.href);
 
 // ============================================================
-// MODE PARSING
+// MODE & USERNAME PARSING
 // ============================================================
 const urlParams = new URLSearchParams(window.location.search);
 const pathSegments = window.location.pathname.replace(/^\/overlay\/?/, '').split('/').filter(Boolean);
-const rawMode = (urlParams.get('type') || pathSegments[0] || 'all').toLowerCase();
+
+const KNOWN_MODES = new Set([
+  'all', 'chat', 'chats', 'gift', 'gifts', 'video', 'vidio', 'image', 'gambar',
+  'media', 'alert', 'alerts', 'topgift', 'top10', 'leaderboard', 'top',
+  'join', 'member', 'bergabung', 'follow', 'follower', 'followers',
+  'share', 'shares', 'taptap', 'tap', 'toplike', 'toplikes', 'like', 'likes',
+  'soundboard', 'sb'
+]);
+
+let targetUsername = (urlParams.get('username') || urlParams.get('user') || '').toLowerCase().trim().replace(/^@/, '');
+let rawMode = (urlParams.get('type') || urlParams.get('mode') || '').toLowerCase();
+
+if (!rawMode) {
+  if (pathSegments.length > 0) {
+    if (KNOWN_MODES.has(pathSegments[0].toLowerCase())) {
+      rawMode = pathSegments[0].toLowerCase();
+    } else {
+      // First segment is username (e.g. /overlay/rian_live or /overlay/rian_live/chat)
+      if (!targetUsername) {
+        targetUsername = pathSegments[0].toLowerCase().trim().replace(/^@/, '');
+      }
+      if (pathSegments.length > 1 && KNOWN_MODES.has(pathSegments[1].toLowerCase())) {
+        rawMode = pathSegments[1].toLowerCase();
+      } else {
+        rawMode = 'all';
+      }
+    }
+  } else {
+    rawMode = 'all';
+  }
+}
 
 let mode = rawMode;
 if (mode === 'vidio') mode = 'video';
@@ -276,98 +306,166 @@ if (isTopGift) {
 }
 
 // ============================================================
-// WEBSOCKET CONNECTION
+// REAL-TIME CONNECTION (Socket.IO with Native WebSocket Fallback)
 // ============================================================
+function handleIncomingMessage(parsed) {
+  if (!parsed || !parsed.type) return;
+  const { type, payload, username } = parsed;
+
+  // Multi-username isolation:
+  // If this overlay is configured for a specific username (e.g. ?username=rian_live),
+  // and the incoming event is tagged with a different username, discard it.
+  if (targetUsername && username && username !== 'all' && username !== targetUsername) {
+    return;
+  }
+
+  if (type === 'overlay:css') {
+    const targetType = payload?.type || 'all';
+    if (mode === 'all' || targetType === 'all' || targetType === mode) {
+      fetch(`${baseUrl}/api/css/${mode}`)
+        .then(res => res.text())
+        .then(css => applyCustomCss(css))
+        .catch(() => applyCustomCss(payload.css));
+    }
+  }
+
+  if (type === 'overlay:taptap-settings' && isTopLike) {
+    updateTopLikeSettings(payload);
+  }
+
+  if (type === 'overlay:topgift-settings' && isTopGift) {
+    updateTopGiftSettings(payload);
+  }
+
+  if (type === 'event:gift' || type === 'gift') {
+    if (isAlertGift) handleGiftAlert(payload);
+    if (isTopGift) handleGiftForTop(payload);
+  }
+  if (type === 'event:chat' && isChat) handleChat(payload);
+  if (type === 'event:like' || type === 'like') {
+    if (isTopLike) handleLikeForTop(payload);
+    spawnTapTapHeart(Number(payload?.likeCount ?? payload?.count ?? 1));
+  }
+  if (type === 'event:join' || type === 'event:member' || type === 'join' || type === 'member') {
+    if (isAlertJoin) handleJoinAlert(payload);
+    if (isChat) handleChatJoin(payload);
+  }
+  if (type === 'event:follow' || type === 'follow' || type === 'social') {
+    if (isAlertFollow) handleFollowAlert(payload);
+    if (isChat) handleChatFollow(payload);
+  }
+  if (type === 'event:share' || type === 'share') {
+    if (isAlertShare) handleShareAlert(payload);
+    if (isChat) handleChatShare(payload);
+  }
+  if (type === 'event:stats') {
+    if (isTopGift && payload.gifters && Object.keys(payload.gifters).length > 0) {
+      if (payload.gifters['unknown']) {
+        const stale = payload.gifters['unknown'];
+        const cleanKey = (stale.nickname && stale.nickname !== 'unknown') ? stale.nickname.trim().replace(/[^a-zA-Z0-9_-]/g, '_') : null;
+        if (cleanKey) payload.gifters[cleanKey] = { ...stale, uniqueId: cleanKey };
+        delete payload.gifters['unknown'];
+      }
+      for (const key of Object.keys(topGifters)) delete topGifters[key];
+      Object.assign(topGifters, payload.gifters);
+      renderTopGifters();
+    }
+    if (isTopLike && payload.likers && Object.keys(payload.likers).length > 0) {
+      for (const key of Object.keys(topLikers)) delete topLikers[key];
+      Object.assign(topLikers, payload.likers);
+      renderTopLikers();
+    }
+  }
+  if (type === 'event:media') {
+    const isVid = payload.mediaType === 'video';
+    if (isVid && isVideo) handleMedia(payload);
+    else if (!isVid && isImage) handleMedia(payload);
+  }
+  if (type === 'event:soundboard-media') {
+    if (targetSoundboardId && String(targetSoundboardId).trim() !== String(payload.id).trim()) {
+      return;
+    }
+    if (isVideo || isImage || isSoundboard) {
+      handleMedia(payload);
+    }
+  }
+}
+
+let isSocketIoConnected = false;
+
 function connect() {
-  console.log('[DIAG] Connecting WebSocket...');
-  const ws = new WebSocket(`${wsProtocol}//${wsHost}`);
+  console.log(`[DIAG] Menghubungkan overlay real-time. Target Username: "${targetUsername || 'SEMUA/DEFAULT'}"`);
+
+  // 1. Coba koneksi Socket.IO jika script /socket.io/socket.io.js berhasil dimuat
+  if (typeof io === 'function') {
+    try {
+      console.log('[DIAG] Menginisialisasi koneksi Socket.IO (Room mode)...');
+      const socket = io(baseUrl, {
+        query: { username: targetUsername },
+        transports: ['websocket', 'polling']
+      });
+      window.__socket = socket;
+
+      socket.on('connect', () => {
+        isSocketIoConnected = true;
+        console.log(`[DIAG] ✅ Socket.IO Connected! Room: "room:${targetUsername || 'all'}" | ID: ${socket.id}`);
+      });
+
+      socket.on('disconnect', (reason) => {
+        isSocketIoConnected = false;
+        console.log('[DIAG] ❌ Socket.IO Disconnected:', reason);
+      });
+
+      socket.on('connect_error', (err) => {
+        console.warn('[DIAG] ⚠️ Socket.IO connect_error, fallback ke WebSocket native:', err.message);
+        if (!isSocketIoConnected) {
+          connectNativeWebSocket();
+        }
+      });
+
+      // Tangkap semua event Socket.IO secara universal
+      socket.onAny((type, payload) => {
+        handleIncomingMessage({ type, payload });
+      });
+
+      return;
+    } catch (err) {
+      console.warn('[DIAG] Gagal inisialisasi Socket.IO, beralih ke Native WebSocket:', err);
+    }
+  }
+
+  // 2. Fallback langsung ke Native WebSocket (ws)
+  connectNativeWebSocket();
+}
+
+function connectNativeWebSocket() {
+  if (window.__ws && window.__ws.readyState === 1) return;
+  const wsQuery = targetUsername ? `?username=${encodeURIComponent(targetUsername)}` : '';
+  console.log('[DIAG] Menghubungkan via Native WebSocket:', `${wsProtocol}//${wsHost}${wsQuery}`);
+  const ws = new WebSocket(`${wsProtocol}//${wsHost}${wsQuery}`);
   window.__ws = ws;
 
-  ws.addEventListener('open', () => console.log('[DIAG] ✅ WebSocket OPEN'));
-  ws.addEventListener('close', (e) => {
-    console.log('[DIAG] ❌ WebSocket CLOSED. code=', e.code, 'reason=', e.reason);
-    setTimeout(connect, 2000);
+  ws.addEventListener('open', () => {
+    console.log(`[DIAG] ✅ Native WebSocket OPEN (Filter: "${targetUsername || 'SEMUA/DEFAULT'}")`);
   });
-  ws.addEventListener('error', (e) => console.error('[DIAG] ⚠️ WebSocket ERROR', e));
+  ws.addEventListener('close', (e) => {
+    console.log('[DIAG] ❌ Native WebSocket CLOSED. code=', e.code, 'reason=', e.reason);
+    if (!isSocketIoConnected) {
+      setTimeout(connect, 2500);
+    }
+  });
+  ws.addEventListener('error', (e) => console.error('[DIAG] ⚠️ Native WebSocket ERROR', e));
 
   ws.addEventListener('message', (msg) => {
     try {
       const parsed = JSON.parse(msg.data);
-      const { type, payload } = parsed;
-
-      if (type === 'overlay:css') {
-        const targetType = payload?.type || 'all';
-        if (mode === 'all' || targetType === 'all' || targetType === mode) {
-          fetch(`${baseUrl}/api/css/${mode}`)
-            .then(res => res.text())
-            .then(css => applyCustomCss(css))
-            .catch(() => applyCustomCss(payload.css));
-        }
-      }
-
-      if (type === 'overlay:taptap-settings' && isTopLike) {
-        updateTopLikeSettings(payload);
-      }
-
-      if (type === 'overlay:topgift-settings' && isTopGift) {
-        updateTopGiftSettings(payload);
-      }
-
-      if (type === 'event:gift' || type === 'gift') {
-        if (isAlertGift) handleGiftAlert(payload);
-        if (isTopGift) handleGiftForTop(payload);
-      }
-      if (type === 'event:chat' && isChat) handleChat(payload);
-      if ((type === 'event:like' || type === 'like') && isTopLike) handleLikeForTop(payload);
-      if (type === 'event:join' || type === 'event:member' || type === 'join' || type === 'member') {
-        if (isAlertJoin) handleJoinAlert(payload);
-        if (isChat) handleChatJoin(payload);
-      }
-      if (type === 'event:follow' || type === 'follow' || type === 'social') {
-        if (isAlertFollow) handleFollowAlert(payload);
-        if (isChat) handleChatFollow(payload);
-      }
-      if (type === 'event:share' || type === 'share') {
-        if (isAlertShare) handleShareAlert(payload);
-        if (isChat) handleChatShare(payload);
-      }
-      if (type === 'event:stats') {
-        if (isTopGift && payload.gifters) {
-          if (payload.gifters['unknown']) {
-            const stale = payload.gifters['unknown'];
-            const cleanKey = (stale.nickname && stale.nickname !== 'unknown') ? stale.nickname.trim().replace(/[^a-zA-Z0-9_-]/g, '_') : null;
-            if (cleanKey) payload.gifters[cleanKey] = { ...stale, uniqueId: cleanKey };
-            delete payload.gifters['unknown'];
-          }
-          for (const key of Object.keys(topGifters)) delete topGifters[key];
-          Object.assign(topGifters, payload.gifters);
-          renderTopGifters();
-        }
-        if (isTopLike && payload.likers) {
-          for (const key of Object.keys(topLikers)) delete topLikers[key];
-          Object.assign(topLikers, payload.likers);
-          renderTopLikers();
-        }
-      }
-      if (type === 'event:media') {
-        const isVid = payload.mediaType === 'video';
-        if (isVid && isVideo) handleMedia(payload);
-        else if (!isVid && isImage) handleMedia(payload);
-      }
-      if (type === 'event:soundboard-media') {
-        // If overlay has ?id=..., only play if ID matches
-        if (targetSoundboardId && String(targetSoundboardId).trim() !== String(payload.id).trim()) {
-          return;
-        }
-        if (isVideo || isImage || isSoundboard) {
-          handleMedia(payload);
-        }
-      }
+      handleIncomingMessage(parsed);
     } catch (err) {
-      console.error('overlay parse error', err);
+      console.error('[DIAG] Failed to parse WebSocket message:', err);
     }
   });
 }
+
 connect();
 
 // ============================================================
@@ -659,10 +757,33 @@ function renderTopGifters() {
 }
 
 // ============================================================
-// TOP LIKES TRACKING
+// TOP LIKES TRACKING & FLOATING HEARTS
 // ============================================================
 const topLikers = {};
 const previousLikeRanks = new Map();
+
+function spawnTapTapHeart(count = 1) {
+  let container = document.getElementById('tapTapFloatingContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'tapTapFloatingContainer';
+    container.className = 'taptap-floating-container';
+    document.body.appendChild(container);
+  }
+  const heartPool = ['❤️', '💖', '💗', '💓', '💕', '🔥', '✨'];
+  const spawnCount = Math.min(Math.max(1, count), 8);
+  for (let i = 0; i < spawnCount; i++) {
+    const el = document.createElement('div');
+    el.className = 'taptap-floating-heart';
+    el.textContent = heartPool[Math.floor(Math.random() * heartPool.length)];
+    const startX = 15 + Math.random() * 70;
+    el.style.left = `${startX}%`;
+    el.style.animationDuration = `${1.2 + Math.random() * 0.8}s`;
+    el.style.animationDelay = `${i * 0.07}s`;
+    container.appendChild(el);
+    setTimeout(() => { try { el.remove(); } catch (_) {} }, 2500);
+  }
+}
 
 function handleLikeForTop(payload) {
   if (!topLikeBoard || !topLikeList) return;

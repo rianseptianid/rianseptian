@@ -1407,7 +1407,11 @@
 
     // WebSocket Connection
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${wsProtocol}//${window.location.host}`;
+    const battleUrlParams = new URLSearchParams(window.location.search);
+    const battlePathParts = window.location.pathname.replace(/^\/overlay\/?/, '').split('/').filter(Boolean);
+    let battlePathUser = (battlePathParts.length >= 2 && battlePathParts[1].toLowerCase() === 'battle') ? battlePathParts[0] : '';
+    const battleUser = (battleUrlParams.get('username') || battleUrlParams.get('user') || battlePathUser || '').toLowerCase().trim().replace(/^@/, '');
+    const wsUrl = `${wsProtocol}//${window.location.host}${battleUser ? '?username=' + encodeURIComponent(battleUser) : ''}`;
     let ws;
 
     function connect() {

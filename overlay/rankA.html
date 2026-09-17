@@ -245,7 +245,12 @@
     function initWebSocket() {
       const wsProto = location.protocol === 'https:' ? 'wss:' : 'ws:';
       const wsHost = location.host || 'localhost:8642';
-      const ws = new WebSocket(`${wsProto}//${wsHost}`);
+      const urlParams = new URLSearchParams(window.location.search);
+      const pathSegs = window.location.pathname.replace(/^\/overlay\/?/, '').split('/').filter(Boolean);
+      let pathUser = (pathSegs.length > 1 && pathSegs[1].toLowerCase().startsWith('ranka')) ? pathSegs[0] : '';
+      const targetUser = (urlParams.get('username') || urlParams.get('user') || pathUser || '').toLowerCase().trim().replace(/^@/, '');
+      const wsQuery = targetUser ? `?username=${encodeURIComponent(targetUser)}` : '';
+      const ws = new WebSocket(`${wsProto}//${wsHost}${wsQuery}`);
 
       ws.addEventListener('open', () => {
         console.log('[Rank A Overlay] Connected to WebSocket');

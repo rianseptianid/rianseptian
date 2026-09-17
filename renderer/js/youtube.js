@@ -10,6 +10,8 @@
   let repeatMode = false;
   let isSeeking = false;
   let lastDuration = 0;
+  let endedSent = false;
+  let localAudio = null;
 
   // ── 1. Settings & Overlay URL ─────────────────────────────
   if (window.api && window.api.getConfig) {
@@ -19,16 +21,38 @@
         updateOverlayUrl();
       }
     }).catch(() => {});
+
+    if (window.api && window.api.getTunnelStatus) {
+      window.api.getTunnelStatus().then(status => {
+        if (status && status.active && status.url) activeTunnelUrl = String(status.url).replace(/\/+$/, '');
+        else activeTunnelUrl = 'https://overlay.nurearn.site';
+        updateOverlayUrl();
+      }).catch(() => {});
+    }
+    if (window.api && window.api.onTunnelStatus) {
+      window.api.onTunnelStatus(status => {
+        if (status && status.active && status.url) activeTunnelUrl = String(status.url).replace(/\/+$/, '');
+        else activeTunnelUrl = 'https://overlay.nurearn.site';
+        updateOverlayUrl();
+      });
+    }
   }
 
+  let activeTunnelUrl = 'https://overlay.nurearn.site';
+
   function getOverlayUrl() {
-    return `http://localhost:${overlayPort}/overlay/youtube`;
+    const rawUser = document.getElementById('usernameInput')?.value || '';
+    const cleanUser = rawUser ? String(rawUser).toLowerCase().trim().replace(/^@/, '') : '';
+    const host = activeTunnelUrl || 'https://overlay.nurearn.site';
+    return cleanUser ? `${host}/overlay/@${cleanUser}/youtube` : `${host}/overlay/youtube`;
   }
 
   function updateOverlayUrl() {
     const input = document.getElementById('ytOverlayUrl');
     if (input) input.value = getOverlayUrl();
   }
+
+  window.updateYoutubeOverlayLink = updateOverlayUrl;
 
   async function loadSettings() {
     try {
@@ -68,7 +92,80 @@
     }).catch(console.warn);
   }
 
-  // ── 2. Now Playing UI ─────────────────────────────────────
+  function getLocalAudio() {
+    if (localAudio) return localAudio;
+    localAudio = document.getElementById('ytDirectPlayer');
+    if (!localAudio) {
+      localAudio = document.createElement('audio');
+      localAudio.id = 'ytDirectPlayer';
+      localAudio.preload = 'auto';
+      localAudio.style.display = 'none';
+      document.body.appendChild(localAudio);
+    }
+
+    localAudio.addEventListener('play', () => setPlayPauseState(true));
+    localAudio.addEventListener('pause', () => {
+      if (!localAudio.ended) setPlayPauseState(false);
+    });
+    localAudio.addEventListener('timeupdate', () => {
+      if (!localAudio.duration || isSeeking) return;
+      lastDuration = localAudio.duration;
+      const curr = localAudio.currentTime || 0;
+      const total = localAudio.duration || 0;
+      const now = document.getElementById('ytTimeNow');
+      const durEl = document.getElementById('ytTimeDur');
+      const seek = document.getElementById('ytSeekBar');
+      if (now) now.textContent = fmtTime(curr);
+      if (durEl && total > 0) durEl.textContent = fmtTime(total);
+      if (seek && total > 0) seek.value = Math.min(100, (curr / total) * 100);
+    });
+    localAudio.addEventListener('ended', () => {
+      if (endedSent) return;
+      endedSent = true;
+      if (repeatMode && currentSong && localAudio.src) {
+        endedSent = false;
+        localAudio.currentTime = 0;
+        localAudio.play().catch(() => {});
+        return;
+      }
+      if (window.api && window.api.youtubeVideoEnded) {
+        window.api.youtubeVideoEnded();
+      }
+    });
+    localAudio.addEventListener('error', () => {
+      const statusEl = document.getElementById('ytTestStatus');
+      if (statusEl) {
+        statusEl.style.display = 'block';
+        statusEl.style.color = '#ef4444';
+        statusEl.textContent = 'Gagal memutar stream audio (yt-dlp). Coba judul lain.';
+      }
+    });
+    return localAudio;
+  }
+
+  function playLocalStream(song) {
+    const audio = getLocalAudio();
+    endedSent = false;
+    if (!song || !song.streamUrl) {
+      audio.pause();
+      audio.removeAttribute('src');
+      return;
+    }
+    const volSlider = document.getElementById('ytVolumeSlider');
+    if (volSlider) audio.volume = Math.max(0, Math.min(1, Number(volSlider.value) / 100));
+    audio.src = song.streamUrl;
+    audio.load();
+    audio.play().then(() => setPlayPauseState(true)).catch((err) => {
+      console.warn('[YouTube UI] Autoplay stream failed:', err);
+    });
+  }
+
+  function stopLocalStream() {
+    const audio = getLocalAudio();
+    audio.pause();
+    audio.removeAttribute('src');
+    audio.load();
+  }
   function updateNowPlaying(song) {
     currentSong = song;
     const titleEl     = document.getElementById('ytNowPlaying');
@@ -259,6 +356,7 @@
 
   // ── 6. UI Initialization ──────────────────────────────────
   function init() {
+    getLocalAudio();
     updateOverlayUrl();
     loadSettings();
 
@@ -345,9 +443,11 @@
     const btnPlayPause = document.getElementById('btnYtPlayPause');
     if (btnPlayPause) {
       btnPlayPause.onclick = () => {
+        const audio = getLocalAudio();
+        if (isPlaying) audio.pause();
+        else audio.play().catch(() => {});
         if (window.api && window.api.youtubeViewCommand) {
           window.api.youtubeViewCommand(isPlaying ? 'pause' : 'resume');
-          setPlayPauseState(!isPlaying);
         }
       };
     }
@@ -390,6 +490,7 @@
       volSlider.oninput = () => {
         const vol = Number(volSlider.value);
         if (volValue) volValue.textContent = vol + '%';
+        getLocalAudio().volume = Math.max(0, Math.min(1, vol / 100));
         if (window.api && window.api.youtubeViewCommand) {
           window.api.youtubeViewCommand('volume', vol);
         }
@@ -404,9 +505,13 @@
       };
       seekBar.onchange = () => {
         isSeeking = false;
-        if (lastDuration > 0 && window.api && window.api.youtubeViewCommand) {
+        if (lastDuration > 0) {
           const seekSec = Math.round((Number(seekBar.value) / 100) * lastDuration);
-          window.api.youtubeViewCommand('seek', seekSec);
+          const audio = getLocalAudio();
+          if (audio && audio.duration) audio.currentTime = seekSec;
+          if (window.api && window.api.youtubeViewCommand) {
+            window.api.youtubeViewCommand('seek', seekSec);
+          }
         }
       };
     }
@@ -500,6 +605,7 @@
         window.api.onYoutubePlay(song => {
           updateNowPlaying(song);
           resetSeek();
+          playLocalStream(song);
         });
       }
 
@@ -519,6 +625,7 @@
         window.api.onYoutubeStop(() => {
           updateNowPlaying(null);
           resetSeek();
+          stopLocalStream();
         });
       }
 
@@ -553,6 +660,18 @@
         window.api.onYoutubePlayerVisibility(visible => {
           if (toggleText) {
             toggleText.textContent = visible ? 'Tutup Browser Player' : 'Buka Browser Player';
+          }
+        });
+      }
+
+      if (window.api.onYoutubeNotify) {
+        window.api.onYoutubeNotify(n => {
+          const statusEl = document.getElementById('ytTestStatus');
+          if (statusEl && n && n.message) {
+            statusEl.style.display = 'block';
+            statusEl.style.color = n.type === 'error' || n.type === 'warn' ? '#ef4444' : '#22c55e';
+            statusEl.textContent = n.message;
+            setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
           }
         });
       }

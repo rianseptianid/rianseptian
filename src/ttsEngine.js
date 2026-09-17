@@ -247,7 +247,13 @@ const VOICE_CATALOG = [
 
 ];
 
+const GOOGLE_VOICES = [
+  { id: 'g-id', name: '🇮🇩 Google Indonesia (Gratis)', category: 'google', engine: 'google', googleLang: 'id', sample: 'Halo semuanya, ini suara Google Translate gratis untuk membaca komentar live.' },
+  { id: 'g-en', name: '🇺🇸 Google English (Gratis)', category: 'google', engine: 'google', googleLang: 'en', sample: 'Hello everyone, this is free Google text to speech for live comments.' }
+];
 
+const https = require('https');
+const http = require('http');
 
 class TtsEngine {
   constructor(logger = console) {
@@ -310,48 +316,160 @@ class TtsEngine {
   }
 
   getVoiceCatalog() {
-    return VOICE_CATALOG;
+    return [...GOOGLE_VOICES, ...VOICE_CATALOG];
   }
 
   findVoiceConfig(voiceId) {
-    if (!voiceId) return VOICE_CATALOG[0];
-    // Exact match by ID
-    let found = VOICE_CATALOG.find(v => v.id === voiceId);
+    const all = this.getVoiceCatalog();
+    if (!voiceId) return GOOGLE_VOICES[0] || VOICE_CATALOG[0];
+    let found = all.find(v => v.id === voiceId);
     if (found) return found;
 
-    // Legacy aliases (backward compat)
-    if (voiceId === 'id-cewe' || voiceId === 'id-gadis' || voiceId === 'id-ID-GadisNeural') return VOICE_CATALOG.find(v => v.id === 'id-cewek') || VOICE_CATALOG[1];
-    if (voiceId === 'id-cowo' || voiceId === 'id-ardi' || voiceId === 'id-ID-ArdiNeural')   return VOICE_CATALOG.find(v => v.id === 'id-pria')  || VOICE_CATALOG[0];
+    if (voiceId === 'id-cewe' || voiceId === 'id-gadis' || voiceId === 'id-ID-GadisNeural') return all.find(v => v.id === 'id-cewek') || VOICE_CATALOG[1];
+    if (voiceId === 'id-cowo' || voiceId === 'id-ardi' || voiceId === 'id-ID-ArdiNeural')   return all.find(v => v.id === 'id-pria')  || VOICE_CATALOG[0];
+    if (voiceId === 'google-id' || voiceId === 'google') return GOOGLE_VOICES[0];
 
-    // Fuzzy match by id or name
-    found = VOICE_CATALOG.find(v => v.id.toLowerCase().includes(voiceId.toLowerCase()) || v.name.toLowerCase().includes(voiceId.toLowerCase()));
-    return found || VOICE_CATALOG[0];
+    found = all.find(v => v.id.toLowerCase().includes(voiceId.toLowerCase()) || v.name.toLowerCase().includes(voiceId.toLowerCase()));
+    return found || GOOGLE_VOICES[0] || VOICE_CATALOG[0];
+  }
+
+  _googleLangFromVoice(voiceCfg, voiceId) {
+    if (voiceCfg?.googleLang) return voiceCfg.googleLang;
+    const id = String(voiceId || voiceCfg?.id || '').toLowerCase();
+    if (id.startsWith('en-') || id === 'g-en') return 'en';
+    if (id.startsWith('ms-')) return 'ms';
+    if (id.startsWith('jv-')) return 'jw';
+    if (id.startsWith('su-')) return 'su';
+    if (id.startsWith('ja-') || id.startsWith('jp')) return 'ja';
+    if (id.startsWith('ko-')) return 'ko';
+    if (id.startsWith('zh-') || id.startsWith('yue-')) return 'zh-CN';
+    return 'id';
+  }
+
+  _splitGoogleChunks(text, maxLen = 180) {
+    const words = String(text).replace(/\s+/g, ' ').trim().split(' ');
+    const parts = [];
+    let cur = '';
+    for (const w of words) {
+      const next = cur ? `${cur} ${w}` : w;
+      if (next.length <= maxLen) {
+        cur = next;
+      } else {
+        if (cur) parts.push(cur);
+        if (w.length > maxLen) {
+          for (let i = 0; i < w.length; i += maxLen) parts.push(w.slice(i, i + maxLen));
+          cur = '';
+        } else {
+          cur = w;
+        }
+      }
+    }
+    if (cur) parts.push(cur);
+    return parts;
+  }
+
+  _httpGetBuffer(url) {
+    return new Promise((resolve, reject) => {
+      const client = url.startsWith('https:') ? https : http;
+      const req = client.get(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          'Accept': '*/*',
+          'Referer': 'https://translate.google.com/'
+        }
+      }, (res) => {
+        if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          res.resume();
+          this._httpGetBuffer(res.headers.location).then(resolve).catch(reject);
+          return;
+        }
+        const chunks = [];
+        res.on('data', c => chunks.push(c));
+        res.on('end', () => {
+          const buf = Buffer.concat(chunks);
+          if (res.statusCode !== 200 || buf.length < 32) {
+            reject(new Error(`Google TTS HTTP ${res.statusCode || 0}`));
+            return;
+          }
+          resolve(buf);
+        });
+      });
+      req.on('error', reject);
+      req.setTimeout(15000, () => {
+        req.destroy();
+        reject(new Error('Google TTS timeout'));
+      });
+    });
+  }
+
+  async _fetchGoogleChunk(text, lang) {
+    const q = encodeURIComponent(text);
+    const urls = [
+      `https://translate.googleapis.com/translate_tts?ie=UTF-8&client=gtx&tl=${encodeURIComponent(lang)}&q=${q}`,
+      `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=${encodeURIComponent(lang)}&q=${q}`
+    ];
+    let lastErr = null;
+    for (const url of urls) {
+      try {
+        return await this._httpGetBuffer(url);
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    throw lastErr || new Error('Google TTS gagal');
+  }
+
+  async _synthesizeGoogle(text, lang = 'id') {
+    const chunks = this._splitGoogleChunks(text);
+    const buffers = [];
+    for (let i = 0; i < chunks.length; i++) {
+      buffers.push(await this._fetchGoogleChunk(chunks[i], lang || 'id'));
+      if (i < chunks.length - 1) {
+        await new Promise(r => setTimeout(r, 60));
+      }
+    }
+    const full = Buffer.concat(buffers);
+    if (!full.length) throw new Error('Audio Google TTS kosong');
+    return full;
   }
 
   /**
-   * Synthesizes speech to an MP3 buffer using Edge Neural TTS only.
+   * Synthesizes speech to an MP3 buffer.
+   * engine: 'google' | 'edge' | 'auto'
    */
-  async synthesizeBuffer(text, voiceId = 'id-gadis', customRate = 1.0, customPitch = 1.0) {
+  async synthesizeBuffer(text, voiceId = 'g-id', customRate = 1.0, customPitch = 1.0, engine = 'auto') {
     const cleanText = String(text || '').slice(0, 500).trim();
     if (!cleanText) throw new Error('Teks TTS kosong');
 
     const voiceCfg = this.findVoiceConfig(voiceId);
-    return await this._synthesizeEdge(cleanText, voiceCfg, customRate, customPitch);
+    const mode = String(engine || voiceCfg.engine || 'google').toLowerCase();
+    const googleLang = this._googleLangFromVoice(voiceCfg, voiceId);
+
+    if (mode === 'google' || voiceCfg.engine === 'google') {
+      return await this._synthesizeGoogle(cleanText, googleLang);
+    }
+
+    try {
+      return await this._synthesizeEdge(cleanText, voiceCfg, customRate, customPitch);
+    } catch (err) {
+      if (mode === 'edge') throw err;
+      this.logger?.warn?.(`[TtsEngine] Edge gagal, fallback Google gratis: ${err.message}`);
+      return await this._synthesizeGoogle(cleanText, googleLang);
+    }
   }
 
   /**
    * Synthesizes speech and returns Base64 Data URL (data:audio/mp3;base64,...).
-   * Cache key: "voiceId|rate|pitch|text" (konsisten, urut, pipe-delimited)
+   * Cache key: "engine|voiceId|rate|pitch|text"
    */
-  async synthesizeDataUrl(text, voiceId = 'id-gadis', customRate = 1.0, customPitch = 1.0) {
-    // Cache key konsisten: voiceId|rate|pitch|text
-    const cacheKey = `${voiceId}|${customRate}|${customPitch}|${String(text || '').slice(0, 500).trim()}`;
+  async synthesizeDataUrl(text, voiceId = 'g-id', customRate = 1.0, customPitch = 1.0, engine = 'auto') {
+    const cacheKey = `${engine}|${voiceId}|${customRate}|${customPitch}|${String(text || '').slice(0, 500).trim()}`;
 
     // Cek cache dulu — _cacheGet() juga refresh posisi LRU
     const cached = this._cacheGet(cacheKey);
     if (cached) return cached;
 
-    const buffer = await this.synthesizeBuffer(text, voiceId, customRate, customPitch);
+    const buffer = await this.synthesizeBuffer(text, voiceId, customRate, customPitch, engine);
     const dataUrl = `data:audio/mp3;base64,${buffer.toString('base64')}`;
 
     // Simpan ke LRU cache

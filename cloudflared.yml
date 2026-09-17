@@ -1,0 +1,7 @@
+tunnel: c7762626-8138-45aa-91fb-381798b61c8c
+credentials-file: C:\Users\Rian\.cloudflared\c7762626-8138-45aa-91fb-381798b61c8c.json
+
+ingress:
+  - hostname: overlay.nurearn.site
+    service: http://127.0.0.1:8642
+  - service: http_status:404

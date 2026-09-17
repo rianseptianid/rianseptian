@@ -14,10 +14,10 @@ function getAllJsFiles(dir) {
         const fullPath = path.join(dir, item);
         const stat = fs.statSync(fullPath);
         if (stat && stat.isDirectory()) {
-            if (item !== 'node_modules' && item !== '.git' && item !== 'dist' && item !== 'scripts') {
+            if (item !== 'node_modules' && item !== '.git' && item !== 'dist' && item !== 'scripts' && item !== 'libs') {
                 results = results.concat(getAllJsFiles(fullPath));
             }
-        } else if (item.endsWith('.js') && !item.endsWith('.min.js')) {
+        } else if (item.endsWith('.js') && !item.endsWith('.min.js') && !item.endsWith('.prod.js')) {
             results.push(fullPath);
         }
     }
@@ -46,6 +46,7 @@ async function secureBuild() {
         'overlay',
         'config',
         'assets',
+        'bin',
         'scripts'
     ];
 
@@ -162,14 +163,15 @@ async function secureBuild() {
 
     // 5. Build application icon and run electron-builder
     console.log('[4/5] Generating application icons...');
-    execSync('node scripts/build-icon.js', { cwd: tempDir, stdio: 'inherit' });
+    execSync('node scripts/build-icon.js', { cwd: tempDir, stdio: 'inherit', shell: true });
 
     console.log('[5/5] Compiling and packaging into nurearn .exe installer...');
     const outDir = path.join(rootDir, 'dist');
     try {
         execSync(`npx electron-builder --projectDir . --win nsis -c.directories.output="${outDir}"`, {
             cwd: tempDir,
-            stdio: 'inherit'
+            stdio: 'inherit',
+            shell: true
         });
 
         console.log('====================================================');

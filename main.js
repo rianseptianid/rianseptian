@@ -28,6 +28,11 @@ app.commandLine.appendSwitch('disable-background-timer-throttling');
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
 app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion,IntensiveWakeUpThrottling');
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=384 --expose-gc');
+app.commandLine.appendSwitch('disable-spell-checking');
+app.commandLine.appendSwitch('disable-breakpad');
+app.commandLine.appendSwitch('disable-component-update');
+app.commandLine.appendSwitch('renderer-process-limit', '2');
 
 
 const Logger = require('./src/logger');
@@ -42,17 +47,20 @@ const TtsReader = require('./src/ttsReader');
 const ttsEngine = require('./src/ttsEngine');
 const licenseManager = require('./src/LicenseManager');
 const UpdateChecker = require('./src/updater');
+const TunnelManager = require('./src/tunnelManager');
 
 // Baca versi dari package.json sekali saja di startup
 const APP_VERSION = (() => {
-  try { return require('./package.json').version || '1.2.0'; }
-  catch (_) { return '1.2.0'; }
+  try { return require('./package.json').version || '1.3.0'; }
+  catch (_) { return '1.3.0'; }
 })();
 
 let mainWindow = null;
 let licenseWindow = null;
-let logger, configManager, connector, triggerEngine, overlayServer, giftManager, goalManager, youtubeManager, ttsReader;
+let logger, configManager, connector, triggerEngine, overlayServer, giftManager, goalManager, youtubeManager, ttsReader, tunnelManager;
 let statsThrottleTimer = null;
+let currentTikTokUsername = '';
+let nurearnLiveHeartbeatTimer = null;
 
 // ── Guard: cegah connect() dobel sebelum disconnect selesai (Tugas 1) ──
 let _isConnecting = false;
@@ -671,9 +679,23 @@ function createWindow() {
     if (global.gc) {
       try { global.gc(); } catch (_) { }
     }
+    if (session && session.defaultSession) {
+      try { session.defaultSession.clearCache(); } catch (_) { }
+    }
   });
 
+  // Periodic memory & cache cleanup when running long live sessions
+  const memoryPurgeInterval = setInterval(() => {
+    if (global.gc) {
+      try { global.gc(); } catch (_) { }
+    }
+    if (session && session.defaultSession) {
+      try { session.defaultSession.clearCache(); } catch (_) { }
+    }
+  }, 10 * 60 * 1000);
+
   mainWindow.on('closed', () => {
+    clearInterval(memoryPurgeInterval);
     mainWindow = null;
     stopWatchPlayerPolling();
     ytWindow = null;
@@ -716,6 +738,37 @@ function send(channel, payload) {
 
 // Track ongoing gift streaks
 const activeStreaks = new Map();
+
+function syncGoalWithStat(type, newCurrent) {
+  if (!goalManager) return;
+  const goal = goalManager.getGoal(type);
+  if (!goal) return;
+  const target = Math.max(1, Number(goal.target) || 100);
+  const prev = Number(goal.current) || 0;
+  const curr = Math.max(0, Number(newCurrent) || 0);
+  if (curr === prev) return;
+
+  const targetAction = goal.targetAction || goal.onReached || 'increase';
+  if (curr >= target && prev < target) {
+    let nextTarget = target;
+    if (targetAction === 'increase') {
+      nextTarget = target * 2;
+    }
+    const updated = goalManager.updateGoal(type, { current: curr, target: nextTarget });
+    send('goal:reached', { type, goal: updated });
+    send('goal:update', { type, goal: updated });
+    if (overlayServer) {
+      overlayServer.broadcast('overlay:goal-reached', { type, goal: updated });
+      overlayServer.broadcast('overlay:goal-update', { type, goal: updated });
+    }
+  } else {
+    const updated = goalManager.updateGoal(type, { current: curr });
+    send('goal:update', { type, goal: updated });
+    if (overlayServer) {
+      overlayServer.broadcast('overlay:goal-update', { type, goal: updated });
+    }
+  }
+}
 
 function updateStats(evt) {
   configManager.updateStats(stats => {
@@ -800,14 +853,70 @@ function updateStats(evt) {
         }
       }
     } else if (evt.type === 'like') {
-      stats.totalLikes = evt.payload?.totalLikeCount || stats.totalLikes || 0;
+      const incomingTotal = Number(evt.payload?.totalLikeCount);
+      if (incomingTotal && !isNaN(incomingTotal) && incomingTotal > (stats.totalLikes || 0)) {
+        stats.totalLikes = incomingTotal;
+      } else {
+        const deltaLike = Math.max(1, Number(evt.payload?.likeCount) || 1);
+        stats.totalLikes = (stats.totalLikes || 0) + deltaLike;
+      }
+    } else if (evt.type === 'follow') {
+      stats.totalFollows = (stats.totalFollows || 0) + 1;
+    } else if (evt.type === 'share') {
+      stats.totalShares = (stats.totalShares || 0) + 1;
+    } else if (evt.type === 'subscribe') {
+      stats.totalSubscribers = (stats.totalSubscribers || 0) + 1;
+    } else if (evt.type === 'roomUser') {
+      const vCount = Number(evt.payload?.viewerCount);
+      if (!isNaN(vCount) && vCount >= 0) {
+        stats.totalViewers = vCount;
+      }
     }
   });
+
+  // Realtime synchronization from Dashboard stats into Goals
+  if (goalManager) {
+    const s = configManager.get()?.stats || {};
+    if (evt.type === 'like' && typeof s.totalLikes === 'number') {
+      syncGoalWithStat('likes', s.totalLikes);
+    } else if (evt.type === 'gift' && typeof s.totalGifts === 'number') {
+      syncGoalWithStat('coins', s.totalGifts);
+    } else if (evt.type === 'follow' && typeof s.totalFollows === 'number') {
+      syncGoalWithStat('followers', s.totalFollows);
+    } else if (evt.type === 'share' && typeof s.totalShares === 'number') {
+      syncGoalWithStat('shares', s.totalShares);
+    } else if (evt.type === 'subscribe' && typeof s.totalSubscribers === 'number') {
+      syncGoalWithStat('subscribers', s.totalSubscribers);
+    } else if (evt.type === 'roomUser' && typeof s.totalViewers === 'number') {
+      syncGoalWithStat('viewers', s.totalViewers);
+    }
+  }
 }
 
 async function bootstrap() {
   const userDataDir = app.getPath('userData');
   const logsDir = path.join(userDataDir, 'logs');
+  const configPath = path.join(userDataDir, 'config.json');
+
+  // Jika config.json belum ada di folder userData baru, periksa apakah ada instalasi v1.2.0 sebelumnya
+  if (!fs.existsSync(configPath)) {
+    try {
+      const appData = app.getPath('appData');
+      const legacyCandidates = [
+        path.join(appData, 'nurearn-studio', 'config.json'),
+        path.join(appData, 'xumuid-studio', 'config.json'),
+        path.join(appData, 'tiktok-live-toolkit', 'config.json')
+      ];
+      for (const leg of legacyCandidates) {
+        if (fs.existsSync(leg)) {
+          fs.mkdirSync(userDataDir, { recursive: true });
+          fs.copyFileSync(leg, configPath);
+          console.log(`[Config Migration] Berhasil memigrasikan data konfigurasi v1.2.0 dari: ${leg}`);
+          break;
+        }
+      }
+    } catch (_) { }
+  }
 
   logger = new Logger(logsDir);
   configManager = new ConfigManager(userDataDir, logger);
@@ -819,8 +928,25 @@ async function bootstrap() {
   overlayServer = new OverlayServer(logger, configManager, goalManager, triggerEngine);
   goalManager.overlayServer = overlayServer;
 
+  // Initialize goals progress with saved dashboard stats
+  try {
+    const initStats = configManager.get()?.stats || {};
+    if (initStats.totalLikes) goalManager.updateGoal('likes', { current: initStats.totalLikes });
+    if (initStats.totalGifts) goalManager.updateGoal('coins', { current: initStats.totalGifts });
+    if (initStats.totalFollows) goalManager.updateGoal('followers', { current: initStats.totalFollows });
+    if (initStats.totalShares) goalManager.updateGoal('shares', { current: initStats.totalShares });
+    if (initStats.totalSubscribers) goalManager.updateGoal('subscribers', { current: initStats.totalSubscribers });
+    if (initStats.totalViewers) goalManager.updateGoal('viewers', { current: initStats.totalViewers });
+  } catch (_) {}
+
   youtubeManager = new YoutubeManager(logger);
   overlayServer.setYoutubeManager(youtubeManager);
+
+  tunnelManager = new TunnelManager(configManager?.get()?.overlayPort || 8642, logger);
+  tunnelManager.on('status', status => send('tunnel:status', status));
+  tunnelManager.start().catch(err => {
+    if (logger) logger.warn(`[Tunnel] Auto-start failed: ${err.message}`);
+  });
 
   ttsReader = new TtsReader(configManager, logger);
   ttsReader.on('speak', item => send('tts:speak', item));
@@ -848,7 +974,7 @@ async function bootstrap() {
     // Process YouTube Music song request commands
     if (evt.type === 'chat' && evt.payload && youtubeManager) {
       try {
-        youtubeManager.handleChatCommand(evt.payload).catch(err => {
+        if (youtubeManager) youtubeManager.handleChatCommand(evt.payload).catch(err => {
           logger?.error(`[YouTube] Chat command error: ${err.message}`);
         });
       } catch (err) {
@@ -868,18 +994,25 @@ async function bootstrap() {
     updateStats(evt);
     scheduleStatsBroadcast();
     triggerEngine.handleEvent(evt);
-    overlayServer.broadcast(`event:${evt.type}`, evt.payload);
+    overlayServer.broadcast(`event:${evt.type}`, evt.payload, currentTikTokUsername);
   });
 
   triggerEngine.on('fired', data => send('trigger:fired', data));
   triggerEngine.on('sound', ({ file, volume }) => send('sound:play', { file, volume }));
   triggerEngine.on('key', data => send('trigger:key', data));
   triggerEngine.on('media', ({ file, mediaType, durationMs }) => {
-    overlayServer.broadcast('event:media', {
+    const payload = {
       url: `/api/media?path=${encodeURIComponent(file)}`,
       mediaType,
       durationMs
-    });
+    };
+    if (overlayServer) {
+      overlayServer.broadcast('event:media', payload);
+      if (currentTikTokUsername) {
+        overlayServer.broadcast('event:media', payload, currentTikTokUsername);
+      }
+    }
+    send('overlay:mediaPreview', { ...payload, file });
   });
 
   const onYtQueue = q => {
@@ -898,51 +1031,54 @@ async function bootstrap() {
     send('youtube:history', h);
   };
 
-  youtubeManager.on('queueUpdated', onYtQueue);
-  youtubeManager.on('historyUpdated', onYtHistory);
-  youtubeManager.on('playSong', (song) => {
-    onYtPlay(song);
-    playSongInWatchWindow(song);
-  });
-  const handleStopPlayer = () => {
-    onYtStop();
-    currentExpectedVideoId = null;
-    isNavigatingYt = false;
-    stopWatchPlayerPolling();
+  if (youtubeManager) {
+    youtubeManager.on('queueUpdated', onYtQueue);
+    youtubeManager.on('historyUpdated', onYtHistory);
+    youtubeManager.on('playSong', (song) => {
+      onYtPlay(song);
+    });
+    const handleStopPlayer = () => {
+      onYtStop();
+      currentExpectedVideoId = null;
+      isNavigatingYt = false;
+      stopWatchPlayerPolling();
 
-    if (ytWindow && !ytWindow.isDestroyed()) {
-      ytWindow.webContents.executeJavaScript(`
-        (() => {
-          window.__userPaused = true;
-          window.__expectedId = null;
-          try {
-            const p = document.getElementById('movie_player');
-            if (p && typeof p.pauseVideo === 'function') p.pauseVideo();
-          } catch (_) {}
-          const v = document.querySelector('video');
-          if (v) { try { v.pause(); v.currentTime = 0; } catch (_) {} }
-        })()
-      `).catch(() => { });
-    }
-  };
-  youtubeManager.on('stopSong', handleStopPlayer);
-  youtubeManager.on('progress', p => send('youtube:progress', p));
-  youtubeManager.on('ended', () => {
-    send('youtube:videoEnded');
-    if (youtubeManager) {
-      if (youtubeManager.queue && youtubeManager.queue.length > 0) {
-        youtubeManager.playNext();
-      } else {
-        youtubeManager.stopCurrent();
+      if (ytWindow && !ytWindow.isDestroyed()) {
+        ytWindow.webContents.executeJavaScript(`
+          (() => {
+            window.__userPaused = true;
+            window.__expectedId = null;
+            try {
+              const p = document.getElementById('movie_player');
+              if (p && typeof p.pauseVideo === 'function') p.pauseVideo();
+            } catch (_) {}
+            const v = document.querySelector('video');
+            if (v) { try { v.pause(); v.currentTime = 0; } catch (_) {} }
+          })()
+        `).catch(() => { });
       }
-    }
-  });
+    };
+    youtubeManager.on('stopSong', handleStopPlayer);
+    youtubeManager.on('progress', p => send('youtube:progress', p));
+    youtubeManager.on('notify', n => send('youtube:notify', n));
+    youtubeManager.on('ended', () => {
+      send('youtube:videoEnded');
+      if (youtubeManager) {
+        if (youtubeManager.queue && youtubeManager.queue.length > 0) {
+          youtubeManager.playNext();
+        } else {
+          youtubeManager.stopCurrent();
+        }
+      }
+    });
+  }
 
   goalManager.on('goal:reached', data => send('goal:reached', data));
 
   try {
     const overlayPort = configManager.get()?.overlayPort || 8642;
     await overlayServer.start(overlayPort);
+    if (youtubeManager) youtubeManager.setOverlayPort(overlayServer.port || overlayPort);
   } catch (err) {
     logger.error(`Could not start overlay server: ${err.message}`);
   }
@@ -1000,6 +1136,16 @@ ipcMain.handle('config:resetStats', () => {
   const freshStats = configManager.get()?.stats;
   send('stats:update', freshStats);
   if (overlayServer) overlayServer.broadcast('event:stats', freshStats);
+
+  // Sync goals reset
+  if (goalManager) {
+    ['likes', 'followers', 'shares', 'subscribers', 'coins', 'viewers'].forEach(t => {
+      goalManager.updateGoal(t, { current: 0 });
+    });
+    const allGoals = goalManager.getAllGoals();
+    send('goals:all', allGoals);
+    if (overlayServer) overlayServer.broadcast('overlay:goals-all', allGoals);
+  }
   return freshStats;
 });
 
@@ -1054,20 +1200,80 @@ ipcMain.handle('tiktok:connect', async (e, username) => {
         if (g) {
           if (!evt.payload.giftName || evt.payload.giftName.startsWith('Gift ')) evt.payload.giftName = g.name;
           if (!evt.payload.giftImage && g.image) evt.payload.giftImage = g.image;
+        } else {
+          try {
+            const newGift = {
+              id: evt.payload.giftId,
+              name: evt.payload.giftName || `Gift ${evt.payload.giftId}`,
+              price: diamondPrice,
+              image: `images/gifts/${evt.payload.giftId}.png`
+            };
+            giftManager.addGift(newGift);
+            evt.payload.giftImage = newGift.image;
+          } catch (err) {
+            logger?.error(`[Gift] Gagal auto-add gift ${evt.payload.giftId}: ${err.message}`);
+          }
         }
       }
       if (evt.type === 'chat' && evt.payload && youtubeManager) {
-        try { youtubeManager.handleChatCommand(evt.payload).catch(err => logger?.error(`[YouTube] Chat command error: ${err.message}`)); } catch (_) {}
+        if (youtubeManager) {
+          try {
+            youtubeManager.handleChatCommand(evt.payload).catch(err => logger?.error(`[YouTube] Chat command error: ${err.message}`));
+          } catch (err) {
+            logger?.error(`[YouTube] Fatal chat handler error: ${err.message}`);
+          }
+        }
       }
       if (ttsReader) { try { ttsReader.handleEvent(evt); } catch (_) {} }
       send('tiktok:event', evt);
       updateStats(evt);
       scheduleStatsBroadcast();
       triggerEngine.handleEvent(evt);
-      overlayServer.broadcast(`event:${evt.type}`, evt.payload);
+      overlayServer.broadcast(`event:${evt.type}`, evt.payload, currentTikTokUsername);
     });
 
     const state = await connector.connect(username);
+    currentTikTokUsername = String(username || '').toLowerCase().trim().replace(/^@/, '');
+    if (overlayServer && typeof overlayServer.setCurrentUsername === 'function') {
+      overlayServer.setCurrentUsername(currentTikTokUsername);
+    }
+
+    // Extract broadcaster real avatar & info from connector roomInfo
+    let broadcasterAvatar = null;
+    let broadcasterNickname = currentTikTokUsername;
+    try {
+      if (connector && connector.connector && connector.connector.roomInfo) {
+        const owner = connector.connector.roomInfo.owner;
+        if (owner) {
+          broadcasterNickname = owner.nickname || currentTikTokUsername;
+          broadcasterAvatar = owner.avatar_thumb?.url_list?.[0] || owner.avatar_large?.url_list?.[0] || owner.avatar_medium?.url_list?.[0] || null;
+        }
+      }
+    } catch (_) {}
+
+    if (nurearnLiveHeartbeatTimer) {
+      clearInterval(nurearnLiveHeartbeatTimer);
+      nurearnLiveHeartbeatTimer = null;
+    }
+
+    const pushNurearnHeartbeat = () => {
+      if (!overlayServer || !currentTikTokUsername) return;
+      const stats = configManager ? configManager.get()?.stats : null;
+      overlayServer.registerLiveStreamer({
+        username: currentTikTokUsername,
+        nickname: broadcasterNickname,
+        avatar: broadcasterAvatar,
+        likes: stats?.totalLikeCount || stats?.likes || 0,
+        viewers: stats?.viewerCount || 0,
+        diamonds: stats?.totalGifts || stats?.diamonds || 0,
+        version: APP_VERSION
+      });
+      send('nurearn:liveUpdate', overlayServer.getLiveStreamers());
+    };
+
+    pushNurearnHeartbeat();
+    nurearnLiveHeartbeatTimer = setInterval(pushNurearnHeartbeat, 8000);
+
     return { ok: true, roomId: state.roomId };
   } catch (err) {
     return { ok: false, error: err.message };
@@ -1077,10 +1283,23 @@ ipcMain.handle('tiktok:connect', async (e, username) => {
 });
 
 ipcMain.handle('tiktok:disconnect', async () => {
+  if (nurearnLiveHeartbeatTimer) {
+    clearInterval(nurearnLiveHeartbeatTimer);
+    nurearnLiveHeartbeatTimer = null;
+  }
+  if (overlayServer && currentTikTokUsername) {
+    overlayServer.removeLiveStreamer(currentTikTokUsername);
+    send('nurearn:liveUpdate', overlayServer.getLiveStreamers());
+  }
+
   // ── Tugas 1: Bersihkan listener connector saat disconnect ──
   try {
     await connector.disconnect();
   } catch (_) {}
+  currentTikTokUsername = '';
+  if (overlayServer && typeof overlayServer.setCurrentUsername === 'function') {
+    overlayServer.setCurrentUsername('');
+  }
   // Bersihkan ulang listener agar tidak menumpuk
   if (connector && typeof connector.removeAllListeners === 'function') {
     connector.removeAllListeners('event');
@@ -1094,25 +1313,41 @@ ipcMain.handle('tiktok:status', () => ({
   username: connector.username
 }));
 
+ipcMain.handle('nurearn:getLive', () => {
+  const list = overlayServer ? overlayServer.getLiveStreamers() : [];
+  return { ok: true, success: true, data: list, streamers: list };
+});
+
 ipcMain.handle('log:tail', (e, lines) => logger.tail(lines || 200));
 ipcMain.handle('log:clear', () => logger.clearLogs());
 
-ipcMain.handle('overlay:getUrl', (e, type) => {
+ipcMain.handle('overlay:getUrl', (e, type, requestedUser) => {
   const port = overlayServer?.port || configManager?.get()?.overlayPort || 8642;
-  const base = `http://localhost:${port}/overlay`;
+  const user = (requestedUser || currentTikTokUsername || '').toLowerCase().trim().replace(/^@/, '');
+  const baseHost = (tunnelManager && tunnelManager.customDomain)
+    ? tunnelManager.customDomain
+    : ((tunnelManager && tunnelManager.active && tunnelManager.url)
+      ? tunnelManager.url.replace(/\/+$/, '')
+      : `http://localhost:${port}`);
+  const base = user ? `${baseHost}/overlay/@${user}` : `${baseHost}/overlay`;
   return type ? `${base}/${type}` : base;
 });
 
 ipcMain.handle('overlay:openInBrowser', (e, url) => {
   try {
     const port = overlayServer?.port || configManager?.get()?.overlayPort || 8642;
+    const baseHost = (tunnelManager && tunnelManager.customDomain)
+      ? tunnelManager.customDomain
+      : ((tunnelManager && tunnelManager.active && tunnelManager.url)
+        ? tunnelManager.url.replace(/\/+$/, '')
+        : `http://localhost:${port}`);
     let target = String(url || '').trim();
     if (!target) {
-      target = `http://localhost:${port}/overlay`;
+      target = `${baseHost}/overlay`;
     } else if (target.startsWith('/')) {
-      target = `http://localhost:${port}${target}`;
+      target = `${baseHost}${target}`;
     } else if (!target.startsWith('http://') && !target.startsWith('https://')) {
-      target = `http://localhost:${port}/overlay/${target}`;
+      target = `${baseHost}/overlay/${target}`;
     }
     shell.openExternal(target);
     return true;
@@ -1176,11 +1411,11 @@ ipcMain.handle('tts:getVoiceCatalog', () => {
   return ttsEngine.getVoiceCatalog();
 });
 
-ipcMain.handle('tts:getAudio', async (e, { text, voice = 'id-gadis', rate = 1.0, pitch = 1.0 }) => {
+ipcMain.handle('tts:getAudio', async (e, { text, voice = 'g-id', rate = 1.0, pitch = 1.0, engine = 'google' }) => {
   try {
     const cleanText = (text || '').slice(0, 500).trim();
     if (!cleanText) return { ok: false, error: 'Teks kosong' };
-    const dataUrl = await ttsEngine.synthesizeDataUrl(cleanText, voice, rate, pitch);
+    const dataUrl = await ttsEngine.synthesizeDataUrl(cleanText, voice, rate, pitch, engine || 'google');
     return { ok: true, dataUrl };
   } catch (err) {
     if (logger) logger.warn(`[TTS] Gagal mensintesis audio TTS: ${err.message}`);
@@ -1209,18 +1444,38 @@ ipcMain.handle('preset:delete', (e, id) => configManager.deletePreset(id));
 ipcMain.handle('preset:apply', (e, id) => configManager.applyPreset(id));
 ipcMain.handle('preset:import', async () => {
   const result = await dialog.showOpenDialog(mainWindow, {
-    title: 'Import File Preset (.json)',
-    filters: [{ name: 'JSON Preset', extensions: ['json'] }],
+    title: 'Impor Konfigurasi v1.2.0 atau File Preset (.json)',
+    filters: [{ name: 'JSON Config / Preset', extensions: ['json'] }],
     properties: ['openFile']
   });
   if (result.canceled || result.filePaths.length === 0) return { canceled: true };
   try {
     const raw = fs.readFileSync(result.filePaths[0], 'utf8');
     const parsed = JSON.parse(raw);
+
+    // Jika file berupa full config (v1.2.0 atau backup), terapkan langsung
+    if (parsed.interactions || parsed.activities || parsed.triggers || parsed.soundboard || parsed.tiktokUsername || parsed.keyTrigger) {
+      const current = configManager.get() || {};
+      const updated = {
+        ...current,
+        ...parsed,
+        interactions: Array.isArray(parsed.interactions) && parsed.interactions.length > 0 ? parsed.interactions : (current.interactions || []),
+        activities: Array.isArray(parsed.activities) && parsed.activities.length > 0 ? parsed.activities : (current.activities || []),
+        triggers: Array.isArray(parsed.triggers) && parsed.triggers.length > 0 ? parsed.triggers : (current.triggers || []),
+        soundboard: Array.isArray(parsed.soundboard) && parsed.soundboard.length > 0 ? parsed.soundboard : (current.soundboard || []),
+        presets: Array.isArray(parsed.presets) ? parsed.presets : (current.presets || []),
+        stats: parsed.stats ? { ...current.stats, ...parsed.stats } : current.stats
+      };
+      configManager.update(updated);
+      send('config:updated', updated);
+      send('stats:update', updated.stats);
+      return { ok: true, isFullConfig: true, imported: [updated] };
+    }
+
     const imported = configManager.importPreset(parsed);
     return { ok: true, imported };
   } catch (err) {
-    logger.error(`Import preset gagal: ${err.message}`);
+    logger.error(`Import preset/config gagal: ${err.message}`);
     return { ok: false, error: err.message };
   }
 });
@@ -1477,76 +1732,18 @@ ipcMain.handle('youtube:playInView', (e, videoId, query) => {
   return { ok: true };
 });
 ipcMain.handle('youtube:viewCommand', (e, cmd, arg) => {
-  if (!ytWindow || ytWindow.isDestroyed() || ytWindow.webContents.isLoading()) return { ok: false };
-  try {
-    if (cmd === 'pause') {
-      send('youtube:state', { isPlaying: false });
-      ytWindow.webContents.executeJavaScript(`
-        (() => {
-          window.__userPaused = true;
-          try {
-            const p = document.getElementById('movie_player');
-            if (p && typeof p.pauseVideo === 'function') p.pauseVideo();
-          } catch (_) {}
-          const v = document.querySelector('video');
-          if (v) v.pause();
-        })()
-      `).catch(() => { });
-    } else if (cmd === 'resume') {
-      send('youtube:state', { isPlaying: true });
-      startWatchPlayerPolling();
-      ytWindow.webContents.executeJavaScript(`
-        (() => {
-          window.__userPaused = false;
-          try {
-            const p = document.getElementById('movie_player');
-            if (p && typeof p.playVideo === 'function') p.playVideo();
-          } catch (_) {}
-          const v = document.querySelector('video');
-          if (v && v.paused) v.play().catch(() => {});
-        })()
-      `).catch(() => { });
-    } else if (cmd === 'volume') {
-      const vol = Math.max(0, Math.min(1, Number(arg) / 100));
-      ytWindow.webContents.executeJavaScript(`
-        (() => {
-          const v = document.querySelector('video');
-          if (v) v.volume = ${vol};
-          try {
-            const p = document.getElementById('movie_player');
-            if (p && typeof p.setVolume === 'function') p.setVolume(${Math.round(vol * 100)});
-          } catch (_) {}
-        })()
-      `).catch(() => { });
-    } else if (cmd === 'seek') {
-      const sec = Number(arg);
-      ytWindow.webContents.executeJavaScript(`
-        (() => {
-          const v = document.querySelector('video');
-          if (v) v.currentTime = ${sec};
-          try {
-            const p = document.getElementById('movie_player');
-            if (p && typeof p.seekTo === 'function') p.seekTo(${sec}, true);
-          } catch (_) {}
-        })()
-      `).catch(() => { });
-    }
-  } catch (_) { }
+  if (cmd === 'pause') send('youtube:state', { isPlaying: false });
+  else if (cmd === 'resume') send('youtube:state', { isPlaying: true });
   if (overlayServer) {
     try { overlayServer.broadcast('youtube:command', { cmd, arg }); } catch (_) { }
   }
   return { ok: true };
 });
-ipcMain.handle('youtube:togglePlayerWindow', () => {
-  const win = getOrCreateYtWindow();
-  if (!win) return false;
-  if (ytWindowVisible) {
-    win.hide();
-  } else {
-    win.show();
-    win.focus();
-  }
-  return ytWindowVisible;
+ipcMain.handle('youtube:togglePlayerWindow', async () => {
+  const port = overlayServer?.port || configManager?.get()?.overlayPort || 8642;
+  const url = `http://localhost:${port}/player/youtube`;
+  await shell.openExternal(url);
+  return true;
 });
 ipcMain.handle('youtube:openBravePlayer', async () => {
   const port = overlayServer?.port || configManager?.get()?.overlayPort || 8642;
@@ -1595,12 +1792,28 @@ ipcMain.on('youtube:videoEnded', () => {
   }
 });
 
-ipcMain.handle('tunnel:start', () => {
-  const port = overlayServer?.port || 8642;
-  return { ok: true, active: true, url: `http://localhost:${port}` };
+ipcMain.handle('tunnel:start', async () => {
+  const port = overlayServer?.port || configManager?.get()?.overlayPort || 8642;
+  if (tunnelManager) {
+    tunnelManager.setPort(port);
+    const res = await tunnelManager.start();
+    send('tunnel:status', tunnelManager.getStatus());
+    return res;
+  }
+  return { ok: false, error: 'TunnelManager tidak diinisialisasi' };
 });
-ipcMain.handle('tunnel:stop', () => ({ ok: true, active: false }));
+ipcMain.handle('tunnel:stop', async () => {
+  if (tunnelManager) {
+    const res = await tunnelManager.stop();
+    send('tunnel:status', tunnelManager.getStatus());
+    return res;
+  }
+  return { ok: true, active: false };
+});
 ipcMain.handle('tunnel:status', () => {
+  if (tunnelManager) {
+    return tunnelManager.getStatus();
+  }
   const port = overlayServer?.port || 8642;
   return { active: false, url: `http://localhost:${port}` };
 });
@@ -1621,6 +1834,9 @@ ipcMain.handle('battle:testGift', (e, { team, diamonds, user }) => {
 app.on('before-quit', () => {
   app.isQuitting = true;
   stopWatchPlayerPolling();
+  if (tunnelManager && tunnelManager.active) {
+    try { tunnelManager.stop().catch(() => {}); } catch (_) {}
+  }
   if (ytWindow && !ytWindow.isDestroyed()) {
     ytWindow.destroy();
     ytWindow = null;
@@ -1663,26 +1879,6 @@ app.whenReady().then(async () => {
     // Simpan referensi agar bisa stop saat app quit
     app.__updateChecker = updateChecker;
     // ─────────────────────────────────────────────────────────────────────
-
-    setTimeout(() => {
-      try {
-        const w = getOrCreateYtWindow();
-        if (w && (!w.webContents.getURL() || w.webContents.getURL() === 'about:blank')) {
-          w.webContents.loadURL('https://www.youtube.com/watch?v=dQw4w9WgXcQ').then(() => {
-            w.webContents.executeJavaScript(`
-              (() => {
-                try {
-                  const p = document.getElementById('movie_player');
-                  if (p && typeof p.pauseVideo === 'function') p.pauseVideo();
-                  const v = document.querySelector('video');
-                  if (v) { v.muted = true; v.pause(); v.currentTime = 0; }
-                } catch (_) {}
-              })()
-            `).catch(() => { });
-          }).catch(() => { });
-        }
-      } catch (_) { }
-    }, 4000);
   } else {
     createLicenseWindow();
   }

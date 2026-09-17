@@ -3,43 +3,43 @@
     "id": 10994,
     "name": "Bouquet",
     "diamond": 100,
-    "image": ""
+    "image": "images/gifts/10994.png"
   },
   {
     "id": 15063,
     "name": "Journey Pass",
     "diamond": 10,
-    "image": ""
+    "image": "images/gifts/15063.png"
   },
   {
     "id": 19443,
     "name": "Bravo!",
     "diamond": 15,
-    "image": ""
+    "image": "images/gifts/19443.png"
   },
   {
     "id": 10996,
     "name": "Power hug",
     "diamond": 1,
-    "image": ""
+    "image": "images/gifts/10996.png"
   },
   {
     "id": 15049,
     "name": "Padang Rice",
     "diamond": 5,
-    "image": ""
+    "image": "images/gifts/15049.png"
   },
   {
     "id": 105781,
     "name": "Spinning Soccer",
     "diamond": 5,
-    "image": ""
+    "image": "images/gifts/105781.png"
   },
   {
     "id": 10716,
     "name": "Blow a kiss",
     "diamond": 1,
-    "image": ""
+    "image": "images/gifts/10716.png"
   },
   {
     "id": 5269,
@@ -1377,7 +1377,7 @@
     "id": 5661,
     "name": "Air Dancer",
     "diamond": 300,
-    "image": ""
+    "image": "images/gifts/5661.png"
   },
   {
     "id": 5776,
@@ -1395,7 +1395,7 @@
     "id": 10283,
     "name": "Diamond Ring of love",
     "diamond": 300,
-    "image": ""
+    "image": "images/gifts/10283.png"
   },
   {
     "id": 10293,
@@ -1455,7 +1455,7 @@
     "id": 8914,
     "name": "Forever Rosa",
     "diamond": 399,
-    "image": ""
+    "image": "images/gifts/8914.png"
   },
   {
     "id": 9624,
@@ -1569,7 +1569,7 @@
     "id": 13999,
     "name": "Wishing Cake",
     "diamond": 400,
-    "image": ""
+    "image": "images/gifts/13999.png"
   },
   {
     "id": 11809,
@@ -2007,7 +2007,7 @@
     "id": 9498,
     "name": "Blooming Ribbons",
     "diamond": 1000,
-    "image": ""
+    "image": "images/gifts/9498.png"
   },
   {
     "id": 11046,

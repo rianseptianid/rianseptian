@@ -68,7 +68,7 @@
   // ── SELECTORS YANG DIPANTAU ────────────────────────────────────────────────
   // Cocokkan ID/class yang mungkin dipakai app.js obfuscated
   const CHAT_SELECTORS = [
-    '#chatList', '#chat-list', '.chat-list', '.chat-container',
+    '#chatFeed', '#chatList', '#chat-list', '.chat-list', '.chat-container',
     '[data-type="chat"]', '#liveChatList', '#commentList', '.comment-list',
     '#chat-feed', '.chat-feed', '#eventFeed', '.event-feed',
     '#liveChat', '.live-chat-list'

@@ -1,9 +1,12 @@
 const EventEmitter = require('events');
 const https = require('https');
+const path = require('path');
+const fs = require('fs');
+const { execFile } = require('child_process');
 
 /**
- * YoutubeManager — manages song request queue, search, playback events.
- * Audio is played by the YouTube BrowserWindow via IFrame API / native player.
+ * YoutubeManager — antrian song request dari live chat TikTok.
+ * Metadata + audio stream diambil lewat yt-dlp (tanpa iklan YouTube).
  */
 class YoutubeManager extends EventEmitter {
   constructor(logger) {
@@ -12,6 +15,7 @@ class YoutubeManager extends EventEmitter {
     this.queue = [];
     this.history = [];
     this.currentSong = null;
+    this.overlayPort = 8642;
     this.settings = {
       reqEnabled: true,
       skipEnabled: true,
@@ -20,12 +24,14 @@ class YoutubeManager extends EventEmitter {
       maxPerUser: 2
     };
 
-    // Anti double-trigger playNext
     this.__playingNext = false;
-
-    // Cooldown per user untuk !play (ms)
     this.__playCooldown = new Map();
     this.__playCooldownMs = 3000;
+    this.__streamCache = new Map();
+  }
+
+  setOverlayPort(port) {
+    if (port) this.overlayPort = Number(port) || this.overlayPort;
   }
 
   updateSettings(partial) {
@@ -34,10 +40,21 @@ class YoutubeManager extends EventEmitter {
   }
 
   checkRole(payload, role) {
+    if (!payload) return false;
+    if (payload.uniqueId === 'host_id') return true;
     if (!role || role === 'all') return true;
-    if (role === 'subscriber') return payload.isSubscriber || payload.isModerator;
-    if (role === 'moderator') return payload.isModerator;
-    if (role === 'friend') return payload.isFriend || payload.isModerator;
+    if (role === 'follower') {
+      return Boolean(payload.isFollower || payload.isSubscriber || payload.isModerator
+        || payload.user?.isFollower || payload.user?.isSubscriber || payload.user?.isModerator);
+    }
+    if (role === 'subscriber') {
+      return Boolean(payload.isSubscriber || payload.isModerator
+        || payload.user?.isSubscriber || payload.user?.isModerator);
+    }
+    if (role === 'moderator') {
+      return Boolean(payload.isModerator || payload.user?.isModerator);
+    }
+    if (role === 'friend') return Boolean(payload.isFriend || payload.isModerator);
     return true;
   }
 
@@ -49,11 +66,10 @@ class YoutubeManager extends EventEmitter {
     if (!comment.startsWith('!')) return false;
     if (!this.checkRole(payload, this.settings.reqRole)) return false;
 
-    const parts = comment.split(' ');
+    const parts = comment.split(/\s+/);
     const cmd = parts[0].toLowerCase();
     const arg = parts.slice(1).join(' ').trim();
 
-    // ── !play / !req / !lagu / !musik / !song ──────────────
     if ((cmd === '!play' || cmd === '!req' || cmd === '!lagu' || cmd === '!musik' || cmd === '!song') && this.settings.reqEnabled) {
       if (!arg) return true;
 
@@ -71,7 +87,6 @@ class YoutubeManager extends EventEmitter {
           return true;
         }
 
-        // Cooldown anti-spam
         const lastPlay = this.__playCooldown.get(uniqueId) || 0;
         if (Date.now() - lastPlay < this.__playCooldownMs) {
           this.logger?.info(`[YouTube] Cooldown active for ${nickname}`);
@@ -90,9 +105,9 @@ class YoutubeManager extends EventEmitter {
         song.status = 'queued';
         this.queue.push(song);
         this.logger?.info(`[YouTube] Added to queue: ${song.title}`);
-        this.emit('queueUpdated', this.queue);
+        this.emit('queueUpdated', [...this.queue]);
         this.emit('notify', { type: 'success', message: `✓ @${nickname} → ${song.title}` });
-        if (!this.currentSong) this.playNext();
+        if (!this.currentSong) await this.playNext();
       } else {
         this.logger?.warn(`[YouTube] Could not find: ${arg}`);
         this.emit('notify', { type: 'error', message: `Lagu "${arg}" tidak ditemukan.` });
@@ -101,42 +116,39 @@ class YoutubeManager extends EventEmitter {
       return true;
     }
 
-    // ── !skip ─────────────────────────────────────────────
     if (cmd === '!skip' && this.settings.skipEnabled) {
       this.logger?.info(`[YouTube] Skip requested by ${nickname}`);
-      this.__playingNext = false; // reset guard biar skip langsung jalan
+      this.__playingNext = false;
       this.skipSong();
       this.emit('notify', { type: 'info', message: `⏭ @${nickname} skip lagu.` });
       return true;
     }
 
-    // ── !stop ─────────────────────────────────────────────
     if (cmd === '!stop') {
       this.logger?.info(`[YouTube] Stop requested by ${nickname}`);
-      this.__playingNext = false; // reset guard
+      this.__playingNext = false;
       this.stopCurrent();
       this.emit('notify', { type: 'info', message: `⏹ @${nickname} stop musik.` });
       return true;
     }
 
-    // ── !revoke / !remove / !cancel ───────────────────────
     if (cmd === '!revoke' || cmd === '!remove' || cmd === '!cancel') {
       if (arg) {
         const idx = this.queue.findIndex(s =>
           s.requesterId === uniqueId &&
-          s.title.toLowerCase().includes(arg.toLowerCase())
+          String(s.title || '').toLowerCase().includes(arg.toLowerCase())
         );
         if (idx >= 0) {
           const removed = this.queue.splice(idx, 1)[0];
           this.logger?.info(`[YouTube] ${nickname} revoked: ${removed.title}`);
-          this.emit('queueUpdated', this.queue);
+          this.emit('queueUpdated', [...this.queue]);
         }
       } else {
         for (let i = this.queue.length - 1; i >= 0; i--) {
           if (this.queue[i].requesterId === uniqueId) {
             const removed = this.queue.splice(i, 1)[0];
             this.logger?.info(`[YouTube] ${nickname} revoked: ${removed.title}`);
-            this.emit('queueUpdated', this.queue);
+            this.emit('queueUpdated', [...this.queue]);
             break;
           }
         }
@@ -147,65 +159,61 @@ class YoutubeManager extends EventEmitter {
     return false;
   }
 
-  // ──────────────────────────────────────────────────────────
-  // Playback controls
-  // ──────────────────────────────────────────────────────────
-
-  playNext() {
-    // Guard anti double-trigger
+  async playNext() {
     if (this.__playingNext) {
       this.logger?.info('[YouTube] playNext() ignored — already in progress');
       return;
     }
     this.__playingNext = true;
-    setTimeout(() => { this.__playingNext = false; }, 1000);
 
-    if (this.queue.length > 0) {
-      const song = this.queue.shift();
-      this.currentSong = song;
-      this.currentSong.status = 'playing';
+    try {
+      if (this.queue.length > 0) {
+        const song = this.queue.shift();
+        song.status = 'playing';
+        song.streamUrl = this.buildProxyStreamUrl(song.videoId);
 
-      this.history.unshift(song);
-      // Tugas 2 (bonus): trim history agar tidak tumbuh tanpa batas saat live 8 jam
-      if (this.history.length > 50) this.history.length = 50;
+        this.currentSong = song;
+        this.history.unshift(song);
+        if (this.history.length > 50) this.history.length = 50;
 
-      // Trim playCooldown Map: hapus entry lebih dari 5 menit lalu agar tidak bocor
-      const cutoff = Date.now() - 5 * 60 * 1000;
-      for (const [uid, ts] of this.__playCooldown) {
-        if (ts < cutoff) this.__playCooldown.delete(uid);
+        const cutoff = Date.now() - 5 * 60 * 1000;
+        for (const [uid, ts] of this.__playCooldown) {
+          if (ts < cutoff) this.__playCooldown.delete(uid);
+        }
+
+        this.logger?.info(`[YouTube] ▶ Playing (ad-free): ${song.title} (${song.videoId})`);
+        this.emit('playSong', this.currentSong);
+        this.emit('queueUpdated', [...this.queue]);
+        this.emit('historyUpdated', [...this.history]);
+      } else {
+        const hadSong = !!this.currentSong;
+        this.currentSong = null;
+        if (hadSong) this.emit('stopSong');
+        this.emit('queueUpdated', [...this.queue]);
       }
-
-      this.emit('playSong', this.currentSong);
-      this.emit('queueUpdated', this.queue);
-      this.emit('historyUpdated', this.history);
-    } else {
-      const hadSong = !!this.currentSong;
-      this.currentSong = null;
-      if (hadSong || this.queue.length === 0) {
-        this.emit('stopSong');
-      }
-      this.emit('queueUpdated', this.queue);
+    } finally {
+      setTimeout(() => { this.__playingNext = false; }, 800);
     }
   }
 
   skipSong() {
     if (this.currentSong) {
       this.currentSong.status = 'skipped';
-      this.emit('historyUpdated', this.history);
+      this.emit('historyUpdated', [...this.history]);
     }
     this.currentSong = null;
-    this.__playingNext = false; // reset guard biar playNext langsung jalan
+    this.__playingNext = false;
     this.playNext();
   }
 
   stopCurrent() {
     if (this.currentSong) {
       this.currentSong.status = 'stopped';
-      this.emit('historyUpdated', this.history);
+      this.emit('historyUpdated', [...this.history]);
     }
     this.currentSong = null;
     this.emit('stopSong');
-    this.emit('queueUpdated', this.queue);
+    this.emit('queueUpdated', [...this.queue]);
   }
 
   stop() { this.stopCurrent(); }
@@ -213,13 +221,13 @@ class YoutubeManager extends EventEmitter {
 
   clearQueue() {
     this.queue = [];
-    this.emit('queueUpdated', this.queue);
+    this.emit('queueUpdated', [...this.queue]);
   }
 
   removeSong(idx) {
     if (idx >= 0 && idx < this.queue.length) {
       this.queue.splice(idx, 1);
-      this.emit('queueUpdated', this.queue);
+      this.emit('queueUpdated', [...this.queue]);
     }
   }
 
@@ -235,10 +243,11 @@ class YoutubeManager extends EventEmitter {
     const cloned = {
       ...song,
       status: 'queued',
+      streamUrl: this.buildProxyStreamUrl(song.videoId),
       requester: song.requester ? `${song.requester} (Replay)` : 'Host (Replay)'
     };
     this.queue.push(cloned);
-    this.emit('queueUpdated', this.queue);
+    this.emit('queueUpdated', [...this.queue]);
     if (!this.currentSong) {
       this.__playingNext = false;
       this.playNext();
@@ -246,12 +255,153 @@ class YoutubeManager extends EventEmitter {
     return true;
   }
 
-  // ──────────────────────────────────────────────────────────
-  // YouTube Search (scrapes ytInitialData)
-  // ──────────────────────────────────────────────────────────
+  buildProxyStreamUrl(videoId) {
+    return `http://127.0.0.1:${this.overlayPort}/api/yt-stream/${encodeURIComponent(videoId)}`;
+  }
 
-  searchYoutube(query) {
+  getYtDlpPath() {
+    const names = process.platform === 'win32' ? ['yt-dlp.exe', 'yt-dlp'] : ['yt-dlp'];
+    const dirs = [];
+    if (process.resourcesPath) {
+      dirs.push(path.join(process.resourcesPath, 'bin'));
+      dirs.push(path.join(process.resourcesPath, 'app.asar.unpacked', 'bin'));
+    }
+    dirs.push(path.join(__dirname, '..', 'bin'));
+    dirs.push(path.join(process.cwd(), 'bin'));
+
+    for (const dir of dirs) {
+      for (const name of names) {
+        const full = path.join(dir, name);
+        if (fs.existsSync(full)) return full;
+      }
+    }
+    return null;
+  }
+
+  runYtDlp(args, timeoutMs = 35000) {
+    return new Promise((resolve, reject) => {
+      const bin = this.getYtDlpPath();
+      if (!bin) {
+        reject(new Error('yt-dlp.exe tidak ditemukan di folder bin/'));
+        return;
+      }
+      execFile(bin, args, {
+        timeout: timeoutMs,
+        windowsHide: true,
+        maxBuffer: 20 * 1024 * 1024
+      }, (err, stdout, stderr) => {
+        if (err) {
+          const detail = (stderr || err.message || '').toString().slice(0, 400);
+          reject(new Error(detail || 'yt-dlp gagal'));
+          return;
+        }
+        resolve(String(stdout || '').trim());
+      });
+    });
+  }
+
+  extractVideoId(query) {
+    const text = String(query || '').trim();
+    const m = text.match(/(?:v=|youtu\.be\/|youtube\.com\/shorts\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    if (m) return m[1];
+    if (/^[a-zA-Z0-9_-]{11}$/.test(text)) return text;
+    return null;
+  }
+
+  formatDuration(sec) {
+    const n = Number(sec);
+    if (!n || n < 0 || Number.isNaN(n)) return '?';
+    const m = Math.floor(n / 60);
+    const s = Math.floor(n % 60);
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  songFromYtDlpInfo(info, fallbackTitle) {
+    if (!info || !info.id) return null;
+    const thumbs = Array.isArray(info.thumbnails) ? info.thumbnails : [];
+    const bestThumb = thumbs.length ? thumbs[thumbs.length - 1].url : (info.thumbnail || '');
+    return {
+      videoId: info.id,
+      title: info.title || fallbackTitle || 'YouTube Music',
+      channel: info.uploader || info.channel || info.artist || 'YouTube',
+      duration: this.formatDuration(info.duration),
+      thumbnail: bestThumb,
+      webpageUrl: info.webpage_url || `https://www.youtube.com/watch?v=${info.id}`
+    };
+  }
+
+  async searchYoutube(query) {
+    const videoId = this.extractVideoId(query);
+    const ytdlp = this.getYtDlpPath();
+
+    if (ytdlp) {
+      try {
+        const target = videoId
+          ? `https://www.youtube.com/watch?v=${videoId}`
+          : `ytsearch1:${query}`;
+        const raw = await this.runYtDlp([
+          '--dump-json',
+          '--no-download',
+          '--no-playlist',
+          '--no-warnings',
+          '--skip-download',
+          target
+        ], 40000);
+        const line = raw.split(/\r?\n/).find(l => l.trim().startsWith('{'));
+        if (line) {
+          const info = JSON.parse(line);
+          const song = this.songFromYtDlpInfo(info, query);
+          if (song) {
+            this.logger?.info(`[YouTube] yt-dlp found: ${song.title}`);
+            return song;
+          }
+        }
+      } catch (err) {
+        this.logger?.warn(`[YouTube] yt-dlp search fallback: ${err.message}`);
+      }
+    } else {
+      this.logger?.warn('[YouTube] yt-dlp.exe tidak ada — memakai pencarian HTML');
+    }
+
+    return this.searchYoutubeHtml(query, videoId);
+  }
+
+  async getDirectAudioUrl(videoId) {
+    if (!videoId) return null;
+    const cached = this.__streamCache.get(videoId);
+    if (cached && cached.expires > Date.now()) return cached.url;
+
+    const ytdlp = this.getYtDlpPath();
+    if (!ytdlp) return null;
+
+    const url = await this.runYtDlp([
+      '-f', 'bestaudio[ext=m4a]/bestaudio/best',
+      '-g',
+      '--no-playlist',
+      '--no-warnings',
+      `https://www.youtube.com/watch?v=${videoId}`
+    ], 35000);
+
+    const streamUrl = url.split(/\r?\n/).map(s => s.trim()).find(s => s.startsWith('http'));
+    if (!streamUrl) return null;
+
+    this.__streamCache.set(videoId, { url: streamUrl, expires: Date.now() + 4 * 60 * 1000 });
+    return streamUrl;
+  }
+
+  searchYoutubeHtml(query, knownId) {
     return new Promise((resolve) => {
+      if (knownId) {
+        resolve({
+          videoId: knownId,
+          title: query,
+          channel: 'YouTube',
+          duration: '?',
+          thumbnail: `https://i.ytimg.com/vi/${knownId}/hqdefault.jpg`
+        });
+        return;
+      }
+
       const url =
         'https://www.youtube.com/results?search_query=' +
         encodeURIComponent(query) +
@@ -260,12 +410,9 @@ class YoutubeManager extends EventEmitter {
       const options = {
         headers: {
           'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
-            'AppleWebKit/537.36 (KHTML, like Gecko) ' +
-            'Chrome/124.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
           'Accept-Language': 'en-US,en;q=0.9',
-          Accept:
-            'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
         }
       };
 
@@ -283,7 +430,6 @@ class YoutubeManager extends EventEmitter {
               }
 
               const data = JSON.parse(match[1]);
-
               const contents =
                 data?.contents
                   ?.twoColumnSearchResultsRenderer
@@ -292,7 +438,6 @@ class YoutubeManager extends EventEmitter {
                   ?.contents;
 
               if (!contents) {
-                this.logger?.warn('[YouTube] Unexpected ytInitialData structure');
                 resolve(null);
                 return;
               }
@@ -300,11 +445,9 @@ class YoutubeManager extends EventEmitter {
               for (const section of contents) {
                 const items = section?.itemSectionRenderer?.contents;
                 if (!items) continue;
-
                 for (const item of items) {
                   const vr = item?.videoRenderer;
                   if (!vr || !vr.videoId) continue;
-
                   const title = vr.title?.runs?.[0]?.text || query;
                   const channel =
                     vr.ownerText?.runs?.[0]?.text ||
@@ -313,13 +456,10 @@ class YoutubeManager extends EventEmitter {
                   const duration = vr.lengthText?.simpleText || '?';
                   const thumbnail =
                     vr.thumbnail?.thumbnails?.[vr.thumbnail.thumbnails.length - 1]?.url || '';
-
                   resolve({ videoId: vr.videoId, title, channel, duration, thumbnail });
                   return;
                 }
               }
-
-              this.logger?.warn(`[YouTube] No video results for: ${query}`);
               resolve(null);
             } catch (err) {
               this.logger?.error(`[YouTube] Search parse error: ${err.message}`);

@@ -9,8 +9,19 @@ console.log('[Goal] Script loaded');
 // PARSE GOAL TYPE
 // ============================================================
 const urlParams = new URLSearchParams(window.location.search);
-const pathSegments = window.location.pathname.replace(/^\/overlay\/goal\/?/, '').split('/').filter(Boolean);
-const goalType = (urlParams.get('type') || pathSegments[0] || 'likes').toLowerCase();
+const rawPathParts = window.location.pathname.replace(/^\/overlay\/?/, '').split('/').filter(Boolean);
+// rawPathParts could be ['goal', 'likes'] or ['@user', 'goal', 'likes'] or ['user', 'goal', 'likes']
+let pathUser = '';
+let pathGoalType = '';
+if (rawPathParts.length >= 2 && rawPathParts[1].toLowerCase() === 'goal') {
+  pathUser = rawPathParts[0];
+  pathGoalType = rawPathParts[2] || '';
+} else if (rawPathParts.length >= 1 && rawPathParts[0].toLowerCase() === 'goal') {
+  pathGoalType = rawPathParts[1] || '';
+}
+
+const goalType = (urlParams.get('type') || pathGoalType || 'likes').toLowerCase();
+const goalTargetUser = (urlParams.get('username') || urlParams.get('user') || pathUser || '').toLowerCase().trim().replace(/^@/, '');
 
 // ============================================================
 // DOM ELEMENTS
@@ -269,7 +280,9 @@ fetch(`${baseUrl}/api/goals/${goalType}`)
 // WEBSOCKET LISTENER
 // ============================================================
 function connect() {
-  const ws = new WebSocket(`${wsProtocol}//${host}`);
+  const targetUser = goalTargetUser || (urlParams.get('username') || urlParams.get('user') || '').toLowerCase().trim().replace(/^@/, '');
+  const wsQuery = targetUser ? `?username=${encodeURIComponent(targetUser)}` : '';
+  const ws = new WebSocket(`${wsProtocol}//${host}${wsQuery}`);
 
   ws.addEventListener('open', () => {
     console.log('[Goal] WebSocket connected');

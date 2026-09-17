@@ -19,7 +19,15 @@
   <!-- ── Update Notifier Banner ─────────────────────────────────────────── -->
   <!-- Tersembunyi by default. Muncul otomatis kalau ada versi baru di GitHub Releases. -->
   <div id="updateBanner" class="update-banner" style="display:none;" role="alert" aria-live="polite">
-    <span class="update-banner__icon">🚀</span>
+    <span class="update-banner__icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z" />
+        <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z" />
+        <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0" />
+        <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5" />
+      </svg>
+    </span>
     <div class="update-banner__text">
       <strong id="updateBannerTitle">Pembaruan tersedia!</strong>
       <span id="updateBannerSub"></span>
@@ -28,7 +36,8 @@
       <button id="updateBannerOpenBtn" class="update-banner__btn-primary" title="Buka halaman unduhan">
         Unduh Sekarang
       </button>
-      <button id="updateBannerDismissBtn" class="update-banner__btn-close" title="Tutup notifikasi" aria-label="Tutup">✕</button>
+      <button id="updateBannerDismissBtn" class="update-banner__btn-close" title="Tutup notifikasi"
+        aria-label="Tutup">✕</button>
     </div>
   </div>
   <!-- ─────────────────────────────────────────────────────────────────────── -->
@@ -85,21 +94,15 @@
               <path d="M14 10l-2 2"></path>
             </svg>
           </span>
-          <span class="tab-text" style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2;">
+          <span class="tab-text"
+            style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.2;">
             <span>Battle Arena</span>
-            <span style="font-size: 9.5px; color: #f59e0b; opacity: 0.9; font-weight: 600; letter-spacing: 0.2px;">(Dalam Pengembangan)</span>
+            <span
+              style="font-size: 9.5px; color: #f59e0b; opacity: 0.9; font-weight: 600; letter-spacing: 0.2px;">(Dalam
+              Pengembangan)</span>
           </span>
         </button>
 
-        <button class="tab-btn" data-tab="chat">
-          <span class="tab-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-              stroke-linecap="round" stroke-linejoin="round" class="tab-ui-icon-svg">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-            </svg>
-          </span>
-          <span class="tab-text">Chat</span>
-        </button>
 
         <button class="tab-btn" data-tab="gifts">
           <span class="tab-icon">
@@ -175,6 +178,8 @@
           </span>
           <span class="tab-text">YouTube Music</span>
         </button>
+
+
 
         <button class="tab-btn" data-tab="tts">
           <span class="tab-icon">
@@ -282,13 +287,19 @@
           </div>
 
           <div class="asset-folders-grid"
-            style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px;">
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
             <!-- FOLDER AUDIO -->
             <div class="asset-folder-card panel"
               style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.25);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h4 style="margin: 0; color: #38bdf8; display: flex; align-items: center; gap: 6px;">
-                  <span>🔊</span> Folder Aset Audio (Sound)
+                <h4 style="margin: 0; color: #38bdf8; display: flex; align-items: center; gap: 8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                  </svg>
+                  <span>Folder Aset Audio (Sound)</span>
                 </h4>
                 <span id="audioFolderCountBadge" class="trigger-count-badge">0 audio</span>
               </div>
@@ -299,7 +310,12 @@
               <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                 <input type="text" id="folderAudioPath" placeholder="Belum ada folder audio dipilih..." readonly
                   style="flex: 1; font-size: 12px; font-family: monospace;" />
-                <button type="button" id="btnPickAudioFolder" class="btn btn-primary btn-sm">📁 Pilih Folder</button>
+                <button type="button" id="btnPickAudioFolder" class="btn btn-primary btn-sm"
+                  style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>Pilih Folder</button>
               </div>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <button type="button" id="btnScanAudioFolder" class="btn btn-ghost btn-sm"
@@ -330,8 +346,19 @@
             <div class="asset-folder-card panel"
               style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(244, 114, 182, 0.25);">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                <h4 style="margin: 0; color: #f472b6; display: flex; align-items: center; gap: 6px;">
-                  <span>🎬</span> Folder Aset Gambar / Video
+                <h4 style="margin: 0; color: #f472b6; display: flex; align-items: center; gap: 8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f472b6" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <line x1="2" y1="7" x2="7" y2="7"></line>
+                    <line x1="2" y1="17" x2="7" y2="17"></line>
+                    <line x1="17" y1="17" x2="22" y2="17"></line>
+                    <line x1="17" y1="7" x2="22" y2="7"></line>
+                  </svg>
+                  <span>Folder Aset Gambar / Video</span>
                 </h4>
                 <span id="mediaFolderCountBadge" class="trigger-count-badge">0 media</span>
               </div>
@@ -341,7 +368,12 @@
               <div style="display: flex; gap: 8px; margin-bottom: 10px;">
                 <input type="text" id="folderMediaPath" placeholder="Belum ada folder media dipilih..." readonly
                   style="flex: 1; font-size: 12px; font-family: monospace;" />
-                <button type="button" id="btnPickMediaFolder" class="btn btn-primary btn-sm">📁 Pilih Folder</button>
+                <button type="button" id="btnPickMediaFolder" class="btn btn-primary btn-sm"
+                  style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>Pilih Folder</button>
               </div>
               <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                 <button type="button" id="btnScanMediaFolder" class="btn btn-ghost btn-sm"
@@ -363,6 +395,62 @@
                 </div>
                 <div id="mediaQuickList" class="asset-quick-list" style="max-height: 140px; overflow-y: auto;">
                   <span class="muted" style="font-size: 11px;">Pilih folder media di atas untuk melihat daftar
+                    file.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FOLDER ASET GIFT (IKON / GAMBAR) -->
+            <div class="asset-folder-card panel"
+              style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.25);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h4 style="margin: 0; color: #fbbf24; display: flex; align-items: center; gap: 8px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                    <rect x="2" y="7" width="20" height="5"></rect>
+                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                  </svg>
+                  <span>Folder Aset Gift (Ikon / Gambar)</span>
+                </h4>
+                <span id="giftFolderCountBadge" class="trigger-count-badge">0 gift</span>
+              </div>
+              <p class="muted" style="font-size: 11.5px; margin-top: 0; margin-bottom: 10px;">
+                Folder penyimpanan ikon & gambar gift kustom. Saat menambah gift baru, Anda bisa memilih langsung dari
+                folder ini.
+              </p>
+              <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                <input type="text" id="folderGiftPath" placeholder="Belum ada folder gift dipilih..." readonly
+                  style="flex: 1; font-size: 12px; font-family: monospace;" />
+                <button type="button" id="btnPickGiftFolder" class="btn btn-primary btn-sm"
+                  style="display:inline-flex; align-items:center; gap:5px;"><svg width="13" height="13"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>Pilih Folder</button>
+              </div>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button type="button" id="btnScanGiftFolder" class="btn btn-ghost btn-sm"
+                  title="Scan ulang isi file folder"> Refresh / Scan</button>
+                <button type="button" id="btnAddFileToGiftFolder" class="btn btn-ghost btn-sm"
+                  title="Tambah file gift baru ke folder ini"> Tambah File</button>
+                <button type="button" id="btnOpenGiftFolderExplorer" class="btn btn-ghost btn-sm"
+                  title="Buka folder di Windows Explorer"> Buka Folder</button>
+              </div>
+
+              <!-- Quick preview list of gifts -->
+              <div id="giftFolderQuickView"
+                style="margin-top: 14px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary);">Daftar Gift
+                    Tersedia:</span>
+                  <input type="text" id="giftQuickSearch" placeholder="Cari gift..."
+                    style="padding: 4px 8px; font-size: 11px; max-width: 130px;" />
+                </div>
+                <div id="giftQuickList" class="asset-quick-list" style="max-height: 140px; overflow-y: auto;">
+                  <span class="muted" style="font-size: 11px;">Pilih folder gift di atas untuk melihat daftar
                     file.</span>
                 </div>
               </div>
@@ -461,7 +549,9 @@
                 </svg>
                 Ekspor Semua
               </button>
-              <button id="btnResetPureDefault" class="btn btn-ghost btn-sm" title="Reset semua data konfigurasi kembali bersih kosong murni seperti install baru" style="color: var(--color-error); border-color: rgba(239, 68, 68, 0.35);">
+              <button id="btnResetPureDefault" class="btn btn-ghost btn-sm"
+                title="Reset semua data konfigurasi kembali bersih kosong murni seperti install baru"
+                style="color: var(--color-error); border-color: rgba(239, 68, 68, 0.35);">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                   stroke-linecap="round" stroke-linejoin="round">
                   <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -546,6 +636,165 @@
             </div>
           </div>
         </div>
+
+        <!-- LIVE CHAT FEED PANEL DI DASHBOARD (PROMINEN TEPAT DI BAWAH STATISTIK) -->
+        <div class="panel dashboard-chat-panel" id="dashboardLiveChatPanel">
+          <div class="nl-header" style="margin-bottom: 12px;">
+            <div class="nl-header-left">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <h2 class="nl-title" style="font-size: 17px !important;">Live Chat Feed</h2>
+              </div>
+              <div class="nl-subtitle">
+                <span>Pesan komentar penonton TikTok LIVE secara realtime</span>
+              </div>
+            </div>
+            <div class="nl-header-right" style="display: flex; gap: 8px;">
+              <button type="button" id="btnTestChatFeed" class="btn btn-ghost btn-sm"
+                title="Simulasi komentar dan penonton bergabung">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Test Chat &amp; Join</span>
+              </button>
+              <button type="button" id="btnClearChatFeed" class="btn btn-ghost btn-sm"
+                title="Bersihkan riwayat live chat">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Bersihkan Chat</span>
+              </button>
+            </div>
+          </div>
+          <div id="chatFeed" class="feed chat-feed">
+            <div class="chat-feed-empty-state" id="chatFeedEmpty">
+              <div class="chat-empty-icon">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </div>
+              <div class="chat-empty-title">Belum ada komentar live chat</div>
+              <div class="chat-empty-desc">Pesan penonton TikTok LIVE akan otomatis mengalir di sini secara realtime saat siaran berlangsung.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NUREARN LIVE STREAMERS PANEL (VUE 3 REACTIVE COMPONENT) -->
+        <div class="panel nurearn-live-panel-v2" id="nurearnLiveApp" v-cloak>
+          <!-- Header matching user's screenshot -->
+          <div class="nl-header">
+            <div class="nl-header-left">
+              <h2 class="nl-title">Nurearn Live</h2>
+              <div class="nl-subtitle">
+                <span class="nl-subtitle-icon">🤝</span>
+                <span>Nuances of Solidarity and Community.</span>
+              </div>
+            </div>
+            <div class="nl-header-right">
+              <div class="nl-online-badge">
+                <span>{{ onlineCount }} Online</span>
+              </div>
+              <button type="button" @click="refresh" class="nl-btn-refresh" :class="{ 'is-loading': isRefreshing }" title="Refresh daftar live">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+                </svg>
+                <span>Refresh</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Search Box -->
+          <div class="nl-search-wrap">
+            <svg class="nl-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              v-model="searchQuery"
+              class="nl-search-input"
+              placeholder="Cari username atau nama akun..."
+            />
+            <button v-if="searchQuery" @click="clearSearch" class="nl-search-clear-btn" title="Hapus pencarian">✕</button>
+          </div>
+
+          <!-- Streamers Grid (2 Columns) -->
+          <div class="nl-grid">
+            <div v-if="filteredStreamers.length === 0" class="nl-empty-state">
+              <div class="nl-empty-icon">🔍</div>
+              <div class="nl-empty-title">Tidak ada pengguna ditemukan</div>
+              <p class="nl-empty-desc">Coba gunakan kata kunci pencarian yang lain.</p>
+            </div>
+
+            <div
+              v-for="s in filteredStreamers"
+              :key="s.username"
+              class="nl-card"
+              :class="{ 'is-online': s.isOnline !== false, 'is-offline': s.isOnline === false }"
+            >
+              <!-- Avatar Circle: TikTok image or Teal Gradient with Initial Letter -->
+              <div class="nl-avatar-wrap">
+                <img
+                  v-if="s.avatar"
+                  :src="s.avatar"
+                  class="nl-avatar-img"
+                  :alt="s.username"
+                  @error="handleAvatarError(s)"
+                />
+                <div v-else class="nl-avatar-initial" :class="{ 'initial-offline': s.isOnline === false }">
+                  {{ getInitialChar(s.nickname, s.username) }}
+                </div>
+              </div>
+
+              <!-- Info (Name, Status Dot + Username, Time) -->
+              <div class="nl-card-info">
+                <div class="nl-name" :title="s.nickname || s.username">
+                  {{ s.nickname || s.username }}
+                </div>
+                <div class="nl-status-row">
+                  <span class="nl-status-dot" :class="s.isOnline !== false ? 'dot-online' : 'dot-offline'"></span>
+                  <span class="nl-username" :title="formatUsername(s.username)">{{ formatUsername(s.username) }}</span>
+                </div>
+                <div class="nl-time-row">
+                  <template v-if="s.isOnline !== false">
+                    <span>Mulai {{ formatTime(s.startTime) }}</span>
+                    <span class="nl-bullet">•</span>
+                    <span>{{ formatDuration(s.startTime) }}</span>
+                  </template>
+                  <template v-else>
+                    <span class="nl-offline-label">Offline</span>
+                    <span class="nl-bullet">•</span>
+                    <span>Terakhir live {{ formatTime(s.lastSeen) }}</span>
+                  </template>
+                </div>
+              </div>
+
+              <!-- Right Action: Open Live Button -->
+              <div class="nl-card-actions">
+                <button
+                  type="button"
+                  @click="openLive(s.username)"
+                  class="nl-btn-open-live"
+                  :title="'Buka Live ' + formatUsername(s.username)"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  <span>Open Live</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="panel" style="display: none !important;">
           <div class="leaderboard-header">
             <div class="leaderboard-header-left">
@@ -980,11 +1229,8 @@
         </div>
       </section>
 
-      <!-- CHAT -->
-      <section id="tab-chat" class="tab-panel">
-        <h1>Live Chat</h1>
-        <div id="chatFeed" class="feed"></div>
-      </section>
+      <!-- CHAT (TELAH DIPINDAHKAN KE DASHBOARD) -->
+      <section id="tab-chat" class="tab-panel" style="display: none !important;"></section>
 
       <!-- GIFTS / GALERI GIFT -->
       <section id="tab-gifts" class="tab-panel">
@@ -1005,9 +1251,31 @@
           </div>
           <div class="gift-header-actions" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
             <div class="top-switch-btns">
-              <button type="button" id="btnSwitchGiftGallery" class="btn btn-sm btn-primary active">🎁 Galeri
-                Gift</button>
-              <button type="button" id="btnSwitchGiftFeed" class="btn btn-sm btn-ghost">📜 Live Feed Gift</button>
+              <button type="button" id="btnSwitchGiftGallery" class="btn btn-sm btn-primary active"
+                style="display:inline-flex; align-items:center; gap:5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                  <rect x="2" y="7" width="20" height="5"></rect>
+                  <line x1="12" y1="22" x2="12" y2="7"></line>
+                  <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                  <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                </svg>
+                <span>Galeri Gift</span>
+              </button>
+              <button type="button" id="btnSwitchGiftFeed" class="btn btn-sm btn-ghost"
+                style="display:inline-flex; align-items:center; gap:5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+                <span>Live Feed Gift</span>
+              </button>
             </div>
             <button type="button" id="btnOpenAddGiftModal" class="btn btn-primary btn-sm">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
@@ -1051,13 +1319,75 @@
           </div>
         </div>
 
-        <!-- SECTION 2: LIVE FEED LOG -->
-        <div id="giftFeedSection" class="panel" style="display: none;">
+        <!-- SECTION 2: LIVE FEED LOG (VUE 3 REACTIVE TRANSITION GROUP) -->
+        <div id="giftFeedSection" class="panel" style="display: none;" v-cloak>
           <div class="trigger-panel-header">
-            <h3>Riwayat Gift Masuk Live</h3>
-            <span class="muted" style="font-size:12px;">Realtime stream gift</span>
+            <div>
+              <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                <span class="nurearn-live-pulse-dot" style="background:#22c55e; box-shadow:0 0 8px #22c55e;"></span>
+                Riwayat Gift Masuk Live
+              </h3>
+              <span class="muted" style="font-size:12px; margin-top:2px; display:block;">Realtime gift stream satset
+                berkecepatan tinggi</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span class="trigger-count-badge"
+                style="background: rgba(255,215,0,0.12); color: #FFD700; border-color: rgba(255,215,0,0.3);">
+                {{ giftFeedList.length }} event
+              </span>
+              <button type="button" @click="clearGiftFeed" class="btn btn-ghost btn-sm"
+                style="font-size: 11px; padding: 3px 8px;" title="Bersihkan riwayat live feed">
+                Bersihkan
+              </button>
+            </div>
           </div>
-          <div id="giftFeed" class="feed" style="margin-top: 10px;"></div>
+
+          <div id="giftFeed" class="feed" style="margin-top: 10px; position: relative;">
+            <div v-if="giftFeedList.length === 0" class="muted" style="padding: 32px 16px; text-align: center;">
+              <div style="margin-bottom: 8px; opacity: 0.6;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="8" y1="6" x2="21" y2="6"></line>
+                  <line x1="8" y1="12" x2="21" y2="12"></line>
+                  <line x1="8" y1="18" x2="21" y2="18"></line>
+                  <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                  <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                  <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                </svg>
+              </div>
+              <div style="font-size: 13px; font-weight: 600;">Belum ada gift yang masuk di live stream saat ini</div>
+              <div style="font-size: 11.5px; margin-top: 2px;">Saat penonton mengirim gift, notifikasi akan langsung
+                meluncur di sini secara realtime.</div>
+            </div>
+
+            <transition-group v-else name="gift-feed" tag="div"
+              style="display: flex; flex-direction: column; gap: 6px;">
+              <div v-for="item in giftFeedList" :key="item.id" class="feed-item gift">
+                <img class="avatar" :src="item.avatar" @error="handleAvatarError($event)" :alt="item.nickname" />
+                <div style="flex: 1; min-width: 0;">
+                  <div style="display: flex; align-items: center; gap: 6px;">
+                    <span class="name">{{ item.nickname }}</span>
+                    <span style="font-size: 11px; color: var(--text-muted);">{{ item.timeStr }}</span>
+                  </div>
+                  <div
+                    style="font-size: 12.5px; margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span class="text">mengirim <strong>{{ item.giftName }}</strong></span>
+                    <span
+                      style="background: rgba(255, 215, 0, 0.15); color: #FFD700; border: 1px solid rgba(255, 215, 0, 0.3); border-radius: 4px; padding: 1px 6px; font-weight: 700; font-size: 11px;">
+                      x{{ item.repeatCount }}
+                    </span>
+                    <span style="color: #FFD700; font-size: 11.5px; font-weight: 600;">({{ item.diamondTotal }}
+                      koin)</span>
+                  </div>
+                </div>
+                <div
+                  style="width: 32px; height: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                  <img :src="item.giftImg" @error="window.__renderGiftFallback($event.target)"
+                    style="width: 28px; height: 28px; object-fit: contain;" :alt="item.giftName" />
+                </div>
+              </div>
+            </transition-group>
+          </div>
         </div>
       </section>
 
@@ -1263,9 +1593,14 @@
                 <span>Hotkey Global (Background)</span>
               </label>
               <button type="button" id="btnCopyAllSoundboardOverlay" class="btn btn-ghost btn-sm"
-                style="font-size: 11.5px; padding: 4px 10px; border-color: rgba(245, 158, 11, 0.35); color: #f59e0b;"
+                style="font-size: 11.5px; padding: 4px 10px; border-color: rgba(245, 158, 11, 0.35); color: #f59e0b; display:inline-flex; align-items:center; gap:5px;"
                 title="Salin link overlay OBS universal untuk semua tombol soundboard (Video & Gambar)">
-                🔗 Link Overlay Soundboard
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                <span>Link Overlay Soundboard</span>
               </button>
               <span id="soundboardCountBadge" class="trigger-count-badge">0 suara</span>
             </div>
@@ -1309,25 +1644,50 @@
           </div>
 
           <div id="publicTunnelControlBox" class="tiktok-studio-notice"
-            style="margin-top: 12px; border-color: rgba(16, 185, 129, 0.4); background: rgba(15, 23, 42, 0.65);">
-            <div class="tiktok-notice-title"
-              style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:8px;">
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size: 16px;">🟢</span>
-                <span><strong>Server Localhost Aktif:</strong></span>
-                <span id="tunnelStatusBadge" class="badge-lan-ip"
-                  style="background:rgba(16, 185, 129, 0.18); color:#10b981; border-color:rgba(16, 185, 129, 0.4);">http://localhost:8642</span>
+            style="margin-top: 12px; border-color: rgba(234, 179, 8, 0.4); background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(24, 24, 27, 0.95)); border-radius: 10px; padding: 14px 18px; box-shadow: 0 4px 16px rgba(0,0,0,0.25);">
+            <div
+              style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:12px;">
+              <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                <div class="nurearn-icon-glow"
+                  style="width: 38px; height: 38px; border-radius: 10px; background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.4); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 14px rgba(234, 179, 8, 0.25);">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polygon
+                      points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2">
+                    </polygon>
+                  </svg>
+                </div>
+                <div>
+                  <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+                    <strong style="font-size: 13px; color:#facc15;">Domain Kustom Permanen:</strong>
+                    <span id="tunnelStatusBadge" class="badge-lan-ip"
+                      style="background:rgba(234, 179, 8, 0.18); color:#facc15; border:1px solid rgba(234, 179, 8, 0.45); padding: 3px 10px; border-radius: 6px; font-family: monospace; font-size: 12.5px; font-weight: 700;">https://overlay.nurearn.site</span>
+                    <span
+                      style="background:rgba(16, 185, 129, 0.18); color:#10b981; border:1px solid rgba(16, 185, 129, 0.4); padding: 2px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">●
+                      AKTIF ONLINE</span>
+                  </div>
+                  <div id="tunnelNoticeBody"
+                    style="margin-top: 5px; font-size: 12px; line-height: 1.5; color: var(--text-secondary);">
+                    Semua link overlay otomatis menggunakan domain <strong>overlay.nurearn.site</strong> dan disesuaikan
+                    langsung dengan <strong>Username TikTok</strong> Anda. Salin sekali ke TikTok LIVE Studio / OBS, dan
+                    link tidak akan pernah berubah selamanya!
+                  </div>
+                </div>
               </div>
-              <div style="display:flex; gap:8px; align-items:center;">
-                <button type="button" id="btnToggleTunnel" class="btn btn-sm btn-ghost"
-                  style="color:var(--text-primary); font-weight:600; font-size:12px;" onclick="window.api.openOverlayInBrowser('http://localhost:8642/overlay')">
-                  🌐 Buka di Browser
+              <div>
+                <button type="button" id="btnOpenBrowserOverlay" class="btn btn-sm btn-ghost"
+                  style="color:var(--text-primary); font-weight:600; font-size:12px; border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 7px 14px; background: rgba(255,255,255,0.06); cursor: pointer; display:inline-flex; align-items:center; gap:6px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path
+                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                    </path>
+                  </svg>
+                  <span>Buka di Browser</span>
                 </button>
               </div>
-            </div>
-            <div class="tiktok-notice-body" id="tunnelNoticeBody"
-              style="margin-top: 6px; font-size: 12px; line-height: 1.5; color: var(--text-secondary);">
-              Server overlay berjalan langsung di komputer Anda (Localhost). Super cepat, 0 latency, ringan tanpa membebani GPU/RAM game, dan tidak memerlukan koneksi internet atau generate link tunnel.
             </div>
           </div>
         </div>
@@ -1335,14 +1695,27 @@
         <div class="overlay-list">
           <div class="panel overlay-card">
             <div class="overlay-header">
-              <span class="overlay-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);">
-                🎬 Soundboard Media
+              <span class="overlay-badge"
+                style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); display:inline-flex; align-items:center; gap:5px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                  <line x1="7" y1="2" x2="7" y2="22"></line>
+                  <line x1="17" y1="2" x2="17" y2="22"></line>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <line x1="2" y1="7" x2="7" y2="7"></line>
+                  <line x1="2" y1="17" x2="7" y2="17"></line>
+                  <line x1="17" y1="17" x2="22" y2="17"></line>
+                  <line x1="17" y1="7" x2="22" y2="7"></line>
+                </svg>
+                <span>Soundboard Media</span>
               </span>
               <h3>Overlay Soundboard (Video & Gambar)</h3>
             </div>
-            <p class="muted">Menampilkan video atau gambar overlay secara otomatis saat tombol suara / hotkey Soundboard ditekan.</p>
+            <p class="muted">Menampilkan video atau gambar overlay secara otomatis saat tombol suara / hotkey Soundboard
+              ditekan.</p>
             <div class="overlay-url-row">
-              <input id="overlayUrl_soundboard" type="text" readonly value="http://localhost:8642/overlay/soundboard" />
+              <input id="overlayUrl_soundboard" type="text" readonly />
               <button class="btn btn-ghost btn-sm btn-copy-overlay" data-target="overlayUrl_soundboard"
                 title="Salin link overlay">Copy Link</button>
               <button class="btn btn-ghost btn-sm btn-open-overlay" data-target="overlayUrl_soundboard"
@@ -1375,31 +1748,39 @@
           <!-- Custom Rank A & B Overlays -->
           <div class="panel overlay-card">
             <div class="overlay-header">
-              <span class="overlay-badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4);">
+              <span class="overlay-badge"
+                style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4);">
                 RANK A
               </span>
               <h3>Overlay Gift A (Top Rank A)</h3>
             </div>
-            <p class="muted">Leaderboard khusus penonton pengirim gift yang diset ke Top Rank A pada menu Aktivitas. Hitungan realtime berdasarkan jumlah koin (diamond &times; combo).</p>
+            <p class="muted">Leaderboard khusus penonton pengirim gift yang diset ke Top Rank A pada menu Aktivitas.
+              Hitungan realtime berdasarkan jumlah koin (diamond &times; combo).</p>
             <div class="overlay-url-row">
-              <input id="overlayUrl_rankA" type="text" readonly value="http://localhost:8642/overlay/ranka" />
-              <button class="btn btn-ghost btn-sm btn-copy-custom-url" data-target="overlayUrl_rankA" title="Salin link overlay">Copy Link</button>
-              <button class="btn btn-ghost btn-sm btn-open-custom-url" data-target="overlayUrl_rankA">Buka di Browser</button>
+              <input id="overlayUrl_rankA" type="text" readonly />
+              <button class="btn btn-ghost btn-sm btn-copy-custom-url" data-target="overlayUrl_rankA"
+                title="Salin link overlay">Copy Link</button>
+              <button class="btn btn-ghost btn-sm btn-open-custom-url" data-target="overlayUrl_rankA">Buka di
+                Browser</button>
             </div>
           </div>
 
           <div class="panel overlay-card">
             <div class="overlay-header">
-              <span class="overlay-badge" style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">
+              <span class="overlay-badge"
+                style="background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4);">
                 RANK B
               </span>
               <h3>Overlay Gift B (Top Rank B)</h3>
             </div>
-            <p class="muted">Leaderboard khusus penonton pengirim gift yang diset ke Top Rank B pada menu Aktivitas. Hitungan realtime berdasarkan jumlah koin (diamond &times; combo).</p>
+            <p class="muted">Leaderboard khusus penonton pengirim gift yang diset ke Top Rank B pada menu Aktivitas.
+              Hitungan realtime berdasarkan jumlah koin (diamond &times; combo).</p>
             <div class="overlay-url-row">
-              <input id="overlayUrl_rankB" type="text" readonly value="http://localhost:8642/overlay/rankb" />
-              <button class="btn btn-ghost btn-sm btn-copy-custom-url" data-target="overlayUrl_rankB" title="Salin link overlay">Copy Link</button>
-              <button class="btn btn-ghost btn-sm btn-open-custom-url" data-target="overlayUrl_rankB">Buka di Browser</button>
+              <input id="overlayUrl_rankB" type="text" readonly />
+              <button class="btn btn-ghost btn-sm btn-copy-custom-url" data-target="overlayUrl_rankB"
+                title="Salin link overlay">Copy Link</button>
+              <button class="btn btn-ghost btn-sm btn-open-custom-url" data-target="overlayUrl_rankB">Buka di
+                Browser</button>
             </div>
           </div>
 
@@ -1817,7 +2198,12 @@
               <div class="goal-bar-widget shape-rounded" id="preview_widget_likes">
                 <div class="goal-bar-info">
                   <div class="goal-title-wrap">
-                    <span class="goal-crown-icon">👑</span>
+                    <span class="goal-crown-icon"><svg class="goal-crown-svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="#FFD700">
+                        <path
+                          d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
+                        <path d="M5 21h14" />
+                      </svg></span>
                     <span class="goal-bar-title" id="preview_title_likes">GEMPA BUMI</span>
                   </div>
                   <span class="goal-bar-count" id="preview_count_likes">0 / 5,000 Likes</span>
@@ -1839,7 +2225,7 @@
                 <span>Overlay</span>
               </div>
               <div class="goal-url-wrapper">
-                <input id="goalUrl_likes" type="text" class="goal-url-input" readonly />
+                <input id="goalUrl_likes" type="text" class="goal-url-input privacy-glass-link" readonly />
                 <button type="button" class="goal-url-copy-icon btn-copy-goal" data-target="goalUrl_likes"
                   title="Salin Link">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -1918,7 +2304,12 @@
               <div class="goal-bar-widget shape-rounded" id="preview_widget_followers">
                 <div class="goal-bar-info">
                   <div class="goal-title-wrap">
-                    <span class="goal-crown-icon">👑</span>
+                    <span class="goal-crown-icon"><svg class="goal-crown-svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="#FFD700">
+                        <path
+                          d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
+                        <path d="M5 21h14" />
+                      </svg></span>
                     <span class="goal-bar-title" id="preview_title_followers">NEW FOLLOWERS</span>
                   </div>
                   <span class="goal-bar-count" id="preview_count_followers">0 / 100 Followers</span>
@@ -1940,7 +2331,7 @@
                 <span>Overlay</span>
               </div>
               <div class="goal-url-wrapper">
-                <input id="goalUrl_followers" type="text" class="goal-url-input" readonly />
+                <input id="goalUrl_followers" type="text" class="goal-url-input privacy-glass-link" readonly />
                 <button type="button" class="goal-url-copy-icon btn-copy-goal" data-target="goalUrl_followers"
                   title="Salin Link">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -2020,7 +2411,12 @@
               <div class="goal-bar-widget shape-rounded" id="preview_widget_shares">
                 <div class="goal-bar-info">
                   <div class="goal-title-wrap">
-                    <span class="goal-crown-icon">👑</span>
+                    <span class="goal-crown-icon"><svg class="goal-crown-svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="#FFD700">
+                        <path
+                          d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
+                        <path d="M5 21h14" />
+                      </svg></span>
                     <span class="goal-bar-title" id="preview_title_shares">TARGET SHARED</span>
                   </div>
                   <span class="goal-bar-count" id="preview_count_shares">0 / 100 Shares</span>
@@ -2042,7 +2438,7 @@
                 <span>Overlay</span>
               </div>
               <div class="goal-url-wrapper">
-                <input id="goalUrl_shares" type="text" class="goal-url-input" readonly />
+                <input id="goalUrl_shares" type="text" class="goal-url-input privacy-glass-link" readonly />
                 <button type="button" class="goal-url-copy-icon btn-copy-goal" data-target="goalUrl_shares"
                   title="Salin Link">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -2120,7 +2516,12 @@
               <div class="goal-bar-widget shape-rounded" id="preview_widget_subscribers">
                 <div class="goal-bar-info">
                   <div class="goal-title-wrap">
-                    <span class="goal-crown-icon">👑</span>
+                    <span class="goal-crown-icon"><svg class="goal-crown-svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="#FFD700">
+                        <path
+                          d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
+                        <path d="M5 21h14" />
+                      </svg></span>
                     <span class="goal-bar-title" id="preview_title_subscribers">NEW SUBSCRIBERS</span>
                   </div>
                   <span class="goal-bar-count" id="preview_count_subscribers">0 / 100 Subscribers</span>
@@ -2142,7 +2543,7 @@
                 <span>Overlay</span>
               </div>
               <div class="goal-url-wrapper">
-                <input id="goalUrl_subscribers" type="text" class="goal-url-input" readonly />
+                <input id="goalUrl_subscribers" type="text" class="goal-url-input privacy-glass-link" readonly />
                 <button type="button" class="goal-url-copy-icon btn-copy-goal" data-target="goalUrl_subscribers"
                   title="Salin Link">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -2215,7 +2616,12 @@
               <div class="goal-bar-widget shape-rounded" id="preview_widget_coins">
                 <div class="goal-bar-info">
                   <div class="goal-title-wrap">
-                    <span class="goal-crown-icon">👑</span>
+                    <span class="goal-crown-icon"><svg class="goal-crown-svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="#FFD700">
+                        <path
+                          d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
+                        <path d="M5 21h14" />
+                      </svg></span>
                     <span class="goal-bar-title" id="preview_title_coins">WHEN YAA?</span>
                   </div>
                   <span class="goal-bar-count" id="preview_count_coins">0 / 1,000 Coins</span>
@@ -2237,7 +2643,7 @@
                 <span>Overlay</span>
               </div>
               <div class="goal-url-wrapper">
-                <input id="goalUrl_coins" type="text" class="goal-url-input" readonly />
+                <input id="goalUrl_coins" type="text" class="goal-url-input privacy-glass-link" readonly />
                 <button type="button" class="goal-url-copy-icon btn-copy-goal" data-target="goalUrl_coins"
                   title="Salin Link">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -2314,7 +2720,12 @@
               <div class="goal-bar-widget shape-rounded" id="preview_widget_viewers">
                 <div class="goal-bar-info">
                   <div class="goal-title-wrap">
-                    <span class="goal-crown-icon">👑</span>
+                    <span class="goal-crown-icon"><svg class="goal-crown-svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="#FFD700">
+                        <path
+                          d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />
+                        <path d="M5 21h14" />
+                      </svg></span>
                     <span class="goal-bar-title" id="preview_title_viewers">VIEWER COUNTS</span>
                   </div>
                   <span class="goal-bar-count" id="preview_count_viewers">0 / 100 Viewers</span>
@@ -2336,7 +2747,7 @@
                 <span>Overlay</span>
               </div>
               <div class="goal-url-wrapper">
-                <input id="goalUrl_viewers" type="text" class="goal-url-input" readonly />
+                <input id="goalUrl_viewers" type="text" class="goal-url-input privacy-glass-link" readonly />
                 <button type="button" class="goal-url-copy-icon btn-copy-goal" data-target="goalUrl_viewers"
                   title="Salin Link">
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -2421,38 +2832,28 @@
           <!-- PENGATURAN YOUTUBE MUSIC -->
           <div id="ytSettingsSection">
             <!-- Test Request Lagu / Cari Lagu Langsung -->
-            <div class="yt-test-box" style="margin-bottom: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+            <div class="yt-test-box"
+              style="margin-bottom: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: var(--radius-md); padding: 14px 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                <label style="font-weight: 700; font-size: 13px; color: var(--gold, #ffd700); display: flex; align-items: center; gap: 8px;">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <label
+                  style="font-weight: 700; font-size: 13px; color: var(--gold, #ffd700); display: flex; align-items: center; gap: 8px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   </svg>
                   Tes Request / Cari &amp; Putar Lagu
                 </label>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                  <button type="button" id="btnYtOpenBrave" class="btn btn-ghost btn-sm"
-                    title="Buka Player di Brave Browser (Bebas Iklan 100%)"
-                    style="font-size: 12px; padding: 4px 12px; color: #fb923c; border: 1px solid rgba(251,146,60,0.4); border-radius: 6px; display: flex; align-items: center; gap: 6px; background: rgba(251,146,60,0.08);">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    </svg>
-                    <span>Buka di Brave Browser</span>
-                  </button>
-                  <button type="button" id="btnYtTogglePlayer" class="btn btn-ghost btn-sm"
-                    style="font-size: 12px; padding: 4px 12px; color: #38bdf8; border: 1px solid rgba(56,189,248,0.35); border-radius: 6px; display: flex; align-items: center; gap: 6px;">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="2" y="3" width="20" height="14" rx="2"/>
-                      <line x1="8" y1="21" x2="16" y2="21"/>
-                      <line x1="12" y1="17" x2="12" y2="21"/>
-                    </svg>
-                    <span id="ytTogglePlayerText">Buka Browser Player</span>
-                  </button>
-                </div>
               </div>
               <div style="display: flex; gap: 8px;">
-                <input type="text" id="ytTestQuery" class="form-control" placeholder="Ketik judul lagu (contoh: Superman Is Dead - Jadilah Legenda)..." style="flex: 1; font-size: 13px;" />
-                <button type="button" id="btnYtTestPlay" class="btn btn-primary" style="white-space: nowrap; font-weight: 600; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"/></svg>
+                <input type="text" id="ytTestQuery" class="form-control"
+                  placeholder="Ketik judul lagu (contoh: Superman Is Dead - Jadilah Legenda)..."
+                  style="flex: 1; font-size: 13px;" />
+                <button type="button" id="btnYtTestPlay" class="btn btn-primary"
+                  style="white-space: nowrap; font-weight: 600; display: flex; align-items: center; gap: 6px; padding: 0 16px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21" />
+                  </svg>
                   Putar Lagu
                 </button>
               </div>
@@ -2586,7 +2987,7 @@
                 <rect x="2" y="4" width="20" height="16" rx="2" />
                 <polygon points="10 8 16 12 10 16" fill="#a5b4fc" stroke="none" />
               </svg>
-              Overlay OBS / TikTok Live Studio
+              Overlay YouTube Music
             </h3>
             <div class="yt-overlay-box">
               <div class="yt-overlay-header">
@@ -2604,8 +3005,7 @@
                 </button>
               </div>
               <input type="text" id="ytOverlayUrl" readonly class="form-control" value="Memuat..." />
-              <small class="muted yt-overlay-hint">Salin link ini ke OBS sebagai Browser Source. Resolusi: 1920x1080
-                (Transparan).</small>
+              <small class="muted yt-overlay-hint">Audio diputar langsung.</small>
             </div>
 
             <h3 class="yt-section-title">
@@ -2748,10 +3148,12 @@
                 </svg>
                 Text-To-Speech (Baca Komentar & Gift)
               </h1>
-              <p class="muted">Membacakan chat komentar penonton dan gift TikTok LIVE secara otomatis dengan suara natural Bahasa Indonesia.</p>
+              <p class="muted">Membacakan chat komentar penonton dan gift TikTok LIVE. Default memakai Google TTS gratis
+                (tanpa API key).</p>
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
-              <span id="tts_status_badge" class="status-badge" style="padding: 4px 12px; font-weight: 700; font-size: 11px; border-radius: 9999px; background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.4);">NONAKTIF</span>
+              <span id="tts_status_badge" class="status-badge"
+                style="padding: 4px 12px; font-weight: 700; font-size: 11px; border-radius: 9999px; background: rgba(100, 116, 139, 0.2); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.4);">NONAKTIF</span>
               <label class="switch" style="position: relative; display: inline-block; width: 44px; height: 24px;">
                 <input type="checkbox" id="tts_enabled">
                 <span class="slider round"></span>
@@ -2760,19 +3162,34 @@
           </div>
         </div>
 
-        <!-- 1. PENGATURAN SUARA & PERFORMA -->
-        <div class="tts-panel">
+        <!-- 1. CARD KARAKTER SUARA & KONTROL AUDIO -->
+        <div class="panel">
           <h2>
             <i data-lucide="sliders" style="width: 18px; height: 18px;"></i>
             Karakter Suara & Kontrol Audio
           </h2>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 16px;">
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 16px;">
             <div>
-              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Pilihan Suara (Voice)</label>
+              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Mesin
+                TTS</label>
+              <select id="tts_engine" style="width: 100%;">
+                <option value="google">Google </option>
+                <option value="auto">Otomatis (Edge, cadangan Google)</option>
+                <option value="edge">Microsoft Edge Neural</option>
+              </select>
+              <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Pilih ini
+                untuk baca komentar.</small>
+            </div>
+
+            <div>
+              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Pilihan Suara
+                (Voice)</label>
               <select id="tts_voice" style="width: 100%;">
-                <option value="id-cewe">🇮🇩 Indonesia - Cewek (Gadis / Natural Jernih)</option>
-                <option value="id-cowo">🇮🇩 Indonesia - Cowok (Ardi / Pria Bass Natural)</option>
+                <option value="g-id">Google Indonesia (Gratis, Natural)</option>
+                <option value="id-cewe">Indonesia - Gadis (Cewek / Jernih)</option>
+                <option value="id-cowo">Indonesia - Ardi (Cowok / Bass Natural)</option>
               </select>
             </div>
 
@@ -2802,96 +3219,158 @@
           </div>
 
           <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <button id="btnTestTtsVoice" type="button">
+            <button id="btnTestTtsVoice" type="button" class="btn btn-primary btn-sm" style="flex: 0 0 auto;">
               <i data-lucide="play" style="width: 14px; height: 14px;"></i>
               Tes Suara
             </button>
-            <button id="btnClearTtsQueue" type="button" class="secondary" style="color: #f87171; border-color: rgba(239, 68, 68, 0.35);">
+            <button id="btnClearTtsQueue" type="button" class="btn btn-ghost btn-sm"
+              style="flex: 0 0 auto; color: #f87171; border-color: rgba(239, 68, 68, 0.35);">
               <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
               Hentikan / Kosongkan Antrian
             </button>
           </div>
         </div>
 
-        <!-- 2. FILTER & TARGET AUDIENS -->
-        <div class="tts-panel">
+        <!-- 2. CARD FILTER PENONTON & EVENT (Diletakkan tepat di bawah card Karakter Suara & di bawah tombol Tes Suara) -->
+        <div class="panel">
           <h2>
             <i data-lucide="filter" style="width: 18px; height: 18px;"></i>
             Filter Penonton & Event
           </h2>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 16px;">
-            <div>
-              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Siapa yang Dibaca?</label>
-              <select id="tts_role" style="width: 100%;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+            <!-- Sub-card 1: Target Audiens -->
+            <div
+              style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 14px; display: flex; flex-direction: column;">
+              <label class="setting-label"
+                style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: #f8fafc;">
+                <i data-lucide="users" style="width: 16px; height: 16px; color: #38bdf8;"></i> Target Audiens
+              </label>
+              <select id="tts_role"
+                style="width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 8px; color: #f1f5f9;">
                 <option value="all">Semua Penonton (Publik)</option>
                 <option value="follower">Hanya Follower</option>
                 <option value="subscriber">Hanya Subscriber / Langganan</option>
                 <option value="moderator">Hanya Moderator</option>
               </select>
+              <small class="muted" style="font-size: 11px; margin-top: 8px; display: block; color: #94a3b8;">Tentukan
+                siapa saja yang pesannya akan dibacakan oleh bot.</small>
             </div>
 
-            <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px;">
-                <input type="checkbox" id="tts_read_chat" checked>
+            <!-- Sub-card 2: Filter Chat & Event -->
+            <div
+              style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 8px;">
+              <label class="setting-label"
+                style="font-weight: 600; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; color: #f8fafc;">
+                <i data-lucide="message-square" style="width: 16px; height: 16px; color: #a855f7;"></i> Filter Chat &
+                Event
+              </label>
+              <label
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                <input type="checkbox" id="tts_read_chat" checked style="accent-color: #a855f7;">
                 <span>Baca Komentar Chat</span>
               </label>
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px;">
-                <input type="checkbox" id="tts_ignore_commands" checked>
-                <span>Abaikan Command Bot (dimulai dengan !)</span>
+              <label
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                <input type="checkbox" id="tts_ignore_commands" checked style="accent-color: #a855f7;">
+                <span>Abaikan Command Bot (!)</span>
+              </label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <label
+                  style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                  <input type="checkbox" id="tts_read_like" style="accent-color: #f43f5e;">
+                  <span>Baca Like</span>
+                </label>
+                <label
+                  style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                  <input type="checkbox" id="tts_read_share" style="accent-color: #3b82f6;">
+                  <span>Baca Share</span>
+                </label>
+                <label
+                  style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                  <input type="checkbox" id="tts_read_follow" style="accent-color: #10b981;">
+                  <span>Baca Follow</span>
+                </label>
+                <label
+                  style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                  <input type="checkbox" id="tts_read_join" style="accent-color: #8b5cf6;">
+                  <span>Baca Join</span>
+                </label>
+              </div>
+              <label
+                style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 12.5px; background: rgba(255, 255, 255, 0.02); padding: 6px 10px; border-radius: 6px;">
+                <input type="checkbox" id="tts_read_gift" checked style="accent-color: #ef4444;">
+                <span>Baca Gift</span>
               </label>
             </div>
 
-            <div style="display: flex; flex-direction: column; justify-content: center; gap: 10px;">
-              <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px;">
-                <input type="checkbox" id="tts_read_gift">
-                <span>Baca Gift Masuk</span>
+            <!-- Sub-card 3: Pengaturan Gift -->
+            <div
+              style="background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 14px; display: flex; flex-direction: column;">
+              <label class="setting-label"
+                style="font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: #f8fafc;">
+                <i data-lucide="gift" style="width: 16px; height: 16px; color: #f43f5e;"></i> Pengaturan Gift
               </label>
-              <div style="display: flex; align-items: center; gap: 8px;">
-                <span style="font-size: 12px; color: #94a3b8;">Min. Koin/Diamond:</span>
-                <input type="number" id="tts_min_diamonds" min="1" max="50000" value="1" style="width: 90px; padding: 4px 8px;">
+              <div
+                style="display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.02); padding: 8px 12px; border-radius: 6px;">
+                <span style="font-size: 13px; color: #cbd5e1;">Min. Koin/Diamond:</span>
+                <input type="number" id="tts_min_diamonds" min="1" max="50000" value="1"
+                  style="width: 70px; padding: 5px 8px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 6px; color: #f1f5f9; text-align: center;">
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 3. TEMPLATE KATA & BLACKLIST KATA KASAR -->
-        <div class="tts-panel">
+        <!-- 3. CARD FORMAT KALIMAT & BLACKLIST -->
+        <div class="panel">
           <h2>
             <i data-lucide="file-text" style="width: 18px; height: 18px;"></i>
             Format Kalimat & Blacklist
           </h2>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 16px;">
             <div>
-              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Template Chat</label>
-              <input type="text" id="tts_template_chat" value="{nickname} berkata: {comment}" style="width: 100%;">
-              <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Variabel: {nickname}, {comment}</small>
+              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Template
+                Chat</label>
+              <input type="text" id="tts_template_chat" value="{comment}" style="width: 100%;">
+              <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Variabel:
+                {nickname}, {comment}</small>
             </div>
             <div>
-              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Template Gift</label>
-              <input type="text" id="tts_template_gift" value="Terima kasih {nickname} mengirim {giftName}" style="width: 100%;">
-              <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Variabel: {nickname}, {giftName}, {count}</small>
+              <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Template
+                Gift</label>
+              <input type="text" id="tts_template_gift" value="Terima kasih {nickname} mengirim {giftName}"
+                style="width: 100%;">
+              <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Variabel:
+                {nickname}, {giftName}, {count}</small>
             </div>
           </div>
 
           <div>
-            <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Blacklist Kata Kasar / Banned Words (pisahkan dengan koma)</label>
-            <textarea id="tts_blacklist" rows="2" placeholder="anjing, bangsat, kontol, babi, judi, slot" style="width: 100%; resize: vertical;"></textarea>
-            <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Komentar yang memuat kata-kata ini otomatis tidak akan dibacakan oleh TTS.</small>
+            <label class="setting-label" style="font-weight: 600; margin-bottom: 6px; display: block;">Blacklist Kata
+              Kasar / Banned Words (pisahkan dengan koma)</label>
+            <textarea id="tts_blacklist" rows="2" placeholder="anjing, bangsat, kontol, babi, judi, slot"
+              style="width: 100%; resize: vertical;"></textarea>
+            <small class="muted" style="font-size: 11px; margin-top: 4px; display: block; color: #94a3b8;">Komentar yang
+              memuat kata-kata ini otomatis tidak akan dibacakan oleh TTS.</small>
           </div>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;">
-          <button id="btnInstallWindowsTts" type="button" class="btn btn-ghost" style="border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 12px; display: flex; align-items: center; gap: 6px;" title="Install paket suara Bahasa Indonesia ke sistem Windows secara permanen (DISM OneCore & SAPI5)">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+          <button id="btnInstallWindowsTts" type="button" class="btn btn-ghost"
+            style="border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-size: 12px; display: flex; align-items: center; gap: 6px;"
+            title="Install paket suara Bahasa Indonesia ke sistem Windows secara permanen (DISM OneCore & SAPI5)">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
               <line x1="12" y1="15" x2="12" y2="3"></line>
             </svg>
-            📥 Install Suara Indonesia ke Windows (DISM)
+            Install Suara Indonesia ke Windows (DISM)
           </button>
-          <button id="btnSaveTts" type="button" class="btn btn-primary" style="padding: 10px 24px; font-weight: 700;">
+          <button id="btnSaveTts" type="button" class="btn btn-primary"
+            style="padding: 10px 24px; font-weight: 700; min-width: 220px;">
             Simpan Pengaturan TTS
           </button>
         </div>
@@ -2995,9 +3474,17 @@
               <input type="number" id="newGiftDiamond" placeholder="cth: 5000" required min="0" />
             </div>
             <div class="field-group">
-              <label for="newGiftImage" style="font-size:11px; font-weight:600; color:var(--text-secondary);">URL
+              <label for="newGiftImage" style="font-size:11px; font-weight:600; color:var(--text-secondary);">URL / File
                 Gambar (Opsional)</label>
-              <input type="url" id="newGiftImage" placeholder="https://... (opsional)" />
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="text" id="newGiftImage" placeholder="https://... atau path file gambar" style="flex: 1;" />
+                <button type="button" id="btnPickGiftImageAdd" class="btn btn-ghost btn-sm"
+                  style="white-space:nowrap; padding: 4px 8px; font-size: 11px; display:inline-flex; align-items:center; gap:4px;"
+                  title="Pilih gambar dari Folder Aset Gift"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                  </svg>Pilih Folder</button>
+              </div>
             </div>
           </div>
           <div class="add-gift-actions">
@@ -3019,7 +3506,7 @@
       </div>
 
       <div class="modal-search">
-        <input id="giftSearchInput" type="text" placeholder="Cari nama, ID gift, atau harga koin..." />
+        <input id="legacyGiftSearchInput" type="text" placeholder="Cari nama, ID gift, atau harga koin..." />
       </div>
       <div id="giftGrid" class="gift-grid"></div>
       <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
@@ -3060,35 +3547,12 @@
                 <input id="int_key_spec" type="text"
                   placeholder="Tekan tombol di keyboard atau klik 'Rekam': Space, W, Ctrl+[, Insert, Lock..." />
                 <button type="button" id="btn_record_key" class="btn btn-sm btn-record-key"
-                  title="Klik untuk merekam/mendeteksi tombol keyboard otomatis">
-                  <span id="record_btn_text">Rekam Hotkey</span>
+                  title="Klik untuk membuka popup keyboard lengkap">
+                  <span id="record_btn_text">Buka Keyboard</span>
                 </button>
                 <button type="button" id="btn_append_key" class="btn btn-sm btn-ghost"
-                  title="Tambah tombol ke-2 berurutan (misal: W lalu D)">+ Urutan</button>
+                  title="Tambah tombol ke-2 berurutan">+ Urutan</button>
                 <button type="button" id="btn_clear_key" class="btn btn-sm btn-ghost" title="Hapus hotkey">✕</button>
-
-                <div class="key-quick-chips">
-                  <span style="color: var(--muted, #9ca3af); font-size: 10.5px; margin-right: 2px;">Cepat:</span>
-                  <button type="button" class="btn-chip" data-key="[" title="Bracket Kiri [">[</button>
-                  <button type="button" class="btn-chip" data-key="]" title="Bracket Kanan ]">]</button>
-                  <button type="button" class="btn-chip" data-key=";" title="Titik Koma ;">;</button>
-                  <button type="button" class="btn-chip" data-key="'" title="Petik Satu '">&#39;</button>
-                  <button type="button" class="btn-chip" data-key="\" title="Garis Miring Terbalik \">\</button>
-                  <button type="button" class="btn-chip" data-key="," title="Koma ,">,</button>
-                  <button type="button" class="btn-chip" data-key="." title="Titik .">.</button>
-                  <button type="button" class="btn-chip" data-key="/" title="Garis Miring /">/</button>
-                  <button type="button" class="btn-chip" data-key="-" title="Minus / Strip -">-</button>
-                  <button type="button" class="btn-chip" data-key="=" title="Sama Dengan =">=</button>
-                  <button type="button" class="btn-chip" data-key="`" title="Backtick `">`</button>
-                  <button type="button" class="btn-chip" data-key="Insert" title="Tombol Insert">Insert</button>
-                  <button type="button" class="btn-chip" data-key="CapsLock" title="Tombol CapsLock">CapsLock</button>
-                  <button type="button" class="btn-chip" data-key="NumLock" title="Tombol NumLock">NumLock</button>
-                  <button type="button" class="btn-chip" data-key="ScrollLock"
-                    title="Tombol ScrollLock">ScrollLock</button>
-                  <button type="button" class="btn-chip" data-key="PrintScreen"
-                    title="Tombol PrintScreen">PrtSc</button>
-                  <button type="button" class="btn-chip" data-key="Pause" title="Tombol Pause">Pause</button>
-                </div>
               </div>
               <div class="input-inline-box" title="Jeda sebelum penekanan tombol">
                 <span class="input-inline-label">Delay:</span>
@@ -3216,7 +3680,7 @@
               <option value="rankB">Top Rank B (Overlay Gift B)</option>
             </select>
           </label>
-          <label id="lbl_act_minLike"  style="display:none">
+          <label id="lbl_act_minLike" style="display:none">
             Minimal Like
             <input id="act_minLike" type="number" min="1" value="1" placeholder="Misal: 10 (minimal like terkirim)" />
           </label>
@@ -3300,50 +3764,57 @@
                 placeholder="Tekan tombol atau klik Rekam (contoh: ArrowLeft, Space, F1...)"
                 style="flex: 1; min-width: 180px;" required />
               <button type="button" id="btn_record_sb_key" class="btn btn-sm btn-record-key"
-                title="Klik lalu tekan tombol keyboard apapun">
-                <span id="record_sb_key_text">Rekam Tombol</span>
+                title="Klik untuk membuka popup keyboard lengkap">
+                <span id="record_sb_key_text">Buka Keyboard</span>
               </button>
               <button type="button" id="btn_clear_sb_key" class="btn btn-sm btn-ghost" title="Hapus hotkey">✕</button>
-            </div>
-            <div class="sb-quick-chips">
-              <span style="color: var(--muted, #9ca3af); font-size: 10.5px; margin-right: 2px;">Cepat:</span>
-              <button type="button" class="btn-chip" data-sb-key="ArrowLeft" title="Panah Kiri">← Panah Kiri</button>
-              <button type="button" class="btn-chip" data-sb-key="ArrowRight" title="Panah Kanan">→ Panah Kanan</button>
-              <button type="button" class="btn-chip" data-sb-key="ArrowUp" title="Panah Atas">↑ Panah Atas</button>
-              <button type="button" class="btn-chip" data-sb-key="ArrowDown" title="Panah Bawah">↓ Panah Bawah</button>
-              <button type="button" class="btn-chip" data-sb-key="Space" title="Spasi">Space</button>
-              <button type="button" class="btn-chip" data-sb-key="Enter" title="Enter">Enter</button>
-              <button type="button" class="btn-chip" data-sb-key="F1" title="F1">F1</button>
-              <button type="button" class="btn-chip" data-sb-key="F2" title="F2">F2</button>
-              <button type="button" class="btn-chip" data-sb-key="1" title="1">1</button>
-              <button type="button" class="btn-chip" data-sb-key="2" title="2">2</button>
             </div>
           </div>
 
           <div style="grid-column: 1 / -1;">
             <label style="display: block; margin-bottom: 6px; font-weight: 600;">
-              File Suara (.mp3, .wav, .ogg, .m4a) <span style="color: var(--accent-hover);">*</span>
+              File Suara (.mp3, .wav, .ogg, .m4a) <span
+                style="font-size: 11px; font-weight: 400; color: var(--text-muted);">(Bisa suara saja, media saja, atau
+                keduanya)</span>
             </label>
             <div style="display: flex; gap: 8px; align-items: center;">
-              <input id="sb_file" type="text" placeholder="Pilih file audio dari komputer Anda..." style="flex: 1;"
-                required />
+              <input id="sb_file" type="text" placeholder="Pilih file audio (opsional jika hanya overlay)..."
+                style="flex: 1;" />
               <button type="button" id="btn_pick_sb_file" class="btn btn-ghost btn-sm">Pilih File</button>
+              <button type="button" id="btn_clear_sb_file" class="btn btn-ghost btn-sm"
+                title="Hapus file audio">✕</button>
             </div>
           </div>
 
-          <div style="grid-column: 1 / -1; padding: 12px; background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px;">
-            <label style="display: block; margin-bottom: 6px; font-weight: 600; color: #f59e0b;">
-              🎬 Media Overlay Stream (Opsional — Video / GIF / Gambar)
+          <div
+            style="grid-column: 1 / -1; padding: 12px; background: rgba(245, 158, 11, 0.04); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px;">
+            <label
+              style="display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-weight: 600; color: #f59e0b;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                <line x1="7" y1="2" x2="7" y2="22"></line>
+                <line x1="17" y1="2" x2="17" y2="22"></line>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <line x1="2" y1="7" x2="7" y2="7"></line>
+                <line x1="2" y1="17" x2="7" y2="17"></line>
+                <line x1="17" y1="17" x2="22" y2="17"></line>
+                <line x1="17" y1="7" x2="22" y2="7"></line>
+              </svg>
+              <span>Media Overlay Stream (Opsional — Video / GIF / Gambar)</span>
             </label>
             <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">
-              <input id="sb_media_file" type="text" placeholder="Pilih file video (.mp4, .webm) atau gambar (.gif, .png, .jpg)..." style="flex: 1;" />
+              <input id="sb_media_file" type="text"
+                placeholder="Pilih file video (.mp4, .webm) atau gambar (.gif, .png, .jpg)..." style="flex: 1;" />
               <button type="button" id="btn_pick_sb_media_file" class="btn btn-ghost btn-sm">Pilih Media</button>
-              <button type="button" id="btn_clear_sb_media_file" class="btn btn-ghost btn-sm" title="Hapus media">✕</button>
+              <button type="button" id="btn_clear_sb_media_file" class="btn btn-ghost btn-sm"
+                title="Hapus media">✕</button>
             </div>
             <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
               <label style="font-size: 12px; display: flex; align-items: center; gap: 6px;">
                 <span>Tipe Media:</span>
-                <select id="sb_media_type" style="padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 12px;">
+                <select id="sb_media_type"
+                  style="padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 12px;">
                   <option value="auto">Otomatis Deteksi</option>
                   <option value="video">Video (.mp4, .webm)</option>
                   <option value="image">Gambar / GIF</option>
@@ -3351,12 +3822,43 @@
               </label>
               <label style="font-size: 12px; display: flex; align-items: center; gap: 6px;">
                 <span>Durasi Tampil:</span>
-                <input id="sb_media_duration" type="number" min="1" max="120" value="5" style="width: 60px; padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 12px;" />
+                <input id="sb_media_duration" type="number" min="1" max="120" value="5"
+                  style="width: 60px; padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; color: var(--text-primary); font-size: 12px;" />
                 <span>detik</span>
               </label>
             </div>
+            <!-- Live Preview Overlay Link khusus tombol ini (jika media diisi) -->
+            <div id="sb_media_overlay_link_box"
+              style="display:none; margin-top: 10px; padding: 8px 10px; background: rgba(0,0,0,0.35); border: 1px dashed rgba(245, 158, 11, 0.4); border-radius: 6px;">
+              <div
+                style="font-size: 11px; color: #fbbf24; font-weight: 600; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="display:inline-flex; align-items:center; gap:5px;"><svg width="12" height="12"
+                    viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <line x1="2" y1="7" x2="7" y2="7"></line>
+                    <line x1="2" y1="17" x2="7" y2="17"></line>
+                    <line x1="17" y1="17" x2="22" y2="17"></line>
+                    <line x1="17" y1="7" x2="22" y2="7"></line>
+                  </svg>Link Overlay Khusus Tombol Ini:</span>
+              </div>
+              <div style="display: flex; gap: 6px; align-items: center;">
+                <input type="text" id="sb_preview_overlay_url" readonly
+                  style="flex: 1; font-size: 11px; padding: 4px 8px; font-family: monospace; background: rgba(0,0,0,0.4); border: 1px solid rgba(245,158,11,0.3); border-radius: 4px; color: #fef08a;" />
+                <button type="button" id="btn_copy_modal_sb_url" class="btn btn-ghost btn-sm"
+                  style="font-size: 11px; color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); padding: 3px 8px;">Salin
+                  Link</button>
+              </div>
+              <p style="margin: 4px 0 0 0; font-size: 10px; color: var(--muted, #9ca3af);">
+                Link ini hanya akan memunculkan video/gambar saat tombol ini ditekan.
+              </p>
+            </div>
             <p class="muted" style="margin: 6px 0 0 0; font-size: 11px;">
-              Media akan tampil di OBS saat hotkey ditekan atau tombol diputar. Tiap tombol memiliki link overlay khusus masing-masing.
+              Media akan tampil di OBS saat hotkey ditekan atau tombol diputar. Tiap tombol yang ada videonya otomatis
+              dibuatkan link overlay khusus.
             </p>
           </div>
 
@@ -3435,6 +3937,248 @@
     </div>
   </div>
 
+  <!-- FULL VIRTUAL KEYBOARD POPUP MODAL -->
+  <div id="fullKeyboardModal" class="modal keyboard-modal-wrapper" style="display:none; z-index: 2500;">
+    <div class="modal-content keyboard-modal-content">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div
+            style="width: 40px; height: 40px; border-radius: 10px; background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.35); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 14px rgba(255, 215, 0, 0.2); flex-shrink: 0;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <rect width="20" height="16" x="2" y="4" rx="2.5" />
+              <path d="M6 8h.001" />
+              <path d="M10 8h.001" />
+              <path d="M14 8h.001" />
+              <path d="M18 8h.001" />
+              <path d="M6 12h.001" />
+              <path d="M10 12h.001" />
+              <path d="M14 12h.001" />
+              <path d="M18 12h.001" />
+              <path d="M7 16h10" />
+            </svg>
+          </div>
+          <div>
+            <h2 style="margin: 0; font-size: 17px; color: #FFD700;">Input Tombol Keyboard Lengkap</h2>
+            <p class="muted" style="margin: 2px 0 0; font-size: 11.5px;">
+              Tekan tombol fisik di keyboard Anda langsung, atau klik tombol di layar. Bisa kombinasi (Ctrl+A), urutan
+              berkali-kali (A, A = 2x), dll.
+            </p>
+          </div>
+        </div>
+        <button type="button" id="btnCloseKeyboardModal" class="btn btn-ghost btn-sm" title="Tutup">✕</button>
+      </div>
+      <div class="modal-body modal-scroll-body" style="padding: 16px 20px;">
+
+        <!-- Live Display / Sequence Preview Bar (Vue 3 Reactive) -->
+        <div class="keyboard-display-panel" id="keyboardDisplayApp" v-cloak>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 260px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span
+                style="font-size: 11.5px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;">Tombol
+                Terpilih / Urutan:</span>
+              <span id="keyboardModeIndicator" style="font-size: 11px; color: #22c55e; font-weight: 600;">{{
+                indicatorText }}</span>
+            </div>
+            <div id="keyboardSequencePreview" class="keyboard-sequence-preview">
+              <span v-if="sequence.length === 0" class="muted" style="font-size: 13px;">(Belum ada tombol ditekan /
+                dipilih - silakan tekan keyboard fisik atau klik tombol di bawah)</span>
+              <transition-group v-else name="key-chip" tag="div"
+                style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <template v-for="(item, index) in sequence" :key="index + '-' + item">
+                  <div class="key-tag-chip">
+                    <span>{{ item }}</span>
+                    <span class="remove-key-tag" title="Hapus tombol ini" @click.stop="removeKey(index)">✕</span>
+                  </div>
+                  <span v-if="index < sequence.length - 1"
+                    style="color: #fbbf24; font-weight: 700; font-size: 12px; opacity: 0.7;">➔</span>
+                </template>
+              </transition-group>
+            </div>
+          </div>
+
+          <div class="keyboard-display-tools">
+            <button type="button" id="btnVkBackspace" class="btn btn-ghost btn-sm" title="Hapus tombol terakhir">
+              ⌫ Hapus Terakhir
+            </button>
+            <button type="button" id="btnVkClear" class="btn btn-ghost btn-sm" style="color: #ef4444;"
+              title="Bersihkan semua tombol">
+              ✕ Bersihkan
+            </button>
+          </div>
+        </div>
+
+        <!-- Virtual Keyboard Layout (Full 104-Key with Dedicated Numpad) -->
+        <div class="virtual-keyboard-body" id="virtualKeyboardBody">
+          <!-- Row 0: Esc + Function Keys + Utility + Numpad Header -->
+          <div class="vk-row">
+            <button type="button" class="vk-key vk-key-fn" data-vk="Escape">Esc</button>
+            <div style="width: 8px;"></div>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F1">F1</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F2">F2</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F3">F3</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F4">F4</button>
+            <div style="width: 8px;"></div>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F5">F5</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F6">F6</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F7">F7</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F8">F8</button>
+            <div style="width: 8px;"></div>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F9">F9</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F10">F10</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F11">F11</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="F12">F12</button>
+            <div style="width: 6px;"></div>
+            <button type="button" class="vk-key vk-key-fn" data-vk="PrintScreen">PrtSc</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="ScrollLock">ScrLk</button>
+            <button type="button" class="vk-key vk-key-fn" data-vk="Pause">Pause</button>
+            <div class="vk-cluster-sep"></div>
+            <div class="vk-key-numpad-badge"
+              style="width: 159px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(255, 215, 0, 0.08); border: 1px solid rgba(255, 215, 0, 0.25); border-radius: 6px; color: #FFD700; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;">
+              NUMPAD</div>
+          </div>
+
+          <!-- Row 1: Numbers + Nav Insert/Home/PgUp + Numpad Top (/ * -) -->
+          <div class="vk-row">
+            <button type="button" class="vk-key" data-vk="`">`</button>
+            <button type="button" class="vk-key" data-vk="1">1</button>
+            <button type="button" class="vk-key" data-vk="2">2</button>
+            <button type="button" class="vk-key" data-vk="3">3</button>
+            <button type="button" class="vk-key" data-vk="4">4</button>
+            <button type="button" class="vk-key" data-vk="5">5</button>
+            <button type="button" class="vk-key" data-vk="6">6</button>
+            <button type="button" class="vk-key" data-vk="7">7</button>
+            <button type="button" class="vk-key" data-vk="8">8</button>
+            <button type="button" class="vk-key" data-vk="9">9</button>
+            <button type="button" class="vk-key" data-vk="0">0</button>
+            <button type="button" class="vk-key" data-vk="-">-</button>
+            <button type="button" class="vk-key" data-vk="=">=</button>
+            <button type="button" class="vk-key vk-key-wide-2" data-vk="Backspace"
+              style="color: #f87171;">Backspace</button>
+            <div style="width: 6px;"></div>
+            <button type="button" class="vk-key" data-vk="Insert">Ins</button>
+            <button type="button" class="vk-key" data-vk="Home">Home</button>
+            <button type="button" class="vk-key" data-vk="PageUp">PgUp</button>
+            <div class="vk-cluster-sep"></div>
+            <button type="button" class="vk-key vk-key-numpad vk-key-fn" data-vk="NumLock">NumLk</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadDivide">/</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadMultiply">*</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadSubtract">-</button>
+          </div>
+
+          <!-- Row 2: QWERTY + Nav Del/End/PgDn + Numpad 7 8 9 + -->
+          <div class="vk-row">
+            <button type="button" class="vk-key vk-key-wide-1" data-vk="Tab">Tab</button>
+            <button type="button" class="vk-key" data-vk="Q">Q</button>
+            <button type="button" class="vk-key" data-vk="W">W</button>
+            <button type="button" class="vk-key" data-vk="E">E</button>
+            <button type="button" class="vk-key" data-vk="R">R</button>
+            <button type="button" class="vk-key" data-vk="T">T</button>
+            <button type="button" class="vk-key" data-vk="Y">Y</button>
+            <button type="button" class="vk-key" data-vk="U">U</button>
+            <button type="button" class="vk-key" data-vk="I">I</button>
+            <button type="button" class="vk-key" data-vk="O">O</button>
+            <button type="button" class="vk-key" data-vk="P">P</button>
+            <button type="button" class="vk-key" data-vk="[">[</button>
+            <button type="button" class="vk-key" data-vk="]">]</button>
+            <button type="button" class="vk-key vk-key-wide-1" data-vk="\">\</button>
+            <div style="width: 6px;"></div>
+            <button type="button" class="vk-key" data-vk="Delete" style="color: #f87171;">Del</button>
+            <button type="button" class="vk-key" data-vk="End">End</button>
+            <button type="button" class="vk-key" data-vk="PageDown">PgDn</button>
+            <div class="vk-cluster-sep"></div>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad7">7</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad8">8</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad9">9</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadAdd" style="color: #38bdf8;">+</button>
+          </div>
+
+          <!-- Row 3: ASDF + Nav Up Arrow + Numpad 4 5 6 = -->
+          <div class="vk-row">
+            <button type="button" class="vk-key vk-key-wide-2" data-vk="CapsLock">Caps</button>
+            <button type="button" class="vk-key" data-vk="A">A</button>
+            <button type="button" class="vk-key" data-vk="S">S</button>
+            <button type="button" class="vk-key" data-vk="D">D</button>
+            <button type="button" class="vk-key" data-vk="F">F</button>
+            <button type="button" class="vk-key" data-vk="G">G</button>
+            <button type="button" class="vk-key" data-vk="H">H</button>
+            <button type="button" class="vk-key" data-vk="J">J</button>
+            <button type="button" class="vk-key" data-vk="K">K</button>
+            <button type="button" class="vk-key" data-vk="L">L</button>
+            <button type="button" class="vk-key" data-vk=";">;</button>
+            <button type="button" class="vk-key" data-vk="'">'</button>
+            <button type="button" class="vk-key vk-key-wide-2" data-vk="Enter" style="color: #4ade80;">Enter</button>
+            <div style="width: 6px;"></div>
+            <div style="width: 36px;"></div>
+            <button type="button" class="vk-key" data-vk="ArrowUp">↑</button>
+            <div style="width: 36px;"></div>
+            <div class="vk-cluster-sep"></div>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad4">4</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad5">5</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad6">6</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadEqual" style="color: #fbbf24;">=</button>
+          </div>
+
+          <!-- Row 4: ZXCV + Nav Left/Down/Right + Numpad 1 2 3 Enter -->
+          <div class="vk-row">
+            <button type="button" class="vk-key vk-key-wide-3 vk-key-mod" data-vk="Shift">Shift</button>
+            <button type="button" class="vk-key" data-vk="Z">Z</button>
+            <button type="button" class="vk-key" data-vk="X">X</button>
+            <button type="button" class="vk-key" data-vk="C">C</button>
+            <button type="button" class="vk-key" data-vk="V">V</button>
+            <button type="button" class="vk-key" data-vk="B">B</button>
+            <button type="button" class="vk-key" data-vk="N">N</button>
+            <button type="button" class="vk-key" data-vk="M">M</button>
+            <button type="button" class="vk-key" data-vk=",">,</button>
+            <button type="button" class="vk-key" data-vk=".">.</button>
+            <button type="button" class="vk-key" data-vk="/">/</button>
+            <button type="button" class="vk-key vk-key-wide-3 vk-key-mod" data-vk="Shift">Shift</button>
+            <div style="width: 6px;"></div>
+            <button type="button" class="vk-key" data-vk="ArrowLeft">←</button>
+            <button type="button" class="vk-key" data-vk="ArrowDown">↓</button>
+            <button type="button" class="vk-key" data-vk="ArrowRight">→</button>
+            <div class="vk-cluster-sep"></div>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad1">1</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad2">2</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad3">3</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadEnter" style="color: #4ade80;">↵</button>
+          </div>
+
+          <!-- Row 5: Modifiers + Spacebar + Numpad 0 . Enter -->
+          <div class="vk-row">
+            <button type="button" class="vk-key vk-key-wide-1 vk-key-mod" data-vk="Ctrl">Ctrl</button>
+            <button type="button" class="vk-key vk-key-wide-1" data-vk="Meta">Win</button>
+            <button type="button" class="vk-key vk-key-wide-1 vk-key-mod" data-vk="Alt">Alt</button>
+            <button type="button" class="vk-key vk-key-wide-space" data-vk="Space">Space</button>
+            <button type="button" class="vk-key vk-key-wide-1 vk-key-mod" data-vk="Alt">Alt</button>
+            <button type="button" class="vk-key vk-key-wide-1" data-vk="Meta">Win</button>
+            <button type="button" class="vk-key vk-key-wide-1 vk-key-mod" data-vk="Ctrl">Ctrl</button>
+            <div style="width: 6px;"></div>
+            <div style="width: 118px;"></div>
+            <div class="vk-cluster-sep"></div>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="Numpad0" style="min-width: 77px;">0</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadDecimal">.</button>
+            <button type="button" class="vk-key vk-key-numpad" data-vk="NumpadEnter"
+              style="color: #4ade80; font-weight: 700;">Enter</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnVkAddComma" class="btn btn-ghost btn-sm"
+            title="Tambah koma untuk urutan bertahap (misal: A, A)">
+            + Urutan Berikutnya (Koma)
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnCancelKeyboardModal" class="btn btn-ghost btn-sm">Batal</button>
+          <button type="button" id="btnApplyKeyboardModal" class="btn btn-primary btn-sm">Gunakan Tombol Ini</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- CUSTOMIZE GOAL OVERLAY MODAL -->
   <div id="goalCustomizeModal" class="modal goal-modal-wrapper" style="display:none; z-index: 1050;">
     <div class="modal-content goal-modal-content">
@@ -3506,9 +4250,9 @@
             <div class="goal-field-group">
               <label for="goal_shape">Bentuk Tampilan (Custom Shape)</label>
               <select id="goal_shape" class="goal-select">
-                <option value="water" selected>🌊 Tangki Air Mengalir (Liquid Water Wave)</option>
-                <option value="crystal">💎 Crystal Prism Aura (Mewah & Berkilau)</option>
-                <option value="neon-capsule">⚡ Kapsul Cyber Reactor (Sci-Fi Core)</option>
+                <option value="water" selected>Liquid Wave Flow (Tangki Air)</option>
+                <option value="crystal">Crystal Prism Aura (Mewah & Berkilau)</option>
+                <option value="neon-capsule">Cyber Reactor Capsule (Sci-Fi Core)</option>
                 <option value="glass">Obsidian Glass Glow</option>
                 <option value="rounded">Smooth Rounded (16px)</option>
                 <option value="pill">Modern Capsule / Pill</option>
@@ -3573,22 +4317,22 @@
               <div class="goal-gradient-presets">
                 <button type="button" class="btn-grad-preset"
                   data-grad="linear-gradient(180deg, #38BDF8 0%, #0EA5E9 50%, #0284C7 100%)" data-glow="#38BDF8"
-                  style="background: linear-gradient(180deg, #38BDF8, #0284C7); color: #fff;">🌊 Water</button>
+                  style="background: linear-gradient(180deg, #38BDF8, #0284C7); color: #fff;">Water Flow</button>
                 <button type="button" class="btn-grad-preset"
                   data-grad="linear-gradient(135deg, #FFD700 0%, #F59E0B 50%, #D4AF37 100%)" data-glow="#FFD700"
-                  style="background: linear-gradient(135deg, #FFD700, #D4AF37); color: #000;">✨ Gold</button>
+                  style="background: linear-gradient(135deg, #FFD700, #D4AF37); color: #000;">Gold Luxury</button>
                 <button type="button" class="btn-grad-preset"
                   data-grad="linear-gradient(135deg, #C084FC 0%, #A855F7 50%, #6366F1 100%)" data-glow="#C084FC"
-                  style="background: linear-gradient(135deg, #C084FC, #6366F1); color: #fff;">💎 Crystal</button>
+                  style="background: linear-gradient(135deg, #C084FC, #6366F1); color: #fff;">Crystal Prism</button>
                 <button type="button" class="btn-grad-preset"
                   data-grad="linear-gradient(90deg, #00F0FF 0%, #7000FF 100%)" data-glow="#00F0FF"
-                  style="background: linear-gradient(90deg, #00F0FF, #7000FF); color: #fff;">⚡ Cyber</button>
+                  style="background: linear-gradient(90deg, #00F0FF, #7000FF); color: #fff;">Cyber Neon</button>
                 <button type="button" class="btn-grad-preset"
                   data-grad="linear-gradient(90deg, #FB7185 0%, #F43F5E 50%, #8B5CF6 100%)" data-glow="#FB7185"
-                  style="background: linear-gradient(90deg, #FB7185, #F43F5E); color: #fff;">💖 Pink</button>
+                  style="background: linear-gradient(90deg, #FB7185, #F43F5E); color: #fff;">Rose Velvet</button>
                 <button type="button" class="btn-grad-preset"
                   data-grad="linear-gradient(90deg, #10B981 0%, #06B6D4 50%, #8B5CF6 100%)" data-glow="#10B981"
-                  style="background: linear-gradient(90deg, #10B981, #06B6D4); color: #fff;">🌿 Emerald</button>
+                  style="background: linear-gradient(90deg, #10B981, #06B6D4); color: #fff;">Emerald Mint</button>
               </div>
               <div class="goal-color-bar-btn" id="btn_pick_barColor"
                 style="background: linear-gradient(90deg, #FB7185, #8B5CF6);">
@@ -3695,8 +4439,16 @@
             <input id="giftPickerSearchInput" type="text" placeholder="Cari nama gift atau ID..." autocomplete="off" />
           </div>
           <button type="button" id="btnSelectAllGiftsOption" class="btn btn-ghost btn-sm"
-            style="border-color:rgba(255,255,255,0.2);">
-            🎁 Semua Gift (Semua ID)
+            style="border-color:rgba(255,255,255,0.2); display:inline-flex; align-items:center; gap:6px;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+            <span>Semua Gift (Semua ID)</span>
           </button>
         </div>
         <div id="giftPickerGrid" class="gift-picker-grid"></div>
@@ -3713,7 +4465,7 @@
     <div class="modal-content" style="max-width: 480px; width: 92%;">
       <div class="modal-header">
         <h2 id="giftModalTitle">Tambah Gift Baru</h2>
-        <button type="button" id="btnCloseGiftModal" class="btn btn-ghost btn-sm">✕</button>
+        <button type="button" id="btnCloseGiftEditModal" class="btn btn-ghost btn-sm">✕</button>
       </div>
       <div class="modal-body modal-scroll-body">
         <form id="giftForm" onsubmit="return false;">
@@ -3750,7 +4502,14 @@
             <label class="muted" style="font-size: 11px;">Preview Tampilan:</label>
             <div class="gift-form-preview-card">
               <div id="giftFormImagePreviewWrap" class="gift-card-avatar-wrap">
-                <span class="gift-fallback-emoji">🎁</span>
+                <span class="gift-fallback-box"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                    stroke="#FFD700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                    <rect x="2" y="7" width="20" height="5"></rect>
+                    <line x1="12" y1="22" x2="12" y2="7"></line>
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+                  </svg></span>
               </div>
               <div class="gift-preview-meta">
                 <span id="giftFormPrevName" style="font-weight: 700; font-size: 14px;">Nama Gift</span>
@@ -3814,7 +4573,12 @@
           </div>
         </div>
         <div id="assetAudioEmptyState" class="asset-empty-state" style="display:none;">
-          <div class="asset-empty-icon">🎵</div>
+          <div class="asset-empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#38bdf8"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18V5l12-2v13"></path>
+              <circle cx="6" cy="18" r="3"></circle>
+              <circle cx="18" cy="16" r="3"></circle>
+            </svg></div>
           <p class="asset-empty-text">Folder audio belum diisi atau tidak ada file audio (.mp3, .wav, .ogg, .m4a, .aac).
           </p>
           <span class="muted" style="font-size: 11px;">Atur folder audio di tab <strong>Pengaturan</strong> atau klik
@@ -3878,7 +4642,12 @@
           </div>
         </div>
         <div id="assetMediaEmptyState" class="asset-empty-state" style="display:none;">
-          <div class="asset-empty-icon">🖼️</div>
+          <div class="asset-empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f472b6"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg></div>
           <p class="asset-empty-text">Folder media belum diisi atau tidak ada file gambar/video.</p>
           <span class="muted" style="font-size: 11px;">Atur folder media di tab <strong>Pengaturan</strong> atau klik
             tombol <em>Jelajahi Manual</em>.</span>
@@ -3894,11 +4663,88 @@
     </div>
   </div>
 
+  <!-- MODAL ASSET GIFT PICKER -->
+  <div id="modalAssetGiftPicker" class="modal" style="display:none; z-index: 2010;">
+    <div class="modal-content modal-asset-picker-dialog">
+      <div class="modal-header">
+        <div class="asset-modal-title-wrap">
+          <div class="asset-picker-icon-badge"
+            style="background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.3); width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3>Pilih Gambar / Ikon Gift</h3>
+            <span class="muted" id="assetGiftPickerSubtitle" style="font-size: 11px;">Folder: Belum dikonfigurasi</span>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" id="btnCloseAssetGiftPicker">✕</button>
+      </div>
+      <div class="modal-body asset-picker-body">
+        <div class="asset-picker-toolbar">
+          <div class="asset-search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" id="assetGiftSearch" class="asset-search-input" placeholder="Cari ikon gift..." />
+          </div>
+          <div class="asset-picker-actions-row">
+            <button type="button" id="btnAssetGiftAddFile" class="btn btn-primary btn-sm"
+              title="Tambah gambar gift baru ke folder">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Tambah File
+            </button>
+            <button type="button" id="btnAssetGiftBrowseManual" class="btn btn-ghost btn-sm"
+              title="Pilih file manual di mana saja di komputer">
+              Jelajahi Manual
+            </button>
+          </div>
+        </div>
+        <div id="assetGiftEmptyState" class="asset-empty-state" style="display:none;">
+          <div class="asset-empty-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fbbf24"
+              stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"></polyline>
+              <rect x="2" y="7" width="20" height="5"></rect>
+              <line x1="12" y1="22" x2="12" y2="7"></line>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg></div>
+          <p class="asset-empty-text">Folder gift belum diisi atau tidak ada file gambar.</p>
+          <span class="muted" style="font-size: 11px;">Atur folder gift di tab <strong>Pengaturan</strong> atau klik
+            tombol <em>Jelajahi Manual</em>.</span>
+        </div>
+        <div id="assetGiftList" class="asset-picker-media-grid">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="muted" id="assetGiftPickerCount" style="font-size: 11px;">0 file ditemukan</span>
+        <button type="button" id="btnCancelAssetGiftPicker" class="btn btn-ghost btn-sm">Tutup</button>
+      </div>
+    </div>
+  </div>
+
   <!-- CUSTOM CONFIRMATION / ALERT MODAL -->
   <div id="customConfirmModal" class="modal" style="display:none; z-index: 2000;">
     <div class="custom-dialog-content">
       <div class="custom-dialog-header">
-        <div id="customConfirmIcon" class="custom-dialog-icon">⚠️</div>
+        <div id="customConfirmIcon" class="custom-dialog-icon"><svg class="custom-dialog-icon-svg" width="20"
+            height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg></div>
         <h3 id="customConfirmTitle" class="custom-dialog-title">Konfirmasi Tindakan</h3>
       </div>
       <div class="custom-dialog-body">
@@ -3913,131 +4759,487 @@
 
   <audio id="soundPlayer" style="display:none"></audio>
 
+  <script src="libs/vue.global.prod.js"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="js/assetFolders.js"></script>
   <script src="js/app.js"></script>
   <script src="js/soundboard.js"></script>
   <script src="js/youtube.js"></script>
+
   <script src="js/tts.js"></script>
+  <script src="js/dashboardStats.js"></script>
+  <script src="js/giftsController.js"></script>
+  <script src="js/goalsController.js"></script>
+  <script src="js/nurearnLive.js"></script>
+  <script src="js/keyboardModal.js"></script>
+  <script src="js/liveChatFeed.js"></script>
+  <script src="js/interactionsController.js"></script>
+  <script src="js/navAndActivities.js"></script>
 
   <script>
-  (function() {
-    // Custom Rank UI wiring & activity modal hook
-    const selRank = document.getElementById('act_customRank');
-    const actEditId = document.getElementById('act_editing_id');
-    const modal = document.getElementById('activityModal');
+    (function () {
+      // Custom Rank UI wiring & activity modal hook
+      const selRank = document.getElementById('act_customRank');
+      const actEditId = document.getElementById('act_editing_id');
+      const modal = document.getElementById('activityModal');
 
-    // Populate customRank when editing an activity
-    if (modal) {
-      const observer = new MutationObserver(() => {
-        if (modal.style.display !== 'none') {
-          const editId = actEditId ? actEditId.value : '';
-          if (editId && window.api && window.api.getConfig) {
-            window.api.getConfig().then(cfg => {
-              const act = (cfg && cfg.activities) ? cfg.activities.find(a => a.id === editId) : null;
-              if (selRank) selRank.value = (act && act.customRank) ? act.customRank : '';
-            }).catch(() => {});
-          } else if (selRank) {
-            selRank.value = '';
+      // Populate customRank when editing an activity
+      if (modal) {
+        const observer = new MutationObserver(() => {
+          if (modal.style.display !== 'none') {
+            const editId = actEditId ? actEditId.value : '';
+            if (editId && window.api && window.api.getConfig) {
+              window.api.getConfig().then(cfg => {
+                const act = (cfg && cfg.activities) ? cfg.activities.find(a => a.id === editId) : null;
+                if (selRank) selRank.value = (act && act.customRank) ? act.customRank : '';
+              }).catch(() => { });
+            } else if (selRank) {
+              selRank.value = '';
+            }
+          }
+        });
+        observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
+      }
+
+      // Hook addActivity and updateActivity to inject customRank
+      function hookApi() {
+        if (!window.api || window.__customRankHooked) return;
+        window.__customRankHooked = true;
+
+        const origAdd = window.api.addActivity;
+        window.api.addActivity = function (activity) {
+          if (selRank && selRank.value) {
+            activity.customRank = selRank.value;
+          }
+          return origAdd.call(window.api, activity);
+        };
+
+        const origUpdate = window.api.updateActivity;
+        window.api.updateActivity = function (id, data) {
+          if (selRank) {
+            data.customRank = selRank.value || '';
+          }
+          return origUpdate.call(window.api, id, data);
+        };
+
+        // Dynamic overlay links based on permanent custom domain nurearn.site and username
+        let overlayServerPort = 8642;
+        let activeCloudTunnelUrl = 'https://overlay.nurearn.site';
+        const usernameInput = document.getElementById('usernameInput');
+
+        function syncAllOverlayUrls(customUser = null) {
+          const savedUser = (typeof localStorage !== 'undefined' && localStorage.getItem('saved_username')) || '';
+          const rawUser = customUser !== null ? customUser : ((usernameInput && usernameInput.value) || savedUser || '');
+          const cleanUser = rawUser ? String(rawUser).toLowerCase().trim().replace(/^@/, '') : '';
+          const userSlug = cleanUser ? `@${cleanUser}` : '@username';
+          const baseHost = activeCloudTunnelUrl || 'https://overlay.nurearn.site';
+          const base = baseHost + '/overlay';
+
+          // 1. Standard Overlays (Tab Overlays)
+          const map = {
+            overlayUrl_soundboard: `${base}/${userSlug}/soundboard`,
+            overlayUrl_chat: `${base}/${userSlug}/chat`,
+            overlayUrl_rankA: `${base}/${userSlug}/ranka?username=${cleanUser || 'username'}`,
+            overlayUrl_rankB: `${base}/${userSlug}/rankb?username=${cleanUser || 'username'}`,
+            overlayUrl_gift: `${base}/${userSlug}/gift`,
+            overlayUrl_topgift: `${base}/${userSlug}/topgift`,
+            overlayUrl_taptap: `${base}/${userSlug}/taptap`,
+            overlayUrl_join: `${base}/${userSlug}/join`,
+            overlayUrl_follow: `${base}/${userSlug}/follow`,
+            overlayUrl_share: `${base}/${userSlug}/share`,
+            overlayUrl_video: `${base}/${userSlug}/video`,
+            overlayUrl_image: `${base}/${userSlug}/image`,
+            overlayUrl_all: `${base}/${userSlug}`
+          };
+
+          for (const [id, url] of Object.entries(map)) {
+            const inp = document.getElementById(id);
+            if (inp) inp.value = url;
+          }
+
+          // 2. Goal Overlays (Tab Goals)
+          const goalMap = {
+            goalUrl_likes: `${base}/${userSlug}/goal/likes`,
+            goalUrl_followers: `${base}/${userSlug}/goal/followers`,
+            goalUrl_shares: `${base}/${userSlug}/goal/shares`,
+            goalUrl_subscribers: `${base}/${userSlug}/goal/subscribers`,
+            goalUrl_coins: `${base}/${userSlug}/goal/coins`,
+            goalUrl_viewers: `${base}/${userSlug}/goal/viewers`
+          };
+          for (const [id, url] of Object.entries(goalMap)) {
+            const inp = document.getElementById(id);
+            if (inp) inp.value = url;
+          }
+
+          // 3. Battle Arena Overlays (Tab Battle)
+          const battleMap = {
+            battleUrlFull: `${base}/${userSlug}/battle`,
+            battleUrlBar: `${base}/${userSlug}/battle?view=bar`,
+            battleUrlBarSplit: `${base}/${userSlug}/battle?view=bar&split=1`,
+            battleUrlLbA: `${base}/${userSlug}/battle?view=leaderboard&team=A`,
+            battleUrlLbB: `${base}/${userSlug}/battle?view=leaderboard&team=B`,
+            battleUrlLb: `${base}/${userSlug}/battle?view=leaderboard`
+          };
+          for (const [id, url] of Object.entries(battleMap)) {
+            const inp = document.getElementById(id);
+            if (inp) inp.value = url;
+          }
+
+          // 4. YouTube Music Overlay
+          const ytInp = document.getElementById('ytOverlayUrl');
+          if (ytInp) ytInp.value = `${base}/${userSlug}/youtube`;
+
+          // 5. Dynamic Custom Rank inputs
+          document.querySelectorAll('input[id^="overlayUrl_custom_"]').forEach(inp => {
+            const match = inp.id.match(/^overlayUrl_custom_(.+)$/);
+            if (match && match[1]) {
+              const rankName = match[1];
+              inp.value = `${base}/${userSlug}/ranka?username=${encodeURIComponent(cleanUser || 'username')}&rank=${encodeURIComponent(rankName)}`;
+            }
+          });
+
+          // 6. Sync external modules
+          if (typeof window.updateSoundboardOverlayLinks === 'function') {
+            window.updateSoundboardOverlayLinks();
+          }
+          if (typeof window.updateYoutubeOverlayLink === 'function') {
+            window.updateYoutubeOverlayLink();
+          }
+        }
+
+        function updateTunnelUI(status) {
+          if (status && status.url) {
+            activeCloudTunnelUrl = String(status.url).replace(/\/+$/, '');
+          } else {
+            activeCloudTunnelUrl = 'https://overlay.nurearn.site';
+          }
+          const badgeEl = document.getElementById('tunnelStatusBadge');
+          if (badgeEl) badgeEl.textContent = activeCloudTunnelUrl;
+          syncAllOverlayUrls();
+        }
+
+        const btnOpenBrowser = document.getElementById('btnOpenBrowserOverlay');
+        if (btnOpenBrowser) {
+          btnOpenBrowser.addEventListener('click', () => {
+            const savedUser = (typeof localStorage !== 'undefined' && localStorage.getItem('saved_username')) || '';
+            const rawUser = (usernameInput && usernameInput.value) || savedUser || '';
+            const cleanUser = rawUser ? String(rawUser).toLowerCase().trim().replace(/^@/, '') : '';
+            const userSlug = cleanUser ? `@${cleanUser}` : '@username';
+            const baseHost = activeCloudTunnelUrl || 'https://overlay.nurearn.site';
+            const target = `${baseHost}/overlay/${userSlug}/chat`;
+            if (window.api && window.api.openOverlayInBrowser) {
+              window.api.openOverlayInBrowser(target);
+            }
+          });
+        }
+
+        if (usernameInput) {
+          usernameInput.addEventListener('input', () => syncAllOverlayUrls());
+          usernameInput.addEventListener('change', () => syncAllOverlayUrls());
+        }
+
+        // Ensure overlay links and config are loaded
+        if (window.api && window.api.getConfig) {
+          window.api.getConfig().then(cfg => {
+            if (cfg && cfg.overlayPort) overlayServerPort = cfg.overlayPort;
+            if (cfg && cfg.tiktokUsername && usernameInput && !usernameInput.value) {
+              usernameInput.value = cfg.tiktokUsername;
+            }
+            syncAllOverlayUrls();
+          }).catch(() => syncAllOverlayUrls());
+        } else {
+          syncAllOverlayUrls();
+        }
+
+        // Listen to tunnel status updates
+        if (window.api && window.api.getTunnelStatus) {
+          window.api.getTunnelStatus().then(status => updateTunnelUI(status)).catch(() => { });
+        }
+        if (window.api && window.api.onTunnelStatus) {
+          window.api.onTunnelStatus((status) => updateTunnelUI(status));
+        }
+
+        // Listen to status updates or connections
+        if (window.api && window.api.onStatus) {
+          window.api.onStatus((status) => {
+            if (status && status.username) {
+              syncAllOverlayUrls(status.username);
+            }
+          });
+        }
+      }
+
+      if (window.api) hookApi();
+      else window.addEventListener('DOMContentLoaded', hookApi);
+
+      // Modern Glass Toast Notification
+      window.showGlassToast = function (msg) {
+        let toast = document.getElementById('globalGlassToast');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'globalGlassToast';
+          toast.className = 'global-glass-toast';
+          document.body.appendChild(toast);
+        }
+        toast.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> <span>${msg}</span>`;
+        toast.classList.add('show');
+        clearTimeout(window._glassToastTimer);
+        window._glassToastTimer = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      };
+
+      // Auto-attach title hint to all privacy link inputs
+      function initPrivacyLinkHints() {
+        document.querySelectorAll('.goal-url-input, .overlay-url-row input, .battle-url-input, #ytOverlayUrl, #sb_preview_overlay_url, .sb-item-overlay-url, .privacy-glass-link').forEach(inp => {
+          if (!inp.getAttribute('title')) {
+            inp.setAttribute('title', 'Klik untuk salin link (Privasi Streamer)');
+          }
+        });
+      }
+      initPrivacyLinkHints();
+      window.addEventListener('DOMContentLoaded', initPrivacyLinkHints);
+
+      // Unified Robust Copy Helper
+      function performCopy(inputEl, feedbackBtn = null) {
+        if (!inputEl || !inputEl.value) return;
+        inputEl.focus();
+        inputEl.select();
+
+        const copyPromise = (navigator.clipboard && navigator.clipboard.writeText)
+          ? navigator.clipboard.writeText(inputEl.value)
+          : new Promise((resolve, reject) => {
+              try {
+                const ok = document.execCommand('copy');
+                if (ok) resolve(); else reject(new Error('execCommand copy failed'));
+              } catch (err) { reject(err); }
+            });
+
+        copyPromise.then(() => {
+          inputEl.classList.remove('link-copied-flash');
+          void inputEl.offsetWidth;
+          inputEl.classList.add('link-copied-flash');
+
+          const container = inputEl.closest('.goal-card, .overlay-card, .panel, .battle-url-card, .goal-url-row, .overlay-url-row, .battle-url-box') || inputEl.parentElement;
+          const targetBtn = feedbackBtn || (container ? container.querySelector('.btn-copy-overlay, .btn-copy-custom-url, .btn-copy-goal, .btn-copy-url, .btn-goal-action-copy') : null);
+
+          if (targetBtn) {
+            if (targetBtn.classList.contains('goal-url-copy-icon')) {
+              const origColor = targetBtn.style.color;
+              targetBtn.style.color = '#22c55e';
+              targetBtn.style.transform = 'scale(1.3)';
+              setTimeout(() => {
+                targetBtn.style.color = origColor;
+                targetBtn.style.transform = '';
+              }, 1400);
+            } else {
+              const origHtml = targetBtn.innerHTML;
+              targetBtn.innerHTML = `
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg> Tersalin!
+              `;
+              targetBtn.style.color = '#22c55e';
+              setTimeout(() => {
+                targetBtn.innerHTML = origHtml;
+                targetBtn.style.color = '';
+              }, 1500);
+            }
+          }
+          window.showGlassToast('Link overlay berhasil disalin!');
+        }).catch(() => {});
+      }
+
+      // Wire Copy, Click-to-Copy, and Open buttons for all overlay cards (goal, overlay, battle, youtube)
+      document.addEventListener('click', (e) => {
+        // 1. Direct Click-to-Copy on Blurred Glass Inputs
+        const clickedInput = e.target.closest('.goal-url-input, .overlay-url-row input, .battle-url-input, #ytOverlayUrl, #sb_preview_overlay_url, .sb-item-overlay-url, .privacy-glass-link');
+        if (clickedInput && clickedInput.value && !e.target.closest('button')) {
+          performCopy(clickedInput);
+          return;
+        }
+
+        // 2. Copy Buttons
+        const copyBtn = e.target.closest('.btn-copy-overlay, .btn-copy-custom-url, .btn-copy-goal, .btn-copy-url, .btn-goal-action-copy');
+        if (copyBtn) {
+          const targetId = copyBtn.getAttribute('data-target');
+          let input = targetId ? document.getElementById(targetId) : null;
+          if (!input) {
+            const card = copyBtn.closest('.overlay-card') || copyBtn.closest('.panel') || copyBtn.closest('.goal-card') || copyBtn.closest('.battle-url-card') || copyBtn.parentElement;
+            input = card ? card.querySelector('input[type="text"]') : null;
+          }
+          if (input) {
+            performCopy(input, copyBtn);
+          }
+        }
+
+        // 3. Open Buttons
+        const openBtn = e.target.closest('.btn-open-overlay, .btn-open-custom-url, .btn-open-goal, .btn-open-url, .btn-goal-action-open');
+        if (openBtn) {
+          e.preventDefault();
+          const targetId = openBtn.getAttribute('data-target');
+          let input = targetId ? document.getElementById(targetId) : null;
+          if (!input) {
+            const card = openBtn.closest('.overlay-card') || openBtn.closest('.panel') || openBtn.closest('.goal-card') || openBtn.closest('.battle-url-card') || openBtn.parentElement;
+            input = card ? card.querySelector('input[type="text"]') : null;
+          }
+          const urlToOpen = input && input.value ? input.value : openBtn.getAttribute('data-url');
+          if (urlToOpen && window.api && window.api.openOverlayInBrowser) {
+            window.api.openOverlayInBrowser(urlToOpen);
+          }
+        }
+
+        // 4. Clear Dashboard Live Chat Feed
+        const clearChatBtn = e.target.closest('#btnClearChatFeed');
+        if (clearChatBtn) {
+          e.preventDefault();
+          const chatFeedEl = document.getElementById('chatFeed');
+          if (chatFeedEl) {
+            renderChatFeedEmptyState(chatFeedEl);
+            if (window.showGlassToast) {
+              window.showGlassToast('Riwayat live chat berhasil dibersihkan');
+            }
           }
         }
       });
-      observer.observe(modal, { attributes: true, attributeFilter: ['style', 'class'] });
-    }
 
-    // Hook addActivity and updateActivity to inject customRank
-    function hookApi() {
-      if (!window.api || window.__customRankHooked) return;
-      window.__customRankHooked = true;
-
-      const origAdd = window.api.addActivity;
-      window.api.addActivity = function(activity) {
-        if (selRank && selRank.value) {
-          activity.customRank = selRank.value;
-        }
-        return origAdd.call(window.api, activity);
-      };
-
-      const origUpdate = window.api.updateActivity;
-      window.api.updateActivity = function(id, data) {
-        if (selRank) {
-          data.customRank = selRank.value || '';
-        }
-        return origUpdate.call(window.api, id, data);
-      };
-
-      // Ensure overlay links are resolved with actual port if available
-      if (window.api.getConfig) {
-        window.api.getConfig().then(cfg => {
-          const port = cfg.overlayPort || 8642;
-          const inpA = document.getElementById('overlayUrl_rankA');
-          const inpB = document.getElementById('overlayUrl_rankB');
-          if (inpA) inpA.value = 'http://localhost:' + port + '/overlay/ranka';
-          if (inpB) inpB.value = 'http://localhost:' + port + '/overlay/rankb';
-        }).catch(() => {});
-      }
-    }
-
-    if (window.api) hookApi();
-    else window.addEventListener('DOMContentLoaded', hookApi);
-
-    // Wire Copy and Open buttons for custom rank cards
-    document.addEventListener('click', (e) => {
-      const copyBtn = e.target.closest('.btn-copy-custom-url');
-      if (copyBtn) {
-        const targetId = copyBtn.getAttribute('data-target');
-        const input = document.getElementById(targetId);
-        if (input) {
-          input.select();
-          navigator.clipboard.writeText(input.value).then(() => {
-            const origText = copyBtn.textContent;
-            copyBtn.textContent = 'Tersalin!';
-            copyBtn.style.color = '#22c55e';
-            setTimeout(() => {
-              copyBtn.textContent = origText;
-              copyBtn.style.color = '';
-            }, 1500);
-          }).catch(() => {});
-        }
+      function renderChatFeedEmptyState(container) {
+        if (!container) return;
+        container.innerHTML = `
+          <div class="chat-feed-empty-state" id="chatFeedEmpty">
+            <div class="chat-empty-icon">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            </div>
+            <div class="chat-empty-title">Belum ada komentar live chat</div>
+            <div class="chat-empty-desc">Pesan penonton TikTok LIVE akan otomatis mengalir di sini secara realtime saat siaran berlangsung.</div>
+          </div>
+        `;
       }
 
-      const openBtn = e.target.closest('.btn-open-custom-url');
-      if (openBtn) {
-        const targetId = openBtn.getAttribute('data-target');
-        const input = document.getElementById(targetId);
-        if (input && window.api && window.api.openOverlayInBrowser) {
-          window.api.openOverlayInBrowser(input.value);
-        }
+      // Auto-manage empty state indicator in Live Chat Feed
+      const chatFeedContainer = document.getElementById('chatFeed');
+      if (chatFeedContainer) {
+        const chatFeedObserver = new MutationObserver(() => {
+          const emptyEl = chatFeedContainer.querySelector('#chatFeedEmpty');
+          const hasItems = chatFeedContainer.querySelectorAll('.feed-item').length > 0;
+          if (hasItems && emptyEl) {
+            emptyEl.remove();
+          } else if (!hasItems && !emptyEl && chatFeedContainer.children.length === 0) {
+            renderChatFeedEmptyState(chatFeedContainer);
+          }
+        });
+        chatFeedObserver.observe(chatFeedContainer, { childList: true });
       }
-    });
 
-    // Robust Sound Player for Interaction Triggers (Interaksi & Aktivitas)
-    if (window.api && window.api.onSoundPlay) {
-      window.api.onSoundPlay(({ file, volume }) => {
-        if (!file) return;
-        try {
-          const cleanFile = file.replace(/\\/g, '/');
-          const fileUrl = cleanFile.startsWith('file://') ? cleanFile : ('file:///' + cleanFile.replace(/^\/+/, ''));
-          const audio = new Audio(fileUrl);
-          audio.volume = typeof volume === 'number' ? Math.max(0, Math.min(1, volume)) : 1.0;
-          audio.play().catch(err => {
-            console.warn('[Interactive Audio] file:// audio error, trying overlay media API:', err);
-            if (window.api && window.api.getConfig) {
-              window.api.getConfig().then(cfg => {
-                const port = cfg?.overlayPort || 8642;
-                const httpUrl = `http://localhost:${port}/api/media?path=${encodeURIComponent(file)}`;
-                const httpAudio = new Audio(httpUrl);
-                httpAudio.volume = typeof volume === 'number' ? Math.max(0, Math.min(1, volume)) : 1.0;
-                httpAudio.play().catch(e => console.error('[Interactive Audio] Playback failed completely:', e));
-              }).catch(() => {});
+      // Robust Sound Player for Interaction Triggers (Interaksi & Aktivitas)
+      if (window.api && window.api.onSoundPlay) {
+        window.api.onSoundPlay(async ({ file, volume }) => {
+          if (!file) return;
+          try {
+            let normVol = typeof volume === 'number' ? volume : 1.0;
+            if (normVol > 1) normVol = normVol / 100;
+            normVol = Math.max(0, Math.min(1, normVol));
+
+            let overlayPort = 8642;
+            try {
+              if (window.api && window.api.getConfig) {
+                const cfg = await window.api.getConfig();
+                if (cfg && cfg.overlayPort) overlayPort = cfg.overlayPort;
+              }
+            } catch (_) {}
+
+            const httpUrl = `http://127.0.0.1:${overlayPort}/api/media?path=${encodeURIComponent(file)}`;
+            const audio = new Audio(httpUrl);
+            audio.volume = normVol;
+
+            audio.play().catch(err => {
+              console.warn('[Interactive Audio] HTTP stream error, fallback to file://:', err);
+              try {
+                const cleanFile = file.replace(/\\/g, '/');
+                const fileUrl = cleanFile.startsWith('file://') ? cleanFile : ('file:///' + cleanFile.replace(/^\/+/, ''));
+                const fileAudio = new Audio(fileUrl);
+                fileAudio.volume = normVol;
+                fileAudio.play().catch(e => console.error('[Interactive Audio] Playback failed completely:', e));
+              } catch (_) {}
+            });
+          } catch (e) {
+            console.error('[Interactive Audio] Error playing audio:', e);
+          }
+        });
+      }
+
+      // Overlay Media Preview feedback in studio app
+      if (window.api && window.api.onOverlayMediaPreview) {
+        window.api.onOverlayMediaPreview((payload) => {
+          if (!payload) return;
+          const fileName = payload.file ? payload.file.replace(/\\/g, '/').split('/').pop() : 'Media';
+          const dur = payload.durationMs ? `${(payload.durationMs / 1000).toFixed(1)}s` : '5s';
+          if (window.showGlassToast) {
+            window.showGlassToast(`[Overlay Media] ${fileName} aktif (${dur})`);
+          }
+        });
+      }
+
+      // Presets & v1.2.0 Config Tools (Import, Export, Reset Pure Default)
+      const btnImport = document.getElementById('btnImportPreset');
+      if (btnImport) {
+        btnImport.addEventListener('click', async (e) => {
+          e.preventDefault();
+          if (window.api && window.api.importPreset) {
+            try {
+              const res = await window.api.importPreset();
+              if (res && res.ok) {
+                if (window.showGlassToast) window.showGlassToast('Konfigurasi / Preset v1.2.0 berhasil dipasang!');
+                setTimeout(() => window.location.reload(), 600);
+              }
+            } catch (err) {
+              alert('Gagal mengimpor konfigurasi: ' + err.message);
             }
-          });
-        } catch (e) {
-          console.error('[Interactive Audio] Error playing audio:', e);
-        }
-      });
-    }
-  })();
+          }
+        });
+      }
+
+      const btnResetPure = document.getElementById('btnResetPureDefault');
+      if (btnResetPure) {
+        btnResetPure.addEventListener('click', async (e) => {
+          e.preventDefault();
+          const ok = confirm('Apakah Anda yakin ingin mereset seluruh aplikasi kembali BERSIH TOTAL (kosong murni) seperti baru install pertama kali?');
+          if (!ok) return;
+          try {
+            if (window.api && window.api.resetPureDefault) {
+              await window.api.resetPureDefault();
+              if (window.showGlassToast) window.showGlassToast('Aplikasi berhasil direset bersih kosong!');
+              setTimeout(() => window.location.reload(), 600);
+            }
+          } catch (err) {
+            alert('Gagal mereset: ' + err.message);
+          }
+        });
+      }
+
+      const btnExportAll = document.getElementById('btnExportAllPresets');
+      if (btnExportAll) {
+        btnExportAll.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try {
+            if (window.api && window.api.getConfig && window.api.exportPreset) {
+              const cfg = await window.api.getConfig();
+              const res = await window.api.exportPreset({
+                defaultName: 'backup-config-v1.3.0.json',
+                data: cfg
+              });
+              if (res && res.ok && res.filePath) {
+                if (window.showGlassToast) window.showGlassToast('Backup konfigurasi berhasil diekspor!');
+              }
+            }
+          } catch (err) {
+            alert('Gagal mengekspor: ' + err.message);
+          }
+        });
+      }
+    })();
   </script>
   <!-- dom-trim.js: Tugas 2 — cegah RAM renderer naik tak terbatas (MAX_CHAT=200, MAX_GIFT=100) -->
   <script src="js/dom-trim.js"></script>

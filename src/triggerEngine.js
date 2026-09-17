@@ -111,6 +111,78 @@ class TriggerEngine extends OriginalTriggerEngine {
       }
     }
   }
+
+  /**
+   * Eksekusi aksi interaksi (Keystroke, Suara, Media) dengan sinkronisasi simultan
+   * Saat simultaneous = true: Suara & Gambar dijalankan serentak bersamaan saat Keystroke aktif tanpa menunggu delay
+   * Saat simultaneous = false: Suara & Gambar menunggu delay/eksekusi keystroke secara berurutan
+   */
+  async _executeInteractionActions(actions = [], simultaneous = true) {
+    if (!Array.isArray(actions) || actions.length === 0) return;
+
+    const isSimultaneous = simultaneous !== false;
+
+    if (isSimultaneous) {
+      // 1. Jalankan Suara & Gambar/Video bersamaan saat Keystroke aktif (tanpa menunggu delay)
+      for (const item of actions) {
+        if (!item) continue;
+        if (item.type === 'sound' && item.file) {
+          this.emit('sound', {
+            file: item.file,
+            volume: typeof item.volume === 'number' ? item.volume : 100
+          });
+        } else if (item.type === 'media' && item.file) {
+          const ext = String(item.file).split('.').pop().toLowerCase();
+          const isVid = ['mp4', 'webm', 'mov', 'mkv', 'avi'].includes(ext);
+          this.emit('media', {
+            file: item.file,
+            mediaType: item.mediaType || (isVid ? 'video' : 'image'),
+            durationMs: Number(item.durationMs) || 5000
+          });
+        }
+      }
+
+      // 2. Kirim tombol Keystroke ke target aplikasi secara paralel
+      for (const item of actions) {
+        if (!item) continue;
+        if (item.type === 'key' && item.spec) {
+          const defaultDelay = this.configManager?.get()?.keyTrigger?.defaultDelayMs ?? 50;
+          this._enqueueKey(
+            item.spec,
+            (item.delayMs != null && !isNaN(Number(item.delayMs))) ? Number(item.delayMs) : defaultDelay,
+            (item.holdMs != null && !isNaN(Number(item.holdMs))) ? Number(item.holdMs) : 0
+          );
+        }
+      }
+    } else {
+      // Jalankan berurutan: jika ada keystroke dengan jeda/delay, tunggu jeda keystroke terlebih dahulu
+      for (const item of actions) {
+        if (!item) continue;
+        if (item.type === 'key' && item.spec) {
+          const defaultDelay = this.configManager?.get()?.keyTrigger?.defaultDelayMs ?? 50;
+          const delay = (item.delayMs != null && !isNaN(Number(item.delayMs))) ? Number(item.delayMs) : defaultDelay;
+          const hold = (item.holdMs != null && !isNaN(Number(item.holdMs))) ? Number(item.holdMs) : 0;
+          this._enqueueKey(item.spec, delay, hold);
+          if (delay > 0) {
+            await new Promise(res => setTimeout(res, delay));
+          }
+        } else if (item.type === 'sound' && item.file) {
+          this.emit('sound', {
+            file: item.file,
+            volume: typeof item.volume === 'number' ? item.volume : 100
+          });
+        } else if (item.type === 'media' && item.file) {
+          const ext = String(item.file).split('.').pop().toLowerCase();
+          const isVid = ['mp4', 'webm', 'mov', 'mkv', 'avi'].includes(ext);
+          this.emit('media', {
+            file: item.file,
+            mediaType: item.mediaType || (isVid ? 'video' : 'image'),
+            durationMs: Number(item.durationMs) || 5000
+          });
+        }
+      }
+    }
+  }
 }
 
 module.exports = TriggerEngine;
