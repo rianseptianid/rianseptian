@@ -1,4 +1,4 @@
-# nurearn (v1.2.0)
+# nurearn (v1.3.0)
 
 <div align="center">
 
@@ -7,7 +7,7 @@
 **Platform Desktop Interaktif untuk Streamer TikTok LIVE**  
 *Monitor event realtime, trigger otomatis, TTS Edge Neural, overlay interaktif OBS, dan pemutar musik YouTube.*
 
-[![Version](https://img.shields.io/badge/version-1.2.0-amber.svg)](https://github.com/nurearn/nurearn/releases)
+[![Version](https://img.shields.io/badge/version-1.3.0-amber.svg)](https://github.com/nurearn/basic-nurearn/releases)
 [![Electron](https://img.shields.io/badge/Electron-31.7.7-blue.svg)](https://electronjs.org)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20x64-green.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-purple.svg)]()
@@ -18,36 +18,52 @@
 
 ## 📖 Tentang nurearn
 
-**nurearn** adalah aplikasi desktop berbasis Electron & Node.js yang dirancang khusus untuk mempermudah dan memaksimalkan interaksi penonton pada siaran langsung **TikTok LIVE**. Dengan aplikasi ini, setiap event siaran (Gift, Chat, Like, Share, Follow) dapat dihubungkan langsung ke berbagai aksi di komputer host maupun di overlay OBS secara otomatis dan realtime.
+**nurearn** adalah aplikasi desktop modern berbasis Electron & Node.js yang dirancang khusus untuk mempermudah dan memaksimalkan interaksi penonton pada siaran langsung **TikTok LIVE**. Dengan aplikasi ini, setiap event siaran (Gift, Chat, Like, Share, Follow, Join, Subscribe) dapat dihubungkan langsung ke berbagai aksi di komputer host maupun di overlay OBS secara otomatis, simultan, dan realtime.
 
-Aplikasi ini telah dioptimalkan untuk sesi live berdurasi panjang (8+ jam) dengan sistem manajemen memori aktif (*DOM auto-trimming* dan pencegahan kebocoran RAM/event listener).
+Pada **versi 1.3.0**, nurearn hadir dengan arsitektur yang lebih ringan, tidak memerlukan hak akses administrator (*non-elevated*), tetap berjalan penuh saat diminimize, memiliki sistem pembersihan cache otomatis (*safe auto-cache cleanup*), eksekusi aksi paralel (keystroke, sound, dan overlay bersamaan), serta keamanan kode terobfuskasi maksimal.
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Fitur Utama (v1.3.0)
 
-### 1. 🎯 TikTok LIVE Real-Time Connector
+### 1. 🚀 Non-Administrator & Instalasi Bersih
+- **Berjalan Tanpa Run as Administrator**: Menggunakan konfigurasi UAC `asInvoker` dan instalasi per-user (`%LOCALAPPDATA%\Programs\nurearn`) sehingga aman dan tidak membutuhkan elevated privileges.
+- **Clean First-Time Install**: Pemasangan awal 100% bersih (dashboard 0 statistik, soundboard kosong, riwayat kosong murni).
+- **Migrasi Konfigurasi v1.2.0**: Mendukung deteksi otomatis serta tombol **"Impor Preset (JSON)"** untuk langsung memakai konfigurasi `config.json` dari versi 1.2.0 sebelumnya tanpa perlu setting ulang.
+
+### 2. ⚡ Minimalkan Aplikasi Tanpa Hambatan (Full Background Operation)
+- Didukung flag Chromium `disable-background-timer-throttling`, `disable-renderer-backgrounding`, dan `backgroundThrottling: false`.
+- Saat jendela aplikasi di-minimize, seluruh fungsi tetap aktif 100%: **keystroke game, soundboard, animasi overlay OBS, pembacaan TTS, dan live feed TikTok**.
+
+### 3. 🍃 Ringan, Hemat Resource & Pembersihan Cache Aman
+- **Batas Memori Terkelola**: Alokasi heap V8 dioptimalkan (`--max-old-space-size=384`) dan batas renderer process untuk konsumsi RAM dan CPU yang sangat rendah.
+- **Auto-Hapus Cache Otomatis**: Scheduler pembersihan berkala berjalan setiap 10 menit membersihkan HTTP session cache dan V8 code cache tanpa mengganggu token login, session cookies, atau streaming yang sedang berjalan.
+- **DOM Auto-Trimming**: Live Chat Feed dibatasi maksimal 200 pesan dan Gift Feed maksimal 100 elemen agar tidak terjadi memory leak selama sesi live berjam-jam (8+ jam nonstop).
+
+### 4. 🎯 TikTok LIVE Real-Time Connector & Live Chat Feed
 - Koneksi langsung ke ruang siaran TikTok LIVE tanpa perlu OBS Virtual Camera.
-- Memantau event secara instan: **Chat, Gift, Like, Follow, Share, Join, Subscribe, Battle (PK), dan Viewer Count**.
-- Pembersihan listener otomatis (*garbage collection*) saat reconnect untuk menjaga RAM tetap stabil di kisaran rendah.
+- Memantau event secara instan: **Chat, Gift, Like, Follow, Share, Member Join, Subscribe, Battle (PK), dan Viewer Count**.
+- **Live Chat Feed Terintegrasi**: Kotak chat feed interaktif di Dashboard menampilkan komentar penonton dan notifikasi penonton bergabung (*join*) secara realtime, dilengkapi tombol *Bersihkan Chat*.
 
-### 2. ⚡ Powerful Trigger Engine
-Memetakan event TikTok ke berbagai aksi otomatis:
-- **Keyboard Keystrokes & Hotkeys**: Mengirim tombol keyboard tunggal (`A`, `Space`, `Enter`), tombol khusus (`Numpad0`-`Numpad9`, `F1`-`F24`), kombinasi (`Ctrl+Shift+A`), atau sekuens berantai (`W,A,S,D`) langsung ke aplikasi atau game aktif melalui driver native.
-- **Sound Effect (SFX)**: Memutar file audio lokal (`.mp3`, `.wav`) dengan opsi antrean (*queue*) atau tumpang-tindih (*overlap*).
+### 5. 🎮 Trigger Engine & Eksekusi Multi-Aksi Simultan
+Memetakan event TikTok ke berbagai aksi otomatis secara non-blocking:
+- **Simultaneous Action Execution**: Tombol keyboard, efek audio, dan overlay alert dapat berjalan bersamaan secara simultan tanpa jeda antrian (*non-blocking*).
+- **Keyboard Keystrokes & Hotkeys**: Mengirim tombol keyboard tunggal (`A`, `Space`, `Enter`), tombol khusus (`Numpad0`-`Numpad9`, `F1`-`F24`), kombinasi (`Ctrl+Shift+A`), atau sekuens berantai (`W,A,S,D`) langsung ke game/aplikasi target melalui driver native.
+- **Interactive Keyboard Modal**: Dialog pemilihan tombol keyboard visual interaktif untuk mempermudah pengaturan key binding.
+- **Sound Effect (SFX)**: Memutar file audio lokal (`.mp3`, `.wav`) dengan kontrol volume dan opsi tumpang-tindih (*overlap*).
 - **Overlay Media Alert**: Menampilkan gambar (`.png`, `.jpg`, `.gif`, `.webp`) atau video (`.mp4`, `.webm`) di layar stream dengan kontrol durasi dan animasi.
-- **Dukungan Combo & Minimal Gift**: Pengaturan khusus untuk hanya memicu trigger setelah rentetan combo gift selesai (*streak ended*) atau berdasarkan ambang jumlah koin tertentu.
-- **Test Run Mandiri**: Tombol pengujian instan untuk setiap trigger sebelum dipakai saat live.
+- **Dukungan Combo & Minimal Gift**: Pengaturan khusus untuk memicu trigger setelah rentetan combo gift selesai (*streak ended*) atau berdasarkan ambang jumlah koin tertentu.
+- **Test Run Mandiri**: Tombol pengujian instan untuk setiap trigger sebelum dipakai saat live streaming.
 
-### 3. 🎙️ Edge Neural Text-to-Speech (TTS) Reader
+### 6. 🎙️ Edge Neural Text-to-Speech (TTS) Reader
 - Menggunakan suara AI natural berteknologi tinggi **Microsoft Edge Neural** (seperti ID-ArdiNeural, ID-GadisNeural, serta opsi multilingual).
-- Fallback cerdas ke sistem suara lokal SAPI saat offline atau koneksi terputus.
+- Fallback cerdas ke sistem suara lokal Windows SAPI saat offline atau koneksi terputus.
 - Normalisasi bahasa gaul & singkatan Indonesia (misal: *wkwk*, *bgt*, *yg*, *gk*).
 - Pengucapan angka & mata uang yang rapi dalam Bahasa Indonesia.
 - Filter sensor kata kasar (*blacklist filter*) yang dapat disesuaikan.
 - Caching audio terisolasi untuk menghemat bandwidth dan menghilangkan delay pembacaan.
 
-### 4. 📺 OBS Transparent Overlays
+### 7. 📺 OBS Transparent Overlays
 Server lokal berbasis Express + WebSocket (`http://localhost:8642/overlay`) siap dipasang sebagai *Browser Source* transparan di OBS Studio / Streamlabs:
 - **Chat Box Alert**: Tampilan chat bergaya modern.
 - **Gift Notification**: Notifikasi popup gift dengan animasi halus.
@@ -56,21 +72,20 @@ Server lokal berbasis Express + WebSocket (`http://localhost:8642/overlay`) siap
 - **Battle / PK Overlay**: Tampilan duel interaktif.
 - **Public Tunneling**: Terintegrasi dengan Cloudflare Tunnel & LocalTunnel untuk menampilkan overlay di perangkat lain dalam jaringan berbeda.
 
-### 5. 🎵 Interactive YouTube Player
+### 8. 🎵 Interactive YouTube Player
 - Pemutar YouTube bawaan (*BrowserWindow*) terisolasi di latar belakang.
 - Penonton dapat meminta lagu (*song request*) via chat atau gift tertentu.
 - Manajemen antrean pemutaran lagu otomatis dengan sinkronisasi ke overlay musik.
 
-### 6. 🎹 Soundboard & Global Hotkeys
+### 9. 🎹 Soundboard & Global Hotkeys
 - Soundboard internal dengan pintasan tombol global (*global hooks*) yang dapat diaktifkan kapan saja meski aplikasi nurearn sedang di-*minimize*.
 
-### 7. 🚀 Auto-Update Notifier
-- Pengecekan versi pembaruan otomatis di latar belakang melalui GitHub Releases API.
-- Menampilkan banner emas yang elegan dan tidak mengganggu sesi siaran saat ada versi baru dirilis.
-
-### 8. 🛡️ Keamanan & Lisensi Terintegrasi
-- Sistem aktivasi berbasis Device Hardware ID (`node-machine-id`) yang divalidasi dengan Firebase.
-- Pipeline build aman dengan proteksi obfuscation kode dan pengemasan ASAR.
+### 10. 🛡️ Proteksi Keamanan Kode Maksimal (Anti-Tamper & Obfuscation)
+- Seluruh file JavaScript produksi (`main.js`, `preload.js`, controller UI, engine triggers, dan server overlay) diacak menggunakan pipeline `build-secure.js` dengan:
+  - *Control Flow Flattening*
+  - Enkripsi String via cipher Base64 & RC4
+  - *Dead Code Injection* dan *Variable Mangling*
+  - Pengemasan ASAR terproteksi untuk mencegah tampering dan reverse engineering.
 
 ---
 
@@ -78,12 +93,12 @@ Server lokal berbasis Express + WebSocket (`http://localhost:8642/overlay`) siap
 
 ```
 xumuid-studio/
-├── main.js                     # Proses utama Electron, orkestrasi modul & IPC
+├── main.js                     # Proses utama Electron, orkestrasi modul, cache cleaner & IPC
 ├── preload.js                   # Bridge komunikasi aman (Context Isolation)
-├── package.json                 # Konfigurasi dependensi & build
+├── package.json                 # Konfigurasi dependensi, NSIS non-admin & metadata v1.3.0
 ├── src/
 │   ├── tiktokConnector.js       # Driver koneksi TikTok LIVE & event emitter
-│   ├── triggerEngine.js         # Evaluasi kondisi & eksekusi trigger
+│   ├── triggerEngine.js         # Evaluasi kondisi & eksekusi multi-aksi simultan
 │   ├── giftManager.js           # Database koin & katalog gift TikTok
 │   ├── goalManager.js           # Pengelola progress bar target donasi
 │   ├── keySender.js             # Generator input keyboard native (nut-js)
@@ -95,14 +110,20 @@ xumuid-studio/
 │   ├── LicenseManager.js        # Validasi lisensi hardware & sinkronisasi
 │   ├── updater.js               # Auto-update background checker
 │   ├── logger.js                # Logger harian & siaran log ke UI
-│   └── configManager.js         # Penyimpanan pengaturan persisten (JSON)
+│   └── configManager.js         # Penyimpanan pengaturan persisten & migrasi v1.2.0
 ├── renderer/                    # Antarmuka Pengguna (UI)
-│   ├── index.html               # Halaman utama aplikasi
+│   ├── index.html               # Dashboard utama aplikasi
 │   ├── css/
 │   │   └── style.css            # Styling tema hitam & emas (Dark Luxury)
 │   └── js/
-│       ├── app.js               # Logika kontrol UI renderer
-│       ├── updater-ui.js        # Kontrol banner update
+│       ├── app.js               # Controller inisialisasi aplikasi
+│       ├── dashboardStats.js    # Pengelola statistik realtime live
+│       ├── liveChatFeed.js      # Controller live chat & join feed realtime
+│       ├── interactionsController.js # Manajemen interaksi & action library
+│       ├── keyboardModal.js     # Modal interaktif input keyboard
+│       ├── goalsController.js   # Pengaturan target & progress goals
+│       ├── giftsController.js   # Katalog & pengaturan trigger gift
+│       ├── soundboard.js        # Soundboard & global hotkeys
 │       ├── dom-trim.js          # Optimasi memori DOM untuk streaming panjang
 │       ├── tts.js               # Pengaturan suara TTS di UI
 │       └── youtube.js           # Antarmuka kontrol musik
@@ -112,7 +133,8 @@ xumuid-studio/
 │   ├── player.html              # Overlay pemutar musik
 │   └── goal.html                # Overlay progress goal
 ├── assets/                      # Ikon & grafis aplikasi
-└── scripts/                     # Skrip build & proteksi kode
+└── scripts/
+    └── build-secure.js          # Pipeline build produksi berproteksi obfuscation RC4/Base64
 ```
 
 ---
@@ -127,8 +149,8 @@ xumuid-studio/
 ### Langkah Pemasangan
 1. Clone repositori ini atau ekstrak file proyek:
    ```bash
-   git clone https://github.com/nurearn/nurearn.git
-   cd nurearn
+   git clone https://github.com/nurearn/basic-nurearn.git
+   cd basic-nurearn
    ```
 2. Pasang semua dependensi:
    ```bash
@@ -140,11 +162,11 @@ xumuid-studio/
    ```
 
 ### Membangun Installer Produksi (.exe)
-Untuk membuat installer Windows NSIS 64-bit yang terproteksi dan terkompresi:
+Untuk membuat installer Windows NSIS 64-bit yang terproteksi, terobfuskasi maksimal, dan siap pakai tanpa administrator:
 ```bash
-npm run build:win
+npm run build:secure
 ```
-Hasil file installer (`nurearn Setup 1.2.0.exe`) akan otomatis dibuat di folder `dist/`.
+Hasil file installer (`nurearn Setup 1.3.0.exe`) akan otomatis dibuat di folder `dist/`.
 
 ---
 
@@ -152,16 +174,18 @@ Hasil file installer (`nurearn Setup 1.2.0.exe`) akan otomatis dibuat di folder 
 
 1. **Hubungkan ke TikTok**:
    - Masukkan username TikTok akun yang sedang live (tanpa `@`) pada form di sidebar, lalu klik **Connect**.
-2. **Setup Trigger**:
-   - Buka tab **Triggers**, klik **Tambah Trigger**.
-   - Tentukan event pemicu (Gift tertentu, Like, atau Komentar).
-   - Tentukan aksi balasan: tekan tombol game, bunyikan efek suara, sebutkan nama donatur lewat TTS, atau tampilkan video lucu di layar.
+2. **Setup Interaksi & Trigger**:
+   - Buka tab **Interaksi**, klik **Tambah Interaksi**.
+   - Tentukan event pemicu (Gift tertentu, Like, Komentar, atau Bergabung).
+   - Tentukan aksi balasan: tekan tombol game (bisa memilih via visual keyboard modal), bunyikan efek suara, sebutkan nama donatur lewat TTS, atau tampilkan animasi media di layar secara simultan.
 3. **Pasang di OBS Studio**:
    - Buka tab **Overlay**, salin URL yang tertera (misal: `http://localhost:8642/overlay`).
    - Di OBS Studio, tambahkan sumber baru: **Browser Source**.
    - Tempelkan URL tersebut, atur resolusi sesuai kanvas (misal: `1920x1080`), dan centang *"Shutdown source when not visible"* bila diperlukan.
 4. **TTS Otomatis**:
    - Atur suara favorit Anda di tab **TTS** (rekomendasi: *ID-ArdiNeural* atau *ID-GadisNeural*). Aktifkan filter sensor kata untuk menjaga siaran tetap ramah penonton.
+5. **Impor Konfigurasi v1.2.0**:
+   - Jika Anda memiliki konfigurasi dari versi sebelumnya, klik tombol **"Impor Preset (JSON)"** di Dashboard untuk memuat semua pengaturan secara instan.
 
 ---
 
@@ -198,4 +222,3 @@ Sebagai bentuk penghargaan dan kepatuhan terhadap komunitas pengembang perangkat
 
 Aplikasi **nurearn** didistribusikan di bawah lisensi [MIT License](LICENSE).  
 Copyright (c) 2024–2026 nurearn.
-# basic-nurearn
